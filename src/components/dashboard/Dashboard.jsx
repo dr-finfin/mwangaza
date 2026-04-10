@@ -1,12 +1,15 @@
-import React from 'react';
-import BentoGrid from './BentoGrid';
+import React from 'react'
+import { useAuth } from '../../context/AuthContext'
+import BentoGrid from './BentoGrid'
+import SkeletonDashboard from './SkeletonDashboard'
 
 const Dashboard = () => {
-  return (
-    <div className="animate-fade-in">
-      <BentoGrid />
-    </div>
-  );
-};
+  const { profile } = useAuth()
 
-export default Dashboard;
+  // Show skeleton while profile is loading from Supabase
+  if (!profile) return <SkeletonDashboard />
+
+  return <BentoGrid />
+}
+
+export default Dashboard
