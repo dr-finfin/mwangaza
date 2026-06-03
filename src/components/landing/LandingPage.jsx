@@ -13,7 +13,9 @@ const LandingPage = () => {
   }
 
   return (
-    <div className={`min-h-screen flex flex-col ${darkMode ? 'dark bg-gray-950 text-white' : 'bg-white text-gray-900'}`}>
+    <div className={`min-h-screen flex flex-col ${
+      darkMode ? 'dark bg-gray-950 text-white' : 'bg-white text-gray-900'
+    }`}>
 
       {/* Navbar */}
       <nav className={`fixed top-0 left-0 right-0 z-50 border-b ${
@@ -21,7 +23,6 @@ const LandingPage = () => {
       }`}>
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
 
-          {/* Logo */}
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center flex-shrink-0">
               <span className="text-white text-sm font-black">M</span>
@@ -36,10 +37,7 @@ const LandingPage = () => {
             </div>
           </div>
 
-          {/* Right actions */}
           <div className="flex items-center gap-2">
-
-            {/* Language */}
             <button
               onClick={() => setLanguage(language === 'en' ? 'sw' : 'en')}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold border ${
@@ -51,7 +49,6 @@ const LandingPage = () => {
               {language === 'en' ? 'SW' : 'EN'}
             </button>
 
-            {/* Theme */}
             <button
               onClick={() => setDarkMode(!darkMode)}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold border ${
@@ -63,19 +60,6 @@ const LandingPage = () => {
               {darkMode ? 'Light' : 'Dark'}
             </button>
 
-            {/* Explore */}
-            <button
-              onClick={() => navigate('/explore')}
-              className={`hidden sm:block px-3 py-1.5 rounded-lg text-xs font-semibold border ${
-                darkMode
-                  ? 'border-gray-700 text-gray-400 hover:text-white hover:border-gray-600'
-                  : 'border-gray-200 text-gray-500 hover:text-gray-900 hover:border-gray-300'
-              }`}
-            >
-              Explore
-            </button>
-
-            {/* Dashboard */}
             <button
               onClick={() => navigate('/dashboard')}
               className="px-4 py-1.5 bg-blue-600 text-white text-xs font-semibold rounded-lg hover:bg-blue-700"
@@ -88,38 +72,31 @@ const LandingPage = () => {
 
       {/* Hero */}
       <main className="flex-1 flex flex-col justify-center pt-16">
-        <div className="max-w-6xl mx-auto w-full px-6 py-20">
+        <div className="max-w-6xl mx-auto w-full px-6 py-16 sm:py-24">
 
-          {/* Headline */}
-          <div className="max-w-2xl mb-16">
-            <h1 className={`text-5xl sm:text-6xl font-black leading-[0.95] tracking-tight mb-6 ${
+          <div className="max-w-3xl mb-20">
+            <h1 className={`text-6xl sm:text-7xl lg:text-[6rem] font-black leading-[0.9] tracking-tighter mb-6 ${
               darkMode ? 'text-white' : 'text-gray-900'
             }`}>
               {language === 'en' ? (
-                <>Education<br /><span className="text-blue-600">without</span><br />barriers.</>
+                <>Free education<br />for every<br /><span className="text-blue-600">Kenyan student.</span></>
               ) : (
-                <>Elimu<br /><span className="text-blue-600">bila</span><br />vikwazo.</>
+                <>Elimu bure<br />kwa kila<br /><span className="text-blue-600">mwanafunzi.</span></>
               )}
             </h1>
 
-            <p className={`text-base leading-relaxed max-w-lg mb-6 ${
+            <p className={`text-lg leading-relaxed max-w-lg ${
               darkMode ? 'text-gray-400' : 'text-gray-500'
             }`}>
               {language === 'en'
-                ? 'Free KICD-aligned lessons and quizzes for every Kenyan student. Grade 1 to Grade 9.'
-                : 'Masomo na maswali ya KICD kwa kila mwanafunzi wa Kenya. Darasa la 1 hadi la 9.'}
-            </p>
-
-            <p className={`text-xs ${darkMode ? 'text-gray-600' : 'text-gray-400'}`}>
-              {language === 'en'
-                ? 'No account. No sign in. Free forever.'
-                : 'Hakuna akaunti. Hakuna kuingia. Bure milele.'}
+                ? 'KICD-aligned lessons and quizzes. Grade 1 to 9. No account needed.'
+                : 'Masomo na maswali ya KICD. Darasa la 1 hadi 9. Hakuna akaunti.'}
             </p>
           </div>
 
           {/* Grade selector */}
           <div>
-            <h2 className={`text-sm font-bold uppercase tracking-wider mb-4 ${
+            <h2 className={`text-sm font-bold uppercase tracking-wider mb-5 ${
               darkMode ? 'text-gray-500' : 'text-gray-400'
             }`}>
               {language === 'en' ? 'Pick your grade' : 'Chagua darasa lako'}
@@ -152,27 +129,27 @@ const LandingPage = () => {
       </main>
 
       {/* Footer */}
-      <footer className={`border-t py-8 ${
+      <footer className={`border-t py-6 ${
         darkMode ? 'border-gray-800' : 'border-gray-100'
       }`}>
-        <div className="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2.5">
-            <div className="w-6 h-6 bg-blue-600 rounded-md flex items-center justify-center">
-              <span className="text-white text-xs font-black">M</span>
+        <div className="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <div className="flex items-center gap-2">
+            <div className="w-5 h-5 bg-blue-600 rounded flex items-center justify-center">
+              <span className="text-white text-[10px] font-black">M</span>
             </div>
-            <span className={`font-black text-sm tracking-tight ${
+            <span className={`font-black text-xs tracking-tight ${
               darkMode ? 'text-white' : 'text-gray-900'
             }`}>
               MWANGAZA
             </span>
           </div>
 
-          <p className={`text-xs text-center ${darkMode ? 'text-gray-600' : 'text-gray-400'}`}>
-            Free forever · KICD aligned
+          <p className={`text-xs ${darkMode ? 'text-gray-600' : 'text-gray-400'}`}>
+            {language === 'en' ? 'Free forever · KICD aligned' : 'Bure milele · KICD'}
           </p>
 
           <span className={`text-xs ${darkMode ? 'text-gray-600' : 'text-gray-400'}`}>
-            © 2025 Mwangaza
+            © 2026
           </span>
         </div>
       </footer>
