@@ -734,3 +734,62 @@ export const UI_STRINGS = {
     explanation:       'Maelezo',
   },
 }
+
+// ─────────────────────────────────────────
+// SEARCH HELPER
+// ─────────────────────────────────────────
+export const searchLessons = (query, limit = 8) => {
+  if (!query || query.trim().length < 2) return []
+
+  const q = query.trim().toLowerCase()
+  const results = []
+
+  for (const [subjectId, subjectData] of Object.entries(CURRICULUM)) {
+    // Find the subject metadata across all grade groups
+    let subjectMeta = null
+    let gradeOfSubject = null
+
+    for (const [grade, subjects] of Object.entries(SUBJECTS)) {
+      const found = subjects.find(s => s.id === subjectId)
+      if (found) {
+        subjectMeta = found
+        gradeOfSubject = Number(grade)
+        break
+      }
+    }
+
+    if (!subjectMeta) continue
+
+    for (const strand of subjectData.strands) {
+      for (const sub of strand.subStrands) {
+        const nameEn   = (sub.name || '').toLowerCase()
+        const nameSw   = (sub.kiswahili || '').toLowerCase()
+        const strandEn = (strand.name || '').toLowerCase()
+
+        if (
+          nameEn.includes(q) ||
+          nameSw.includes(q) ||
+          strandEn.includes(q)
+        ) {
+          results.push({
+            lessonId:      sub.id,
+            lessonName:    sub.name,
+            lessonNameSw:  sub.kiswahili,
+            subjectId,
+            subjectName:   subjectMeta.name,
+            subjectNameSw: subjectMeta.kiswahili,
+            subjectEmoji:  subjectMeta.emoji,
+            subjectColor:  subjectMeta.color,
+            strandName:    strand.name,
+            strandId:      strand.id,
+            grade:         gradeOfSubject,
+          })
+
+          if (results.length >= limit) return results
+        }
+      }
+    }
+  }
+
+  return results
+}

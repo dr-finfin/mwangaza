@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useApp } from '../../context/AppContext'
 import { GRADES, getSubjectsForGrade, CURRICULUM } from '../../data/curriculum'
 import LessonView from './LessonView'
@@ -133,9 +133,13 @@ const SubjectSelector = ({ grade, onSelect, onBack, progress, language }) => {
   )
 }
 
-const StrandList = ({ subject, grade, onSelectLesson, onBack, onBackGrade, progress, language }) => {
+const StrandList = ({ subject, grade, onSelectLesson, onBack, onBackGrade, progress, language, autoExpandStrand }) => {
   const data = CURRICULUM[subject.id]
-  const [expanded, setExpanded] = useState(null)
+  const [expanded, setExpanded] = useState(autoExpandStrand || null)
+
+  useEffect(() => {
+    if (autoExpandStrand) setExpanded(autoExpandStrand)
+  }, [autoExpandStrand])
 
   if (!data) {
     return (
@@ -256,11 +260,55 @@ const StrandList = ({ subject, grade, onSelectLesson, onBack, onBackGrade, progr
 
 const CurriculumNavigator = () => {
   const navigate = useNavigate()
+  const [searchParams, setSearchParams] = useSearchParams()
   const { progress, selectedGrade, setSelectedGrade, language } = useApp()
 
   const [step, setStep] = useState(selectedGrade ? 'subject' : 'grade')
   const [selectedSubject, setSelectedSubject] = useState(null)
   const [selectedLesson, setSelectedLesson] = useState(null)
+  const [autoExpandStrand, setAutoExpandStrand] = useState(null)
+
+  // Read URL params on mount and navigate accordingly
+  useEffect(() => {
+    const gradeParam   = searchParams.get('grade')
+    const subjectParam = searchParams.get('subject')
+    const strandParam  = searchParams.get('strand')
+    const lessonParam  = searchParams.get('lesson')
+
+    if (gradeParam) {
+      const g = Number(gradeParam)
+      setSelectedGrade(g)
+
+      if (subjectParam) {
+        const subjects = getSubjectsForGrade(g)
+        const subject = subjects.find(s => s.id === subjectParam)
+        if (subject) {
+          setSelectedSubject(subject)
+
+          if (lessonParam) {
+            const data = CURRICULUM[subjectParam]
+            if (data) {
+              for (const strand of data.strands) {
+                const lesson = strand.subStrands.find(ss => ss.id === lessonParam)
+                if (lesson) {
+                  setSelectedLesson({ lesson, subject })
+                  setStep('lesson')
+                  setAutoExpandStrand(strand.id)
+                  return
+                }
+              }
+            }
+          }
+
+          if (strandParam) setAutoExpandStrand(strandParam)
+          setStep('strands')
+          return
+        }
+      }
+
+      setStep('subject')
+    }
+  }, [searchParams])
 
   useEffect(() => {
     if (selectedGrade && step === 'grade') setStep('subject')
@@ -268,12 +316,15 @@ const CurriculumNavigator = () => {
 
   const goDashboard = () => navigate('/dashboard')
 
+  // Clear URL params when navigating manually backward
+  const clearParams = () => setSearchParams({})
+
   return (
     <div>
       {step === 'grade' && (
         <GradeSelector
           selectedGrade={selectedGrade}
-          onSelect={(g) => { setSelectedGrade(g); setStep('subject') }}
+          onSelect={(g) => { setSelectedGrade(g); setStep('subject'); clearParams() }}
           language={language}
           goDashboard={goDashboard}
         />
@@ -283,7 +334,7 @@ const CurriculumNavigator = () => {
         <SubjectSelector
           grade={selectedGrade}
           onSelect={(s) => { setSelectedSubject(s); setStep('strands') }}
-          onBack={() => setStep('grade')}
+          onBack={() => { setStep('grade'); clearParams() }}
           progress={progress}
           language={language}
         />
@@ -294,10 +345,11 @@ const CurriculumNavigator = () => {
           subject={selectedSubject}
           grade={selectedGrade}
           onSelectLesson={(lesson, subject) => { setSelectedLesson({ lesson, subject }); setStep('lesson') }}
-          onBack={() => setStep('subject')}
-          onBackGrade={() => setStep('grade')}
+          onBack={() => { setStep('subject'); clearParams() }}
+          onBackGrade={() => { setStep('grade'); clearParams() }}
           progress={progress}
           language={language}
+          autoExpandStrand={autoExpandStrand}
         />
       )}
 
@@ -305,7 +357,7 @@ const CurriculumNavigator = () => {
         <LessonView
           lesson={selectedLesson.lesson}
           subject={selectedLesson.subject}
-          onBack={() => setStep('strands')}
+          onBack={() => { setStep('strands'); clearParams() }}
           onComplete={() => {}}
         />
       )}
