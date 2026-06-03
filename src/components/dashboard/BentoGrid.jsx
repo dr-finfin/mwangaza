@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom'
 import { useApp } from '../../context/AppContext'
 import { CURRICULUM } from '../../data/curriculum'
 
-// Lookup lesson name from curriculum data
 const getLessonName = (lessonId) => {
   for (const subject of Object.values(CURRICULUM)) {
     for (const strand of subject.strands) {
@@ -20,9 +19,7 @@ const BentoGrid = () => {
   const { name, selectedGrade, setSelectedGrade, language, progress, stats, t } = useApp()
 
   const today = new Date().toLocaleDateString('en-KE', {
-    weekday: 'long',
-    month: 'long',
-    day: 'numeric',
+    weekday: 'long', month: 'long', day: 'numeric',
   })
 
   const recentLessons = Object.entries(progress)
@@ -37,7 +34,6 @@ const BentoGrid = () => {
   return (
     <div>
 
-      {/* Welcome */}
       <div className="mb-8">
         <p className="text-gray-400 dark:text-gray-500 text-sm">{today}</p>
         <h1 className="text-3xl font-black text-gray-900 dark:text-white mt-1">
@@ -47,8 +43,8 @@ const BentoGrid = () => {
 
       {/* Stats */}
       <div className="grid grid-cols-2 gap-4 mb-4">
-        <div className="bg-blue-600 text-white rounded-2xl p-5">
-          <p className="text-blue-200 text-xs font-medium mb-1">{t('lessonsCompleted')}</p>
+        <div className="text-white rounded-2xl p-5" style={{ backgroundColor: 'var(--accent)' }}>
+          <p className="text-white/80 text-xs font-medium mb-1">{t('lessonsCompleted')}</p>
           <p className="text-4xl font-black">{stats.completed}</p>
         </div>
 
@@ -56,7 +52,7 @@ const BentoGrid = () => {
           <p className="text-gray-400 text-xs font-medium mb-1">{t('masteryScore')}</p>
           <p className="text-4xl font-black text-gray-900 dark:text-white">{stats.mastery}%</p>
           <div className="mt-2 h-1.5 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
-            <div className="h-full bg-blue-600 rounded-full" style={{ width: `${stats.mastery}%` }} />
+            <div className="h-full rounded-full" style={{ width: `${stats.mastery}%`, backgroundColor: 'var(--accent)' }} />
           </div>
         </div>
       </div>
@@ -78,9 +74,10 @@ const BentoGrid = () => {
                 onClick={() => handleGradeClick(g)}
                 className={`w-7 h-7 rounded-lg text-xs font-bold transition-all ${
                   selectedGrade === g
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 hover:bg-blue-50 dark:hover:bg-gray-600'
+                    ? 'text-white'
+                    : 'bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600'
                 }`}
+                style={selectedGrade === g ? { backgroundColor: 'var(--accent)' } : {}}
               >
                 {g}
               </button>
@@ -90,13 +87,14 @@ const BentoGrid = () => {
 
         <button
           onClick={() => navigate('/curriculum')}
-          className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl text-sm"
+          className="w-full py-3 text-white font-semibold rounded-xl text-sm"
+          style={{ backgroundColor: 'var(--accent)' }}
         >
           {language === 'en' ? 'Start Learning' : 'Anza Kujifunza'}
         </button>
       </div>
 
-      {/* Recent lessons */}
+      {/* Recent */}
       {recentLessons.length > 0 && (
         <div className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl p-5 mb-4">
           <div className="flex items-center justify-between mb-4">
@@ -105,7 +103,8 @@ const BentoGrid = () => {
             </p>
             <button
               onClick={() => navigate('/curriculum')}
-              className="text-xs text-blue-600 font-medium hover:underline"
+              className="text-xs font-medium hover:underline"
+              style={{ color: 'var(--accent)' }}
             >
               {language === 'en' ? 'View all' : 'Ona yote'}
             </button>
@@ -113,10 +112,7 @@ const BentoGrid = () => {
 
           <div className="space-y-2">
             {recentLessons.map(([lessonId, data]) => (
-              <div
-                key={lessonId}
-                className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-xl"
-              >
+              <div key={lessonId} className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
                 <div className={`w-2 h-2 rounded-full flex-shrink-0 ${
                   data.status === 'completed' ? 'bg-emerald-500' : 'bg-blue-400'
                 }`} />
@@ -134,21 +130,18 @@ const BentoGrid = () => {
         </div>
       )}
 
-      {/* Empty state */}
       {recentLessons.length === 0 && (
         <div className="bg-gray-50 dark:bg-gray-800 border border-dashed border-gray-200 dark:border-gray-700 rounded-2xl p-8 text-center mb-4">
           <p className="text-gray-600 dark:text-gray-300 font-semibold text-sm mb-1">
             {language === 'en' ? 'No lessons yet' : 'Hakuna masomo bado'}
           </p>
-          <p className="text-gray-400 text-xs mb-4">
-            {language === 'en'
-              ? 'Pick a grade above to start learning.'
-              : 'Chagua darasa hapo juu kuanza kujifunza.'}
+          <p className="text-gray-400 text-xs">
+            {language === 'en' ? 'Pick a grade above to start.' : 'Chagua darasa hapo juu kuanza.'}
           </p>
         </div>
       )}
 
-      {/* Daily quote */}
+      {/* Quote */}
       <div className="bg-gray-50 dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-5">
         <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">
           {language === 'en' ? 'Daily Quote' : 'Nukuu ya Leo'}

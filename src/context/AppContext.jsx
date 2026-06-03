@@ -5,6 +5,14 @@ import { UI_STRINGS } from '../data/curriculum'
 const STORAGE_KEY = 'mwangaza_state'
 const STATE_VERSION = 1
 
+export const ACCENT_COLORS = {
+  blue:    { name: 'Blue',    hex: '#2563eb', hover: '#1d4ed8' },
+  gold:    { name: 'Gold',    hex: '#C9A84C', hover: '#B8860B' },
+  emerald: { name: 'Emerald', hex: '#059669', hover: '#047857' },
+  rose:    { name: 'Rose',    hex: '#e11d48', hover: '#be123c' },
+  slate:   { name: 'Slate',   hex: '#475569', hover: '#334155' },
+}
+
 const DEFAULT_STATE = {
   version: STATE_VERSION,
   profile: {
@@ -12,6 +20,7 @@ const DEFAULT_STATE = {
     selectedGrade: 4,
     language: 'en',
     darkMode: false,
+    accent: 'blue',
   },
   progress: {},
 }
@@ -22,7 +31,11 @@ const loadState = () => {
     if (!raw) return DEFAULT_STATE
     const parsed = JSON.parse(raw)
     if (parsed.version !== STATE_VERSION) return DEFAULT_STATE
-    return parsed
+    return {
+      ...DEFAULT_STATE,
+      ...parsed,
+      profile: { ...DEFAULT_STATE.profile, ...parsed.profile },
+    }
   } catch {
     return DEFAULT_STATE
   }
@@ -35,7 +48,6 @@ export const AppProvider = ({ children }) => {
   const [state, setState] = useState(loadState)
   const [notification, setNotification] = useState(null)
 
-  // Persist to localStorage on every state change
   useEffect(() => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
@@ -44,41 +56,52 @@ export const AppProvider = ({ children }) => {
     }
   }, [state])
 
-  // Apply dark mode class
   useEffect(() => {
     document.documentElement.classList.toggle('dark', state.profile.darkMode)
   }, [state.profile.darkMode])
 
-  // ── Profile setters ────────────────────────────────────────
+  // Apply accent CSS var
+  useEffect(() => {
+    const accent = ACCENT_COLORS[state.profile.accent] || ACCENT_COLORS.blue
+    document.documentElement.style.setProperty('--accent', accent.hex)
+    document.documentElement.style.setProperty('--accent-hover', accent.hover)
+  }, [state.profile.accent])
+
   const setName = useCallback((name) => {
-    setState(prev => ({
-      ...prev,
-      profile: { ...prev.profile, name },
-    }))
+    setState(prev => ({ ...prev, profile: { ...prev.profile, name } }))
   }, [])
 
   const setSelectedGrade = useCallback((grade) => {
-    setState(prev => ({
-      ...prev,
-      profile: { ...prev.profile, selectedGrade: grade },
-    }))
+    setState(prev => ({ ...prev, profile: { ...prev.profile, selectedGrade: grade } }))
   }, [])
 
   const setLanguage = useCallback((lang) => {
-    setState(prev => ({
-      ...prev,
-      profile: { ...prev.profile, language: lang },
-    }))
+    setState(prev => ({ ...prev, profile: { ...prev.profile, language: lang } }))
   }, [])
 
   const setDarkMode = useCallback((dark) => {
-    setState(prev => ({
-      ...prev,
-      profile: { ...prev.profile, darkMode: dark },
-    }))
+    setState(prev => ({ ...prev, profile: { ...prev.profile, darkMode: dark } }))
   }, [])
 
-  // ── Progress ───────────────────────────────────────────────
+  const setAccent = useCallback((accent) => {
+    setState(prev => ({ ...prev, profile: { ...prev.profile, accent } }))
+  }, [])
+
+  const resetAll = useCallback(() => {
+    setState(DEFAULT_STATE)
+    localStorage.removeItem(STORAGE_KEY)
+  }, [])
+
+  const exportData = useCallback(() => {
+    const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = `mwangaza-backup-${Date.now()}.json`
+    link.click()
+    URL.revokeObjectURL(url)
+  }, [state])
+
   const saveLessonProgress = useCallback((lessonId, score, passed) => {
     setState(prev => {
       const existing = prev.progress[lessonId]
@@ -104,13 +127,12 @@ export const AppProvider = ({ children }) => {
 
     if (passed) {
       showNotification(
-        state.profile.language === 'en' ? 'Lesson complete!' : 'Somo limekamilika!',
+        state.profile.language === 'en' ? 'Lesson complete' : 'Somo limekamilika',
         'success'
       )
     }
   }, [state.profile.language])
 
-  // ── Derived stats ──────────────────────────────────────────
   const stats = useMemo(() => {
     const entries = Object.values(state.progress)
     const completed = entries.filter(p => p.status === 'completed').length
@@ -119,41 +141,35 @@ export const AppProvider = ({ children }) => {
     const mastery = scored.length
       ? Math.round(scored.reduce((sum, p) => sum + p.bestScore, 0) / scored.length)
       : 0
-
     return { completed, attempted, mastery }
   }, [state.progress])
 
-  // ── Notification ───────────────────────────────────────────
   const showNotification = useCallback((message, type = 'info') => {
     setNotification({ message, type, id: Date.now() })
     setTimeout(() => setNotification(null), 3500)
   }, [])
 
-  // ── Translation ────────────────────────────────────────────
   const t = useCallback((key) => {
     return UI_STRINGS[state.profile.language]?.[key] || UI_STRINGS.en[key] || key
   }, [state.profile.language])
 
   return (
     <AppContext.Provider value={{
-      // Profile
       name:          state.profile.name,
       selectedGrade: state.profile.selectedGrade,
       language:      state.profile.language,
       darkMode:      state.profile.darkMode,
+      accent:        state.profile.accent,
       setName,
       setSelectedGrade,
       setLanguage,
       setDarkMode,
-
-      // Progress
+      setAccent,
+      resetAll,
+      exportData,
       progress: state.progress,
       saveLessonProgress,
-
-      // Derived
       stats,
-
-      // Utils
       showNotification,
       notification,
       navigate,

@@ -21,22 +21,14 @@ const Sidebar = ({ mobileOpen, onClose }) => {
   const content = (
     <div className="flex flex-col h-full">
 
-      {/* Logo */}
-      <div className="px-5 py-5 border-b border-gray-100 dark:border-gray-800">
-        <button onClick={() => handleNav('/dashboard')} className="flex items-center gap-3 w-full text-left">
+      {/* Logo only */}
+      <div className="px-5 py-5 border-b border-gray-100 dark:border-gray-800 flex justify-center">
+        <button onClick={() => handleNav('/dashboard')} aria-label="Mwangaza">
           <img
             src="/mwangaza_icon.png"
             alt="Mwangaza"
-            className="w-10 h-10 rounded-xl shadow-sm"
+            className="w-12 h-12 rounded-xl shadow-sm"
           />
-          <div>
-            <div className="font-black text-lg text-gray-900 dark:text-white tracking-tight leading-none">
-              MWANGAZA
-            </div>
-            <div className="text-xs mt-1" style={{ color: '#C9A84C' }}>
-              {language === 'en' ? 'Illuminate Learning' : 'Angaza Elimu'}
-            </div>
-          </div>
         </button>
       </div>
 
@@ -50,9 +42,10 @@ const Sidebar = ({ mobileOpen, onClose }) => {
               onClick={() => handleNav(item.path)}
               className={`w-full flex items-center px-4 py-3 rounded-xl text-sm font-medium transition-all ${
                 isActive
-                  ? 'bg-blue-600 text-white shadow-sm'
+                  ? 'text-white shadow-sm'
                   : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white'
               }`}
+              style={isActive ? { backgroundColor: 'var(--accent)' } : {}}
             >
               {language === 'en' ? item.label : item.labelSw}
             </button>
@@ -67,7 +60,10 @@ const Sidebar = ({ mobileOpen, onClose }) => {
         </div>
         <div className="flex items-center gap-2">
           <div className="flex-1 h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-            <div className="h-full bg-blue-500 rounded-full" style={{ width: `${Math.min(stats.mastery, 100)}%` }} />
+            <div
+              className="h-full rounded-full"
+              style={{ width: `${Math.min(stats.mastery, 100)}%`, backgroundColor: 'var(--accent)' }}
+            />
           </div>
           <span className="text-xs font-semibold text-gray-600 dark:text-gray-400">
             {stats.mastery}%

@@ -18,13 +18,8 @@ const LandingPage = () => {
       {/* Navbar */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white dark:bg-gray-950 border-b border-gray-100 dark:border-gray-800">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-
           <div className="flex items-center gap-2.5">
-            <img
-              src="/mwangaza_icon.png"
-              alt="Mwangaza"
-              className="w-8 h-8 rounded-lg"
-            />
+            <img src="/mwangaza_icon.png" alt="Mwangaza" className="w-8 h-8 rounded-lg" />
             <div className="font-black text-lg tracking-tight text-gray-900 dark:text-white">
               MWANGAZA
             </div>
@@ -33,21 +28,22 @@ const LandingPage = () => {
           <div className="flex items-center gap-2">
             <button
               onClick={() => setLanguage(language === 'en' ? 'sw' : 'en')}
-              className="px-3 py-1.5 rounded-lg text-xs font-semibold border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:border-gray-300 dark:hover:border-gray-600"
+              className="px-3 py-1.5 rounded-lg text-xs font-semibold border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
             >
               {language === 'en' ? 'SW' : 'EN'}
             </button>
 
             <button
               onClick={() => setDarkMode(!darkMode)}
-              className="px-3 py-1.5 rounded-lg text-xs font-semibold border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:border-gray-300 dark:hover:border-gray-600"
+              className="px-3 py-1.5 rounded-lg text-xs font-semibold border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
             >
               {darkMode ? 'Light' : 'Dark'}
             </button>
 
             <button
               onClick={() => navigate('/dashboard')}
-              className="px-4 py-1.5 bg-blue-600 text-white text-xs font-semibold rounded-lg hover:bg-blue-700"
+              className="px-4 py-1.5 text-white text-xs font-semibold rounded-lg"
+              style={{ backgroundColor: 'var(--accent)' }}
             >
               Dashboard
             </button>
@@ -62,9 +58,9 @@ const LandingPage = () => {
           <div className="max-w-3xl mb-20">
             <h1 className="text-6xl sm:text-7xl lg:text-[6rem] font-black leading-[0.9] tracking-tighter mb-6 text-gray-900 dark:text-white">
               {language === 'en' ? (
-                <>Free education<br />for every<br /><span className="text-blue-600">Kenyan student.</span></>
+                <>Free education<br />for every<br /><span style={{ color: 'var(--accent)' }}>Kenyan student.</span></>
               ) : (
-                <>Elimu bure<br />kwa kila<br /><span className="text-blue-600">mwanafunzi.</span></>
+                <>Elimu bure<br />kwa kila<br /><span style={{ color: 'var(--accent)' }}>mwanafunzi.</span></>
               )}
             </h1>
 
@@ -75,13 +71,11 @@ const LandingPage = () => {
             </p>
 
             <p className="text-xs text-gray-400 dark:text-gray-600">
-              {language === 'en'
-                ? 'No account. No sign in. Free forever.'
-                : 'Hakuna akaunti. Hakuna kuingia. Bure milele.'}
+              {language === 'en' ? 'No account. No sign in. Free forever.' : 'Hakuna akaunti. Bure milele.'}
             </p>
           </div>
 
-          {/* Grade selector */}
+          {/* Grade selector — no emojis */}
           <div>
             <h2 className="text-sm font-bold uppercase tracking-wider mb-5 text-gray-400 dark:text-gray-500">
               {language === 'en' ? 'Pick your grade' : 'Chagua darasa lako'}
@@ -92,13 +86,13 @@ const LandingPage = () => {
                 <button
                   key={grade.id}
                   onClick={() => handleGradeClick(grade.id)}
-                  className="flex flex-col items-center gap-2 p-4 rounded-2xl border-2 transition-all hover:scale-105 active:scale-95 bg-white dark:bg-gray-900 border-gray-100 dark:border-gray-800 hover:border-blue-300 dark:hover:border-blue-500 hover:shadow-md dark:hover:bg-gray-800"
+                  className="flex flex-col items-center justify-center gap-2 py-5 rounded-2xl border-2 transition-all hover:scale-105 active:scale-95 bg-white dark:bg-gray-900 border-gray-100 dark:border-gray-800 hover:shadow-md hover:border-gray-300 dark:hover:border-gray-600"
                 >
-                  <div className={`w-10 h-10 bg-gradient-to-br ${grade.color} rounded-xl flex items-center justify-center text-lg shadow-sm`}>
-                    {grade.emoji}
-                  </div>
-                  <span className="text-xs font-bold text-gray-600 dark:text-gray-400">
-                    Grade {grade.id}
+                  <span className="text-3xl font-black text-gray-900 dark:text-white">
+                    {grade.id}
+                  </span>
+                  <span className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">
+                    {language === 'en' ? 'Grade' : 'Darasa'}
                   </span>
                 </button>
               ))}
@@ -111,20 +105,14 @@ const LandingPage = () => {
       <footer className="border-t border-gray-100 dark:border-gray-800 py-6">
         <div className="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <img
-              src="/mwangaza_icon.png"
-              alt="Mwangaza"
-              className="w-5 h-5 rounded"
-            />
+            <img src="/mwangaza_icon.png" alt="Mwangaza" className="w-5 h-5 rounded" />
             <span className="font-black text-xs tracking-tight text-gray-900 dark:text-white">
               MWANGAZA
             </span>
           </div>
-
           <p className="text-xs text-gray-400 dark:text-gray-600">
             {language === 'en' ? 'Free forever · KICD aligned' : 'Bure milele · KICD'}
           </p>
-
           <span className="text-xs text-gray-400 dark:text-gray-600">© 2025</span>
         </div>
       </footer>

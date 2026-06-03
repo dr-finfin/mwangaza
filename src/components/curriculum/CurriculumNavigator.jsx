@@ -3,58 +3,84 @@ import { useApp } from '../../context/AppContext'
 import { GRADES, getSubjectsForGrade, CURRICULUM } from '../../data/curriculum'
 import LessonView from './LessonView'
 
-const GradeSelector = ({ selectedGrade, onSelect, t, language }) => (
-  <div>
-    <div className="mb-8">
-      <h1 className="text-3xl font-black text-gray-900 dark:text-white">{t('chooseGrade')}</h1>
-      <p className="text-gray-500 dark:text-gray-400 mt-1 text-sm">
-        {language === 'en' ? 'Select your grade level to begin' : 'Chagua darasa lako kuanza'}
-      </p>
-    </div>
+// ── Breadcrumb ─────────────────────────────────────────────
+const Breadcrumb = ({ items }) => (
+  <nav className="flex items-center gap-1.5 text-sm mb-6 flex-wrap">
+    {items.map((item, i) => (
+      <React.Fragment key={i}>
+        {i > 0 && <span className="text-gray-300 dark:text-gray-600">/</span>}
+        {item.onClick ? (
+          <button
+            onClick={item.onClick}
+            className="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white font-medium"
+          >
+            {item.label}
+          </button>
+        ) : (
+          <span className="text-gray-900 dark:text-white font-semibold">{item.label}</span>
+        )}
+      </React.Fragment>
+    ))}
+  </nav>
+)
 
-    <div className="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+// ── Grade Selector ─────────────────────────────────────────
+const GradeSelector = ({ selectedGrade, onSelect, language }) => (
+  <div>
+    <Breadcrumb items={[{ label: language === 'en' ? 'Grade' : 'Darasa' }]} />
+
+    <h1 className="text-3xl font-black text-gray-900 dark:text-white mb-1">
+      {language === 'en' ? 'Choose your grade' : 'Chagua darasa lako'}
+    </h1>
+    <p className="text-gray-500 dark:text-gray-400 text-sm mb-8">
+      {language === 'en' ? 'Select a grade level to view subjects' : 'Chagua darasa kuangalia masomo'}
+    </p>
+
+    <div className="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-9 gap-3">
       {GRADES.map(grade => (
         <button
           key={grade.id}
           onClick={() => onSelect(grade.id)}
-          className={`relative flex flex-col items-center gap-2 p-4 rounded-2xl border-2 transition-all hover:scale-105 active:scale-95 ${
+          className={`flex flex-col items-center justify-center gap-1 py-5 rounded-2xl border-2 transition-all hover:scale-105 ${
             selectedGrade === grade.id
-              ? 'border-blue-500 bg-blue-50 dark:bg-blue-950/30 shadow-lg shadow-blue-500/20'
-              : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-blue-300 dark:hover:border-blue-700'
+              ? 'text-white'
+              : 'bg-white dark:bg-gray-800 border-gray-100 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
           }`}
+          style={selectedGrade === grade.id ? { backgroundColor: 'var(--accent)', borderColor: 'var(--accent)' } : {}}
         >
-          <div className={`w-12 h-12 bg-gradient-to-br ${grade.color} rounded-xl flex items-center justify-center shadow-lg`}>
-            <span className="text-2xl">{grade.emoji}</span>
-          </div>
-          <span className={`font-bold text-sm ${
-            selectedGrade === grade.id ? 'text-blue-600 dark:text-blue-400' : 'text-gray-700 dark:text-gray-300'
+          <span className={`text-3xl font-black ${
+            selectedGrade === grade.id ? 'text-white' : 'text-gray-900 dark:text-white'
           }`}>
-            {grade.label}
+            {grade.id}
           </span>
-          {selectedGrade === grade.id && (
-            <div className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-blue-600 rounded-full flex items-center justify-center text-white text-xs">✓</div>
-          )}
+          <span className={`text-xs font-semibold uppercase tracking-wider ${
+            selectedGrade === grade.id ? 'text-white/80' : 'text-gray-400 dark:text-gray-500'
+          }`}>
+            {language === 'en' ? 'Grade' : 'Darasa'}
+          </span>
         </button>
       ))}
     </div>
   </div>
 )
 
-const SubjectSelector = ({ grade, onSelect, onBack, progress, t, language }) => {
+// ── Subject Selector ───────────────────────────────────────
+const SubjectSelector = ({ grade, onSelect, onBack, progress, language }) => {
   const subjects = getSubjectsForGrade(grade)
 
   return (
     <div>
-      <button onClick={onBack} className="flex items-center gap-2 text-gray-500 dark:text-gray-400 hover:text-blue-600 font-medium text-sm mb-6">
-        ← {language === 'en' ? `Grade ${grade}` : `Darasa ${grade}`}
-      </button>
+      <Breadcrumb items={[
+        { label: language === 'en' ? 'Grade' : 'Darasa', onClick: onBack },
+        { label: `${language === 'en' ? 'Grade' : 'Darasa'} ${grade}` },
+      ]} />
 
-      <div className="mb-8">
-        <h2 className="text-3xl font-black text-gray-900 dark:text-white">{t('chooseSubject')}</h2>
-        <p className="text-gray-500 dark:text-gray-400 mt-1 text-sm">
-          {language === 'en' ? `Grade ${grade}` : `Darasa ${grade}`} · {subjects.length} {language === 'en' ? 'subjects' : 'masomo'}
-        </p>
-      </div>
+      <h1 className="text-3xl font-black text-gray-900 dark:text-white mb-1">
+        {language === 'en' ? 'Choose a subject' : 'Chagua somo'}
+      </h1>
+      <p className="text-gray-500 dark:text-gray-400 text-sm mb-8">
+        {subjects.length} {language === 'en' ? 'subjects' : 'masomo'}
+      </p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {subjects.map(subject => {
@@ -68,12 +94,12 @@ const SubjectSelector = ({ grade, onSelect, onBack, progress, t, language }) => 
             <button
               key={subject.id}
               onClick={() => onSelect(subject)}
-              className="relative text-left bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl p-5 hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all group overflow-hidden"
+              className="text-left bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl p-5 hover:shadow-lg hover:scale-[1.02] transition-all"
             >
-              <div className={`w-14 h-14 bg-gradient-to-br ${subject.color} rounded-2xl flex items-center justify-center text-3xl shadow-lg mb-4`}>
+              <div className={`w-12 h-12 bg-gradient-to-br ${subject.color} rounded-xl flex items-center justify-center text-2xl shadow-sm mb-4`}>
                 {subject.emoji}
               </div>
-              <h3 className="font-bold text-gray-900 dark:text-white text-base mb-0.5">
+              <h3 className="font-bold text-gray-900 dark:text-white text-base mb-1">
                 {language === 'en' ? subject.name : subject.kiswahili}
               </h3>
               <p className="text-gray-400 dark:text-gray-500 text-xs mb-4">
@@ -85,7 +111,7 @@ const SubjectSelector = ({ grade, onSelect, onBack, progress, t, language }) => 
                   <span className="text-gray-400">{completed}/{total}</span>
                 </div>
                 <div className="w-full h-1.5 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
-                  <div className={`h-full bg-gradient-to-r ${subject.color} rounded-full`} style={{ width: `${pct}%` }} />
+                  <div className="h-full rounded-full" style={{ width: `${pct}%`, backgroundColor: 'var(--accent)' }} />
                 </div>
               </div>
             </button>
@@ -96,42 +122,50 @@ const SubjectSelector = ({ grade, onSelect, onBack, progress, t, language }) => 
   )
 }
 
-const StrandList = ({ subject, onSelectLesson, onBack, progress, t, language }) => {
+// ── Strand List ────────────────────────────────────────────
+const StrandList = ({ subject, grade, onSelectLesson, onBackGrade, onBackSubject, progress, language }) => {
   const data = CURRICULUM[subject.id]
   const [expanded, setExpanded] = useState(null)
 
   if (!data) {
     return (
-      <div className="text-center py-16">
-        <p className="text-3xl mb-4">🚧</p>
-        <h3 className="text-base font-bold text-gray-700 dark:text-gray-300 mb-2">
-          {language === 'en' ? 'Coming Soon' : 'Inakuja Hivi Karibuni'}
-        </h3>
-        <p className="text-gray-400 text-sm mb-6">
-          {language === 'en' ? 'This subject is being prepared.' : 'Somo hili linaandaliwa.'}
-        </p>
-        <button onClick={onBack} className="px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-lg hover:bg-blue-700">
-          ← {language === 'en' ? 'Go Back' : 'Rudi'}
-        </button>
+      <div>
+        <Breadcrumb items={[
+          { label: language === 'en' ? 'Grade' : 'Darasa', onClick: onBackGrade },
+          { label: `${language === 'en' ? 'Grade' : 'Darasa'} ${grade}`, onClick: onBackSubject },
+          { label: language === 'en' ? subject.name : subject.kiswahili },
+        ]} />
+        <div className="text-center py-16">
+          <h3 className="text-base font-bold text-gray-700 dark:text-gray-300 mb-2">
+            {language === 'en' ? 'Coming soon' : 'Inakuja hivi karibuni'}
+          </h3>
+          <p className="text-gray-400 text-sm">
+            {language === 'en' ? 'This subject is being prepared.' : 'Somo hili linaandaliwa.'}
+          </p>
+        </div>
       </div>
     )
   }
 
   return (
     <div>
-      <button onClick={onBack} className="flex items-center gap-2 text-gray-500 dark:text-gray-400 hover:text-blue-600 font-medium text-sm mb-6">
-        ← {language === 'en' ? subject.name : subject.kiswahili}
-      </button>
+      <Breadcrumb items={[
+        { label: language === 'en' ? 'Grade' : 'Darasa', onClick: onBackGrade },
+        { label: `${language === 'en' ? 'Grade' : 'Darasa'} ${grade}`, onClick: onBackSubject },
+        { label: language === 'en' ? subject.name : subject.kiswahili },
+      ]} />
 
-      <div className={`bg-gradient-to-br ${subject.color} rounded-2xl p-6 text-white mb-8`}>
-        <div className="flex items-center gap-4">
-          <div className="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center text-3xl">
-            {subject.emoji}
-          </div>
-          <div>
-            <h2 className="text-2xl font-black">{language === 'en' ? subject.name : subject.kiswahili}</h2>
-            <p className="text-white/70 text-sm">{data.strands.length} strands · KICD</p>
-          </div>
+      <div className="flex items-center gap-4 mb-8">
+        <div className={`w-14 h-14 bg-gradient-to-br ${subject.color} rounded-xl flex items-center justify-center text-3xl shadow-sm`}>
+          {subject.emoji}
+        </div>
+        <div>
+          <h1 className="text-2xl font-black text-gray-900 dark:text-white">
+            {language === 'en' ? subject.name : subject.kiswahili}
+          </h1>
+          <p className="text-gray-400 text-sm">
+            {data.strands.length} {language === 'en' ? 'strands' : 'nyuzi'}
+          </p>
         </div>
       </div>
 
@@ -147,7 +181,7 @@ const StrandList = ({ subject, onSelectLesson, onBack, progress, t, language }) 
                 className="w-full flex items-center justify-between p-5 hover:bg-gray-50 dark:hover:bg-gray-750 text-left"
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-lg flex items-center justify-center text-sm font-bold">
+                  <div className="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold text-white" style={{ backgroundColor: 'var(--accent)' }}>
                     {si + 1}
                   </div>
                   <div>
@@ -173,7 +207,7 @@ const StrandList = ({ subject, onSelectLesson, onBack, progress, t, language }) 
                       <button
                         key={sub.id}
                         onClick={() => onSelectLesson(sub, subject)}
-                        className="w-full flex items-center gap-4 px-5 py-4 hover:bg-blue-50 dark:hover:bg-blue-950/20 text-left group"
+                        className="w-full flex items-center gap-4 px-5 py-4 hover:bg-gray-50 dark:hover:bg-gray-800 text-left"
                       >
                         <div className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 text-sm font-bold ${
                           completed
@@ -191,26 +225,18 @@ const StrandList = ({ subject, onSelectLesson, onBack, progress, t, language }) 
                           </p>
                           <div className="flex items-center gap-2 mt-0.5 flex-wrap">
                             <span className="text-gray-400 text-xs">{sub.duration}</span>
-                            <span className={`text-xs px-2 py-0.5 rounded-full ${
-                              sub.difficulty === 'Beginner'
-                                ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600'
-                                : 'bg-orange-100 dark:bg-orange-900/30 text-orange-600'
-                            }`}>
-                              {sub.difficulty}
-                            </span>
+                            <span className="text-xs text-gray-400">·</span>
+                            <span className="text-gray-400 text-xs">{sub.difficulty}</span>
                             {sp?.bestScore != null && (
-                              <span className="text-xs text-blue-600 dark:text-blue-400 font-medium">
-                                Best: {sp.bestScore}%
-                              </span>
+                              <>
+                                <span className="text-xs text-gray-400">·</span>
+                                <span className="text-xs font-medium" style={{ color: 'var(--accent)' }}>
+                                  {sp.bestScore}%
+                                </span>
+                              </>
                             )}
                           </div>
                         </div>
-
-                        {completed && (
-                          <span className="text-xs bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 px-2 py-0.5 rounded-full font-medium flex-shrink-0">
-                            Done
-                          </span>
-                        )}
                       </button>
                     )
                   })}
@@ -225,42 +251,22 @@ const StrandList = ({ subject, onSelectLesson, onBack, progress, t, language }) 
 }
 
 const CurriculumNavigator = () => {
-  const { t, progress, selectedGrade, setSelectedGrade, language } = useApp()
+  const { progress, selectedGrade, setSelectedGrade, language } = useApp()
 
-  // If grade is already selected, skip to subjects
   const [step, setStep] = useState(selectedGrade ? 'subject' : 'grade')
   const [selectedSubject, setSelectedSubject] = useState(null)
   const [selectedLesson, setSelectedLesson] = useState(null)
 
-  // If grade changes externally (from dashboard/landing), reset to subject step
   useEffect(() => {
-    if (selectedGrade && step === 'grade') {
-      setStep('subject')
-    }
+    if (selectedGrade && step === 'grade') setStep('subject')
   }, [selectedGrade])
-
-  const handleGradeSelect = (grade) => {
-    setSelectedGrade(grade)
-    setStep('subject')
-  }
-
-  const handleSubjectSelect = (subject) => {
-    setSelectedSubject(subject)
-    setStep('strands')
-  }
-
-  const handleLessonSelect = (lesson, subject) => {
-    setSelectedLesson({ lesson, subject })
-    setStep('lesson')
-  }
 
   return (
     <div>
       {step === 'grade' && (
         <GradeSelector
-          selectedGrade={selectedGrade || 4}
-          onSelect={handleGradeSelect}
-          t={t}
+          selectedGrade={selectedGrade}
+          onSelect={(g) => { setSelectedGrade(g); setStep('subject') }}
           language={language}
         />
       )}
@@ -268,10 +274,9 @@ const CurriculumNavigator = () => {
       {step === 'subject' && (
         <SubjectSelector
           grade={selectedGrade}
-          onSelect={handleSubjectSelect}
+          onSelect={(s) => { setSelectedSubject(s); setStep('strands') }}
           onBack={() => setStep('grade')}
           progress={progress}
-          t={t}
           language={language}
         />
       )}
@@ -279,10 +284,11 @@ const CurriculumNavigator = () => {
       {step === 'strands' && selectedSubject && (
         <StrandList
           subject={selectedSubject}
-          onSelectLesson={handleLessonSelect}
-          onBack={() => setStep('subject')}
+          grade={selectedGrade}
+          onSelectLesson={(lesson, subject) => { setSelectedLesson({ lesson, subject }); setStep('lesson') }}
+          onBackGrade={() => setStep('grade')}
+          onBackSubject={() => setStep('subject')}
           progress={progress}
-          t={t}
           language={language}
         />
       )}
