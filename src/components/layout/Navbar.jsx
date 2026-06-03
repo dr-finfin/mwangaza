@@ -8,25 +8,27 @@ const Navbar = ({ onMenuToggle }) => {
   const { t, language, setLanguage, darkMode, setDarkMode, selectedGrade } = useApp()
 
   const [showDropdown, setShowDropdown] = useState(false)
-  const [showSearch, setShowSearch] = useState(false)
-  const [searchQuery, setSearchQuery] = useState('')
+  const [showSearch,   setShowSearch]   = useState(false)
+  const [searchQuery,  setSearchQuery]  = useState('')
 
   const studentName = localStorage.getItem('mwangaza_name') || 'Student'
-  const initials = studentName
-    ? studentName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
-    : 'S'
+  const initials    = studentName
+    .split(' ')
+    .map(n => n[0])
+    .join('')
+    .toUpperCase()
+    .slice(0, 2)
 
   const pathLabels = {
-    '/dashboard': 'Home',
+    '/dashboard':  'Home',
     '/curriculum': 'Learn',
-    '/progress': 'Progress',
-    '/profile': 'Profile',
+    '/profile':    'Profile',
   }
 
   const currentLabel = pathLabels[location.pathname] || ''
 
   return (
-    <header className="fixed top-0 right-0 left-0 lg:left-64 z-40 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md border-b border-gray-100 dark:border-gray-800">
+    <header className="fixed top-0 right-0 left-0 lg:left-64 z-40 bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800">
       <div className="flex items-center justify-between px-4 sm:px-6 h-16">
 
         {/* Left */}
@@ -105,18 +107,18 @@ const Navbar = ({ onMenuToggle }) => {
           {/* Theme */}
           <button
             onClick={() => setDarkMode(!darkMode)}
-            className="px-3 py-1.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400 text-xs font-semibold transition-colors border border-gray-100 dark:border-gray-800"
+            className="hidden sm:flex items-center px-3 py-1.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400 text-xs font-semibold transition-all border border-gray-100 dark:border-gray-800"
           >
             {darkMode ? 'Light' : 'Dark'}
           </button>
 
-          {/* Profile menu */}
+          {/* Profile dropdown */}
           <div className="relative">
             <button
               onClick={() => setShowDropdown(!showDropdown)}
               className="flex items-center gap-2 pl-1 pr-2.5 py-1 rounded-2xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-all"
             >
-              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white text-xs font-bold">
+              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
                 {initials}
               </div>
               <span className="hidden sm:block text-sm font-medium text-gray-700 dark:text-gray-300 max-w-[90px] truncate">
@@ -138,8 +140,9 @@ const Navbar = ({ onMenuToggle }) => {
                   className="fixed inset-0 z-40"
                   onClick={() => setShowDropdown(false)}
                 />
+                <div className="absolute right-0 top-full mt-2 w-52 bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-800 overflow-hidden z-50">
 
-                <div className="absolute right-0 top-full mt-2 w-52 bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-800 overflow-hidden z-50 animate-scale-in">
+                  {/* Header */}
                   <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50">
                     <div className="font-semibold text-gray-800 dark:text-white text-sm truncate">
                       {studentName}
@@ -149,42 +152,31 @@ const Navbar = ({ onMenuToggle }) => {
                     </div>
                   </div>
 
+                  {/* Items */}
                   <div className="py-1">
                     <button
-                      onClick={() => {
-                        navigate('/profile')
-                        setShowDropdown(false)
-                      }}
+                      onClick={() => { navigate('/profile'); setShowDropdown(false) }}
                       className="w-full px-4 py-2.5 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-left"
                     >
                       {t('profile')}
                     </button>
 
                     <button
-                      onClick={() => {
-                        navigate('/progress')
-                        setShowDropdown(false)
-                      }}
+                      onClick={() => { navigate('/curriculum'); setShowDropdown(false) }}
                       className="w-full px-4 py-2.5 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-left"
                     >
-                      Progress
+                      {language === 'en' ? 'Browse lessons' : 'Angalia masomo'}
                     </button>
 
                     <button
-                      onClick={() => {
-                        setLanguage(language === 'en' ? 'sw' : 'en')
-                        setShowDropdown(false)
-                      }}
+                      onClick={() => { setLanguage(language === 'en' ? 'sw' : 'en'); setShowDropdown(false) }}
                       className="w-full px-4 py-2.5 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-left"
                     >
                       {language === 'en' ? 'Switch to Kiswahili' : 'Switch to English'}
                     </button>
 
                     <button
-                      onClick={() => {
-                        setDarkMode(!darkMode)
-                        setShowDropdown(false)
-                      }}
+                      onClick={() => { setDarkMode(!darkMode); setShowDropdown(false) }}
                       className="w-full px-4 py-2.5 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-left"
                     >
                       {darkMode ? 'Use light mode' : 'Use dark mode'}
