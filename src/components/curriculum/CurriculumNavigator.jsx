@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
-import { useAuth } from '../../context/AuthContext';
 import { GRADES, getSubjectsForGrade, CURRICULUM } from '../../data/curriculum';
 import LessonView from './LessonView';
 
@@ -60,14 +59,7 @@ const GradeSelector = ({ selectedGrade, onSelect, t, language }) => (
 );
 
 // ── Subject Selector ──────────────────────────────────────────
-const SubjectSelector = ({
-  grade,
-  onSelect,
-  onBack,
-  progress,
-  t,
-  language,
-}) => {
+const SubjectSelector = ({ grade, onSelect, onBack, progress, t, language }) => {
   const subjects = getSubjectsForGrade(grade);
 
   return (
@@ -77,9 +69,7 @@ const SubjectSelector = ({
         className="flex items-center gap-2 text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 
                    font-medium text-sm mb-6 group transition-colors"
       >
-        <span className="group-hover:-translate-x-1 transition-transform">
-          ←
-        </span>
+        <span className="group-hover:-translate-x-1 transition-transform">←</span>
         Grade {grade}
       </button>
 
@@ -95,13 +85,10 @@ const SubjectSelector = ({
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {subjects.map((subject) => {
           const curriculumData = CURRICULUM[subject.id];
-          const allSubStrands =
-            curriculumData?.strands?.flatMap((s) => s.subStrands) || [];
-          const completed = allSubStrands.filter(
-            (ss) => progress[ss.id]?.status === 'completed'
-          ).length;
-          const total = allSubStrands.length;
-          const pct = total ? Math.round((completed / total) * 100) : 0;
+          const allSubStrands  = curriculumData?.strands?.flatMap(s => s.subStrands) || [];
+          const completed      = allSubStrands.filter(ss => progress[ss.id]?.status === 'completed').length;
+          const total          = allSubStrands.length;
+          const pct            = total ? Math.round((completed / total) * 100) : 0;
 
           return (
             <button
@@ -111,16 +98,11 @@ const SubjectSelector = ({
                          rounded-3xl p-5 hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] 
                          transition-all duration-200 group overflow-hidden"
             >
-              {/* Background gradient hint */}
-              <div
-                className={`absolute inset-0 bg-gradient-to-br ${subject.color} opacity-0 group-hover:opacity-5 transition-opacity duration-300 rounded-3xl`}
-              />
+              <div className={`absolute inset-0 bg-gradient-to-br ${subject.color} opacity-0 group-hover:opacity-5 transition-opacity duration-300 rounded-3xl`} />
 
               <div className="relative">
-                <div
-                  className={`w-14 h-14 bg-gradient-to-br ${subject.color} rounded-2xl flex items-center 
-                                  justify-center text-3xl shadow-lg mb-4 group-hover:scale-110 transition-transform duration-200`}
-                >
+                <div className={`w-14 h-14 bg-gradient-to-br ${subject.color} rounded-2xl flex items-center 
+                                  justify-center text-3xl shadow-lg mb-4 group-hover:scale-110 transition-transform duration-200`}>
                   {subject.emoji}
                 </div>
 
@@ -131,15 +113,10 @@ const SubjectSelector = ({
                   {subject.strands} strands
                 </p>
 
-                {/* Progress bar */}
                 <div className="space-y-1.5">
                   <div className="flex justify-between text-xs">
-                    <span className="text-gray-400 dark:text-gray-500">
-                      {t('yourProgress')}
-                    </span>
-                    <span className="font-semibold text-gray-600 dark:text-gray-400">
-                      {pct}%
-                    </span>
+                    <span className="text-gray-400 dark:text-gray-500">{t('yourProgress')}</span>
+                    <span className="font-semibold text-gray-600 dark:text-gray-400">{pct}%</span>
                   </div>
                   <div className="w-full h-1.5 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
                     <div
@@ -149,12 +126,9 @@ const SubjectSelector = ({
                   </div>
                 </div>
 
-                {/* Arrow */}
-                <div
-                  className="absolute top-0 right-0 w-8 h-8 flex items-center justify-center 
+                <div className="absolute top-0 right-0 w-8 h-8 flex items-center justify-center 
                                 text-gray-300 dark:text-gray-600 group-hover:text-blue-500 group-hover:translate-x-1 
-                                transition-all duration-200"
-                >
+                                transition-all duration-200">
                   →
                 </div>
               </div>
@@ -167,30 +141,19 @@ const SubjectSelector = ({
 };
 
 // ── Strand/SubStrand List ─────────────────────────────────────
-const StrandList = ({
-  subject,
-  onSelectLesson,
-  onBack,
-  progress,
-  t,
-  language,
-}) => {
-  const curriculumData = CURRICULUM[subject.id];
+const StrandList = ({ subject, onSelectLesson, onBack, progress, t, language }) => {
+  const curriculumData   = CURRICULUM[subject.id];
   const [expandedStrand, setExpandedStrand] = useState(null);
 
   if (!curriculumData) {
     return (
       <div className="animate-fade-in text-center py-16">
         <div className="text-5xl mb-4">🚧</div>
-        <h3 className="text-xl font-bold text-gray-700 dark:text-gray-300 mb-2">
-          Coming Soon
-        </h3>
+        <h3 className="text-xl font-bold text-gray-700 dark:text-gray-300 mb-2">Coming Soon</h3>
         <p className="text-gray-400 dark:text-gray-500 text-sm mb-6">
           This subject's content is being prepared by our curriculum team.
         </p>
-        <button onClick={onBack} className="btn-primary">
-          ← Go Back
-        </button>
+        <button onClick={onBack} className="btn-primary">← Go Back</button>
       </div>
     );
   }
@@ -202,16 +165,11 @@ const StrandList = ({
         className="flex items-center gap-2 text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 
                    font-medium text-sm mb-6 group transition-colors"
       >
-        <span className="group-hover:-translate-x-1 transition-transform">
-          ←
-        </span>
+        <span className="group-hover:-translate-x-1 transition-transform">←</span>
         {language === 'en' ? subject.name : subject.kiswahili}
       </button>
 
-      {/* Subject header */}
-      <div
-        className={`bg-gradient-to-br ${subject.color} rounded-3xl p-6 text-white mb-8`}
-      >
+      <div className={`bg-gradient-to-br ${subject.color} rounded-3xl p-6 text-white mb-8`}>
         <div className="flex items-center gap-4">
           <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center text-4xl">
             {subject.emoji}
@@ -227,12 +185,11 @@ const StrandList = ({
         </div>
       </div>
 
-      {/* Strands */}
       <div className="space-y-3">
         {curriculumData.strands.map((strand, si) => {
-          const isExpanded = expandedStrand === strand.id;
+          const isExpanded        = expandedStrand === strand.id;
           const completedInStrand = strand.subStrands.filter(
-            (ss) => progress[ss.id]?.status === 'completed'
+            ss => progress[ss.id]?.status === 'completed'
           ).length;
 
           return (
@@ -240,16 +197,13 @@ const StrandList = ({
               key={strand.id}
               className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden shadow-sm"
             >
-              {/* Strand header */}
               <button
                 onClick={() => setExpandedStrand(isExpanded ? null : strand.id)}
                 className="w-full flex items-center justify-between p-5 hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors text-left"
               >
                 <div className="flex items-center gap-3">
-                  <div
-                    className="w-8 h-8 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 
-                                  rounded-lg flex items-center justify-center text-sm font-bold"
-                  >
+                  <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 
+                                  rounded-lg flex items-center justify-center text-sm font-bold">
                     {si + 1}
                   </div>
                   <div>
@@ -257,37 +211,23 @@ const StrandList = ({
                       {language === 'en' ? strand.name : strand.kiswahili}
                     </h3>
                     <p className="text-gray-400 dark:text-gray-500 text-xs">
-                      {completedInStrand}/{strand.subStrands.length} lessons
-                      complete
+                      {completedInStrand}/{strand.subStrands.length} lessons complete
                     </p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="text-xs font-semibold text-gray-400">
-                    {Math.round(
-                      (completedInStrand / strand.subStrands.length) * 100
-                    )}
-                    %
+                    {Math.round((completedInStrand / strand.subStrands.length) * 100)}%
                   </div>
                   <svg
-                    className={`w-5 h-5 text-gray-400 transition-transform duration-300 ${
-                      isExpanded ? 'rotate-180' : ''
-                    }`}
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
+                    className={`w-5 h-5 text-gray-400 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}
+                    fill="none" stroke="currentColor" viewBox="0 0 24 24"
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M19 9l-7 7-7-7"
-                    />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </div>
               </button>
 
-              {/* Sub-strands */}
               {isExpanded && (
                 <div className="border-t border-gray-100 dark:border-gray-700 divide-y divide-gray-50 dark:divide-gray-750">
                   {strand.subStrands.map((sub, ssi) => {
@@ -302,40 +242,31 @@ const StrandList = ({
                         className="w-full flex items-center gap-4 px-5 py-4 hover:bg-blue-50 dark:hover:bg-blue-950/20 
                                    transition-colors text-left group"
                       >
-                        {/* Status icon */}
-                        <div
-                          className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 ${
-                            isCompleted
-                              ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600'
-                              : isAttempted
-                              ? 'bg-orange-100 dark:bg-orange-900/30 text-orange-500'
-                              : 'bg-gray-100 dark:bg-gray-700 text-gray-400'
-                          }`}
-                        >
-                          {isCompleted
-                            ? '✓'
+                        <div className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 ${
+                          isCompleted
+                            ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600'
                             : isAttempted
-                            ? '▷'
-                            : String(ssi + 1)}
+                            ? 'bg-orange-100 dark:bg-orange-900/30 text-orange-500'
+                            : 'bg-gray-100 dark:bg-gray-700 text-gray-400'
+                        }`}>
+                          {isCompleted ? '✓' : isAttempted ? '▷' : String(ssi + 1)}
                         </div>
 
                         <div className="flex-1 min-w-0">
                           <p className="font-semibold text-gray-800 dark:text-gray-200 text-sm truncate">
                             {language === 'en' ? sub.name : sub.kiswahili}
                           </p>
-                          <div className="flex items-center gap-3 mt-0.5">
+                          <div className="flex items-center gap-3 mt-0.5 flex-wrap">
                             <span className="text-gray-400 dark:text-gray-500 text-xs">
-                              ⏱ {sub.duration}
+                              {sub.duration}
                             </span>
-                            <span
-                              className={`text-xs px-2 py-0.5 rounded-full ${
-                                sub.difficulty === 'Beginner'
-                                  ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400'
-                                  : sub.difficulty === 'Intermediate'
-                                  ? 'bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400'
-                                  : 'bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400'
-                              }`}
-                            >
+                            <span className={`text-xs px-2 py-0.5 rounded-full ${
+                              sub.difficulty === 'Beginner'
+                                ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400'
+                                : sub.difficulty === 'Intermediate'
+                                ? 'bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400'
+                                : 'bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400'
+                            }`}>
                               {sub.difficulty}
                             </span>
                             {subProgress?.best_score && (
@@ -348,25 +279,16 @@ const StrandList = ({
 
                         <div className="flex items-center gap-2 flex-shrink-0">
                           {isCompleted && (
-                            <span
-                              className="text-xs bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 
-                                             px-2 py-0.5 rounded-full font-medium"
-                            >
-                              ✓ Done
+                            <span className="text-xs bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 
+                                             px-2 py-0.5 rounded-full font-medium">
+                              Done
                             </span>
                           )}
                           <svg
                             className="w-4 h-4 text-gray-300 dark:text-gray-600 group-hover:text-blue-500 group-hover:translate-x-1 transition-all duration-200"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" viewBox="0 0 24 24"
                           >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M9 5l7 7-7 7"
-                            />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                           </svg>
                         </div>
                       </button>
@@ -385,15 +307,13 @@ const StrandList = ({
 // ── Main Navigator ────────────────────────────────────────────
 const CurriculumNavigator = () => {
   const { t, progress, selectedGrade, setSelectedGrade, language } = useApp();
-  const { profile, updateProfile } = useAuth();
 
-  const [step, setStep] = useState('grade'); // grade | subject | strands | lesson
+  const [step,            setStep]           = useState('grade');
   const [selectedSubject, setSelectedSubject] = useState(null);
-  const [selectedLesson, setSelectedLesson] = useState(null);
+  const [selectedLesson,  setSelectedLesson]  = useState(null);
 
   const handleGradeSelect = (grade) => {
     setSelectedGrade(grade);
-    updateProfile({ selected_grade: grade });
     setStep('subject');
   };
 
@@ -407,15 +327,11 @@ const CurriculumNavigator = () => {
     setStep('lesson');
   };
 
-  const handleLessonComplete = (result) => {
-    // Optionally show celebration etc.
-  };
-
   return (
     <div className="animate-fade-in">
       {step === 'grade' && (
         <GradeSelector
-          selectedGrade={selectedGrade || profile?.selected_grade || 4}
+          selectedGrade={selectedGrade || 4}
           onSelect={handleGradeSelect}
           t={t}
           language={language}
@@ -449,7 +365,7 @@ const CurriculumNavigator = () => {
           lesson={selectedLesson.lesson}
           subject={selectedLesson.subject}
           onBack={() => setStep('strands')}
-          onComplete={handleLessonComplete}
+          onComplete={() => {}}
         />
       )}
     </div>
