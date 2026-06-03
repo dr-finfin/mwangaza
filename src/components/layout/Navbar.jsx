@@ -1,49 +1,46 @@
 import React, { useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { useAuth } from '../../context/AuthContext'
 import { useApp } from '../../context/AppContext'
 
 const Navbar = ({ onMenuToggle }) => {
-  const navigate  = useNavigate()
-  const location  = useLocation()
-  const { profile, signOut } = useAuth()
-  const { t, language, setLanguage, darkMode, setDarkMode } = useApp()
+  const navigate = useNavigate()
+  const location = useLocation()
+  const { t, language, setLanguage, darkMode, setDarkMode, selectedGrade } = useApp()
 
   const [showDropdown, setShowDropdown] = useState(false)
-  const [showSearch,   setShowSearch]   = useState(false)
-  const [searchQuery,  setSearchQuery]  = useState('')
+  const [showSearch, setShowSearch] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
 
-  const initials = profile?.full_name
-    ? profile.full_name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
-    : '??'
+  const studentName = localStorage.getItem('mwangaza_name') || 'Student'
+  const initials = studentName
+    ? studentName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
+    : 'S'
 
   const pathLabels = {
-    '/dashboard':  'Home',
+    '/dashboard': 'Home',
     '/curriculum': 'Learn',
-    '/progress':   'Progress',
-    '/profile':    'Profile',
+    '/progress': 'Progress',
+    '/profile': 'Profile',
   }
+
   const currentLabel = pathLabels[location.pathname] || ''
 
   return (
-    <header className="fixed top-0 right-0 left-0 lg:left-64 z-40
-                       bg-white/90 dark:bg-gray-900/90 backdrop-blur-md
-                       border-b border-gray-100 dark:border-gray-800">
+    <header className="fixed top-0 right-0 left-0 lg:left-64 z-40 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md border-b border-gray-100 dark:border-gray-800">
       <div className="flex items-center justify-between px-4 sm:px-6 h-16">
 
         {/* Left */}
         <div className="flex items-center gap-3">
           <button
             onClick={onMenuToggle}
-            className="lg:hidden p-2 rounded-xl hover:bg-gray-100
-                       dark:hover:bg-gray-800 text-gray-500 transition-colors"
+            className="lg:hidden p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 transition-colors"
+            aria-label="Open menu"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16"/>
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
             </svg>
           </button>
 
-          {/* Breadcrumb */}
           <div className="hidden sm:flex items-center gap-2 text-sm">
             <span className="text-gray-400 dark:text-gray-500">Mwangaza</span>
             {currentLabel && (
@@ -67,16 +64,20 @@ const Navbar = ({ onMenuToggle }) => {
                 autoFocus
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
-                onBlur={() => { setShowSearch(false); setSearchQuery('') }}
+                onBlur={() => {
+                  setShowSearch(false)
+                  setSearchQuery('')
+                }}
                 placeholder={t('search')}
-                className="w-44 sm:w-60 px-4 py-2 pr-8 bg-gray-100 dark:bg-gray-800
-                           border border-gray-200 dark:border-gray-700 rounded-xl
-                           text-sm text-gray-700 dark:text-gray-300 placeholder-gray-400
-                           focus:outline-none focus:border-blue-500 transition-all"
+                className="w-44 sm:w-60 px-4 py-2 pr-8 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm text-gray-700 dark:text-gray-300 placeholder-gray-400 focus:outline-none focus:border-blue-500 transition-all"
               />
               <button
-                onMouseDown={() => { setShowSearch(false); setSearchQuery('') }}
+                onMouseDown={() => {
+                  setShowSearch(false)
+                  setSearchQuery('')
+                }}
                 className="absolute right-2.5 text-gray-400 hover:text-gray-600 text-lg leading-none"
+                aria-label="Close search"
               >
                 ×
               </button>
@@ -84,153 +85,109 @@ const Navbar = ({ onMenuToggle }) => {
           ) : (
             <button
               onClick={() => setShowSearch(true)}
-              className="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800
-                         text-gray-400 transition-colors"
+              className="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-400 transition-colors"
+              aria-label="Search"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
             </button>
           )}
 
-          {/* Language toggle */}
+          {/* Language */}
           <button
             onClick={() => setLanguage(language === 'en' ? 'sw' : 'en')}
-            className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl
-                       hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500
-                       dark:text-gray-400 text-xs font-semibold transition-all
-                       border border-gray-100 dark:border-gray-800"
+            className="hidden sm:flex items-center px-3 py-1.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400 text-xs font-semibold transition-all border border-gray-100 dark:border-gray-800"
           >
-            {language === 'en' ? '🇬🇧 EN' : '🇰🇪 SW'}
+            {language === 'en' ? 'EN' : 'SW'}
           </button>
 
-          {/* Dark mode */}
+          {/* Theme */}
           <button
             onClick={() => setDarkMode(!darkMode)}
-            className="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800
-                       text-gray-400 transition-colors"
+            className="px-3 py-1.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400 text-xs font-semibold transition-colors border border-gray-100 dark:border-gray-800"
           >
-            <span className="text-base">{darkMode ? '☀️' : '🌙'}</span>
+            {darkMode ? 'Light' : 'Dark'}
           </button>
 
-          {/* Avatar + Dropdown */}
+          {/* Profile menu */}
           <div className="relative">
             <button
               onClick={() => setShowDropdown(!showDropdown)}
-              className="flex items-center gap-2 pl-1 pr-2.5 py-1 rounded-2xl
-                         hover:bg-gray-100 dark:hover:bg-gray-800 transition-all"
+              className="flex items-center gap-2 pl-1 pr-2.5 py-1 rounded-2xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-all"
             >
-              {profile?.avatar_url ? (
-                <img
-                  src={profile.avatar_url}
-                  alt="avatar"
-                  className="w-7 h-7 rounded-lg object-cover"
-                />
-              ) : (
-                <div className="w-7 h-7 bg-blue-600 rounded-lg flex items-center
-                                justify-center text-white text-xs font-bold">
-                  {initials}
-                </div>
-              )}
-              <span className="hidden sm:block text-sm font-medium text-gray-700
-                               dark:text-gray-300 max-w-[90px] truncate">
-                {profile?.full_name?.split(' ')[0] || 'Student'}
+              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white text-xs font-bold">
+                {initials}
+              </div>
+              <span className="hidden sm:block text-sm font-medium text-gray-700 dark:text-gray-300 max-w-[90px] truncate">
+                {studentName.split(' ')[0]}
               </span>
               <svg
-                className={`w-3.5 h-3.5 text-gray-400 transition-transform duration-200 ${
-                  showDropdown ? 'rotate-180' : ''
-                }`}
-                fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                className={`w-3.5 h-3.5 text-gray-400 transition-transform duration-200 ${showDropdown ? 'rotate-180' : ''}`}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
               >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7"/>
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
               </svg>
             </button>
 
-            {/* Dropdown menu */}
             {showDropdown && (
               <>
                 <div
                   className="fixed inset-0 z-40"
                   onClick={() => setShowDropdown(false)}
                 />
-                <div className="absolute right-0 top-full mt-2 w-52 bg-white
-                                dark:bg-gray-900 rounded-2xl shadow-xl
-                                border border-gray-100 dark:border-gray-800
-                                overflow-hidden z-50 animate-scale-in">
 
-                  {/* Profile header */}
-                  <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-800
-                                  bg-gray-50 dark:bg-gray-800/50">
+                <div className="absolute right-0 top-full mt-2 w-52 bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-800 overflow-hidden z-50 animate-scale-in">
+                  <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50">
                     <div className="font-semibold text-gray-800 dark:text-white text-sm truncate">
-                      {profile?.full_name || 'Student'}
+                      {studentName}
                     </div>
-                    <div className="text-gray-400 text-xs truncate mt-0.5">
-                      {profile?.email}
-                    </div>
-                    <div className="flex items-center gap-1.5 mt-2 flex-wrap">
-                      <span className="text-xs bg-blue-50 dark:bg-blue-900/30
-                                       text-blue-600 dark:text-blue-400
-                                       px-2 py-0.5 rounded-full font-medium">
-                        Grade {profile?.selected_grade || 4}
-                      </span>
-                      <span
-                        className="text-xs px-2 py-0.5 rounded-full font-medium"
-                        style={{
-                          backgroundColor: 'rgba(201,168,76,0.12)',
-                          color: '#B8860B',
-                        }}
-                      >
-                        🔥 {profile?.streak_days || 0}d
-                      </span>
+                    <div className="text-gray-400 text-xs mt-0.5">
+                      Grade {selectedGrade}
                     </div>
                   </div>
 
-                  {/* Menu items */}
                   <div className="py-1">
-                    {[
-                      {
-                        icon: '👤',
-                        label: t('profile'),
-                        action: () => { navigate('/profile'); setShowDropdown(false) },
-                      },
-                      {
-                        icon: '📊',
-                        label: 'Progress',
-                        action: () => { navigate('/progress'); setShowDropdown(false) },
-                      },
-                      {
-                        icon: language === 'en' ? '🇰🇪' : '🇬🇧',
-                        label: language === 'en' ? 'Switch to Kiswahili' : 'Switch to English',
-                        action: () => { setLanguage(language === 'en' ? 'sw' : 'en'); setShowDropdown(false) },
-                      },
-                      {
-                        icon: darkMode ? '☀️' : '🌙',
-                        label: t('darkMode'),
-                        action: () => { setDarkMode(!darkMode); setShowDropdown(false) },
-                      },
-                    ].map((item, i) => (
-                      <button
-                        key={i}
-                        onClick={item.action}
-                        className="w-full flex items-center gap-3 px-4 py-2.5 text-sm
-                                   text-gray-600 dark:text-gray-300 hover:bg-gray-50
-                                   dark:hover:bg-gray-800 transition-colors text-left"
-                      >
-                        <span>{item.icon}</span>
-                        {item.label}
-                      </button>
-                    ))}
-                  </div>
-
-                  <div className="border-t border-gray-100 dark:border-gray-800 py-1">
                     <button
-                      onClick={() => { signOut(); setShowDropdown(false) }}
-                      className="w-full flex items-center gap-3 px-4 py-2.5 text-sm
-                                 text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20
-                                 transition-colors text-left"
+                      onClick={() => {
+                        navigate('/profile')
+                        setShowDropdown(false)
+                      }}
+                      className="w-full px-4 py-2.5 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-left"
                     >
-                      <span>🚪</span>
-                      {t('signOut')}
+                      {t('profile')}
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        navigate('/progress')
+                        setShowDropdown(false)
+                      }}
+                      className="w-full px-4 py-2.5 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-left"
+                    >
+                      Progress
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        setLanguage(language === 'en' ? 'sw' : 'en')
+                        setShowDropdown(false)
+                      }}
+                      className="w-full px-4 py-2.5 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-left"
+                    >
+                      {language === 'en' ? 'Switch to Kiswahili' : 'Switch to English'}
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        setDarkMode(!darkMode)
+                        setShowDropdown(false)
+                      }}
+                      className="w-full px-4 py-2.5 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-left"
+                    >
+                      {darkMode ? 'Use light mode' : 'Use dark mode'}
                     </button>
                   </div>
                 </div>
