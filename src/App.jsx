@@ -6,7 +6,6 @@ import Navbar from './components/layout/Navbar'
 import Sidebar from './components/layout/Sidebar'
 import Dashboard from './components/dashboard/Dashboard'
 import CurriculumNavigator from './components/curriculum/CurriculumNavigator'
-import ProgressView from './components/dashboard/ProgressView'
 import ProfileView from './components/dashboard/ProfileView'
 import ExploreView from './components/explore/ExploreView'
 import Notification from './components/ui/Notification'
@@ -115,15 +114,6 @@ const AppShell = () => {
         element={
           <AppLayout>
             <CurriculumNavigator />
-          </AppLayout>
-        }
-      />
-
-      <Route
-        path="/progress"
-        element={
-          <AppLayout>
-            <ProgressView />
           </AppLayout>
         }
       />
