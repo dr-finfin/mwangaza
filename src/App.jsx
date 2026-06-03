@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { AppProvider, useApp } from './context/AppContext'
 import LandingPage from './components/landing/LandingPage'
+import OnboardingView from './components/onboarding/OnboardingView'
 import Navbar from './components/layout/Navbar'
 import Sidebar from './components/layout/Sidebar'
 import Dashboard from './components/dashboard/Dashboard'
@@ -22,7 +23,7 @@ const AppLayout = ({ children }) => {
       />
       <Navbar onMenuToggle={() => setMobileMenuOpen(prev => !prev)} />
       <main className={`pt-16 transition-all duration-200 ${sidebarCollapsed ? 'lg:ml-20' : 'lg:ml-64'}`}>
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
           {children}
         </div>
       </main>
@@ -41,6 +42,7 @@ const LandingOrRedirect = () => {
 const AppShell = () => (
   <Routes>
     <Route path="/" element={<LandingOrRedirect />} />
+    <Route path="/onboarding" element={<OnboardingView />} />
     <Route path="/dashboard"  element={<AppLayout><Dashboard /></AppLayout>} />
     <Route path="/curriculum" element={<AppLayout><CurriculumNavigator /></AppLayout>} />
     <Route path="/profile"    element={<AppLayout><ProfileView /></AppLayout>} />
