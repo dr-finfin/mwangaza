@@ -21,6 +21,7 @@ const DEFAULT_STATE = {
     language: 'en',
     darkMode: false,
     accent: 'blue',
+    sidebarCollapsed: false,
   },
   progress: {},
 }
@@ -60,32 +61,18 @@ export const AppProvider = ({ children }) => {
     document.documentElement.classList.toggle('dark', state.profile.darkMode)
   }, [state.profile.darkMode])
 
-  // Apply accent CSS var
   useEffect(() => {
     const accent = ACCENT_COLORS[state.profile.accent] || ACCENT_COLORS.blue
     document.documentElement.style.setProperty('--accent', accent.hex)
     document.documentElement.style.setProperty('--accent-hover', accent.hover)
   }, [state.profile.accent])
 
-  const setName = useCallback((name) => {
-    setState(prev => ({ ...prev, profile: { ...prev.profile, name } }))
-  }, [])
-
-  const setSelectedGrade = useCallback((grade) => {
-    setState(prev => ({ ...prev, profile: { ...prev.profile, selectedGrade: grade } }))
-  }, [])
-
-  const setLanguage = useCallback((lang) => {
-    setState(prev => ({ ...prev, profile: { ...prev.profile, language: lang } }))
-  }, [])
-
-  const setDarkMode = useCallback((dark) => {
-    setState(prev => ({ ...prev, profile: { ...prev.profile, darkMode: dark } }))
-  }, [])
-
-  const setAccent = useCallback((accent) => {
-    setState(prev => ({ ...prev, profile: { ...prev.profile, accent } }))
-  }, [])
+  const setName             = useCallback(v => setState(p => ({ ...p, profile: { ...p.profile, name: v } })), [])
+  const setSelectedGrade    = useCallback(v => setState(p => ({ ...p, profile: { ...p.profile, selectedGrade: v } })), [])
+  const setLanguage         = useCallback(v => setState(p => ({ ...p, profile: { ...p.profile, language: v } })), [])
+  const setDarkMode         = useCallback(v => setState(p => ({ ...p, profile: { ...p.profile, darkMode: v } })), [])
+  const setAccent           = useCallback(v => setState(p => ({ ...p, profile: { ...p.profile, accent: v } })), [])
+  const setSidebarCollapsed = useCallback(v => setState(p => ({ ...p, profile: { ...p.profile, sidebarCollapsed: v } })), [])
 
   const resetAll = useCallback(() => {
     setState(DEFAULT_STATE)
@@ -102,19 +89,22 @@ export const AppProvider = ({ children }) => {
     URL.revokeObjectURL(url)
   }, [state])
 
+  const showNotification = useCallback((message, type = 'info') => {
+    setNotification({ message, type, id: Date.now() })
+    setTimeout(() => setNotification(null), 3500)
+  }, [])
+
   const saveLessonProgress = useCallback((lessonId, score, passed) => {
     setState(prev => {
       const existing = prev.progress[lessonId]
       const attempts = (existing?.attempts || 0) + 1
       const bestScore = Math.max(score, existing?.bestScore || 0)
-      const status = passed ? 'completed' : 'attempted'
-
       return {
         ...prev,
         progress: {
           ...prev.progress,
           [lessonId]: {
-            status,
+            status: passed ? 'completed' : 'attempted',
             score,
             bestScore,
             best_score: bestScore,
@@ -124,14 +114,10 @@ export const AppProvider = ({ children }) => {
         },
       }
     })
-
     if (passed) {
-      showNotification(
-        state.profile.language === 'en' ? 'Lesson complete' : 'Somo limekamilika',
-        'success'
-      )
+      showNotification(state.profile.language === 'en' ? 'Lesson complete' : 'Somo limekamilika', 'success')
     }
-  }, [state.profile.language])
+  }, [state.profile.language, showNotification])
 
   const stats = useMemo(() => {
     const entries = Object.values(state.progress)
@@ -144,29 +130,20 @@ export const AppProvider = ({ children }) => {
     return { completed, attempted, mastery }
   }, [state.progress])
 
-  const showNotification = useCallback((message, type = 'info') => {
-    setNotification({ message, type, id: Date.now() })
-    setTimeout(() => setNotification(null), 3500)
-  }, [])
-
-  const t = useCallback((key) => {
+  const t = useCallback(key => {
     return UI_STRINGS[state.profile.language]?.[key] || UI_STRINGS.en[key] || key
   }, [state.profile.language])
 
   return (
     <AppContext.Provider value={{
-      name:          state.profile.name,
-      selectedGrade: state.profile.selectedGrade,
-      language:      state.profile.language,
-      darkMode:      state.profile.darkMode,
-      accent:        state.profile.accent,
-      setName,
-      setSelectedGrade,
-      setLanguage,
-      setDarkMode,
-      setAccent,
-      resetAll,
-      exportData,
+      name:             state.profile.name,
+      selectedGrade:    state.profile.selectedGrade,
+      language:         state.profile.language,
+      darkMode:         state.profile.darkMode,
+      accent:           state.profile.accent,
+      sidebarCollapsed: state.profile.sidebarCollapsed,
+      setName, setSelectedGrade, setLanguage, setDarkMode, setAccent, setSidebarCollapsed,
+      resetAll, exportData,
       progress: state.progress,
       saveLessonProgress,
       stats,

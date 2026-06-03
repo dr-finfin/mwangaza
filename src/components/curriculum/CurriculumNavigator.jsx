@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useApp } from '../../context/AppContext'
 import { GRADES, getSubjectsForGrade, CURRICULUM } from '../../data/curriculum'
 import LessonView from './LessonView'
 
-// ── Breadcrumb ─────────────────────────────────────────────
 const Breadcrumb = ({ items }) => (
   <nav className="flex items-center gap-1.5 text-sm mb-6 flex-wrap">
     {items.map((item, i) => (
@@ -24,10 +24,21 @@ const Breadcrumb = ({ items }) => (
   </nav>
 )
 
-// ── Grade Selector ─────────────────────────────────────────
-const GradeSelector = ({ selectedGrade, onSelect, language }) => (
+const BackArrow = ({ onClick, label }) => (
+  <button
+    onClick={onClick}
+    className="flex items-center gap-2 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white text-sm font-medium mb-6"
+  >
+    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+    </svg>
+    {label}
+  </button>
+)
+
+const GradeSelector = ({ selectedGrade, onSelect, language, goDashboard }) => (
   <div>
-    <Breadcrumb items={[{ label: language === 'en' ? 'Grade' : 'Darasa' }]} />
+    <BackArrow onClick={goDashboard} label={language === 'en' ? 'Dashboard' : 'Nyumbani'} />
 
     <h1 className="text-3xl font-black text-gray-900 dark:text-white mb-1">
       {language === 'en' ? 'Choose your grade' : 'Chagua darasa lako'}
@@ -64,14 +75,14 @@ const GradeSelector = ({ selectedGrade, onSelect, language }) => (
   </div>
 )
 
-// ── Subject Selector ───────────────────────────────────────
 const SubjectSelector = ({ grade, onSelect, onBack, progress, language }) => {
   const subjects = getSubjectsForGrade(grade)
 
   return (
     <div>
+      <BackArrow onClick={onBack} label={language === 'en' ? 'Grades' : 'Madarasa'} />
       <Breadcrumb items={[
-        { label: language === 'en' ? 'Grade' : 'Darasa', onClick: onBack },
+        { label: language === 'en' ? 'Grades' : 'Madarasa', onClick: onBack },
         { label: `${language === 'en' ? 'Grade' : 'Darasa'} ${grade}` },
       ]} />
 
@@ -122,26 +133,18 @@ const SubjectSelector = ({ grade, onSelect, onBack, progress, language }) => {
   )
 }
 
-// ── Strand List ────────────────────────────────────────────
-const StrandList = ({ subject, grade, onSelectLesson, onBackGrade, onBackSubject, progress, language }) => {
+const StrandList = ({ subject, grade, onSelectLesson, onBack, onBackGrade, progress, language }) => {
   const data = CURRICULUM[subject.id]
   const [expanded, setExpanded] = useState(null)
 
   if (!data) {
     return (
       <div>
-        <Breadcrumb items={[
-          { label: language === 'en' ? 'Grade' : 'Darasa', onClick: onBackGrade },
-          { label: `${language === 'en' ? 'Grade' : 'Darasa'} ${grade}`, onClick: onBackSubject },
-          { label: language === 'en' ? subject.name : subject.kiswahili },
-        ]} />
+        <BackArrow onClick={onBack} label={language === 'en' ? 'Subjects' : 'Masomo'} />
         <div className="text-center py-16">
           <h3 className="text-base font-bold text-gray-700 dark:text-gray-300 mb-2">
             {language === 'en' ? 'Coming soon' : 'Inakuja hivi karibuni'}
           </h3>
-          <p className="text-gray-400 text-sm">
-            {language === 'en' ? 'This subject is being prepared.' : 'Somo hili linaandaliwa.'}
-          </p>
         </div>
       </div>
     )
@@ -149,9 +152,10 @@ const StrandList = ({ subject, grade, onSelectLesson, onBackGrade, onBackSubject
 
   return (
     <div>
+      <BackArrow onClick={onBack} label={language === 'en' ? 'Subjects' : 'Masomo'} />
       <Breadcrumb items={[
-        { label: language === 'en' ? 'Grade' : 'Darasa', onClick: onBackGrade },
-        { label: `${language === 'en' ? 'Grade' : 'Darasa'} ${grade}`, onClick: onBackSubject },
+        { label: language === 'en' ? 'Grades' : 'Madarasa', onClick: onBackGrade },
+        { label: `${language === 'en' ? 'Grade' : 'Darasa'} ${grade}`, onClick: onBack },
         { label: language === 'en' ? subject.name : subject.kiswahili },
       ]} />
 
@@ -178,7 +182,7 @@ const StrandList = ({ subject, grade, onSelectLesson, onBackGrade, onBackSubject
             <div key={strand.id} className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden">
               <button
                 onClick={() => setExpanded(isOpen ? null : strand.id)}
-                className="w-full flex items-center justify-between p-5 hover:bg-gray-50 dark:hover:bg-gray-750 text-left"
+                className="w-full flex items-center justify-between p-5 hover:bg-gray-50 dark:hover:bg-gray-800 text-left"
               >
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold text-white" style={{ backgroundColor: 'var(--accent)' }}>
@@ -251,6 +255,7 @@ const StrandList = ({ subject, grade, onSelectLesson, onBackGrade, onBackSubject
 }
 
 const CurriculumNavigator = () => {
+  const navigate = useNavigate()
   const { progress, selectedGrade, setSelectedGrade, language } = useApp()
 
   const [step, setStep] = useState(selectedGrade ? 'subject' : 'grade')
@@ -261,6 +266,8 @@ const CurriculumNavigator = () => {
     if (selectedGrade && step === 'grade') setStep('subject')
   }, [selectedGrade])
 
+  const goDashboard = () => navigate('/dashboard')
+
   return (
     <div>
       {step === 'grade' && (
@@ -268,6 +275,7 @@ const CurriculumNavigator = () => {
           selectedGrade={selectedGrade}
           onSelect={(g) => { setSelectedGrade(g); setStep('subject') }}
           language={language}
+          goDashboard={goDashboard}
         />
       )}
 
@@ -286,8 +294,8 @@ const CurriculumNavigator = () => {
           subject={selectedSubject}
           grade={selectedGrade}
           onSelectLesson={(lesson, subject) => { setSelectedLesson({ lesson, subject }); setStep('lesson') }}
+          onBack={() => setStep('subject')}
           onBackGrade={() => setStep('grade')}
-          onBackSubject={() => setStep('subject')}
           progress={progress}
           language={language}
         />
