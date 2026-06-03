@@ -10,11 +10,11 @@ import ProfileView from './components/dashboard/ProfileView'
 import Notification from './components/ui/Notification'
 
 const AppLayout = ({ children }) => {
-  const { notification, darkMode } = useApp()
+  const { notification } = useApp()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   return (
-    <div className={`min-h-screen bg-gray-50 ${darkMode ? 'dark' : ''}`}>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       <Sidebar
         mobileOpen={mobileMenuOpen}
         onClose={() => setMobileMenuOpen(false)}
@@ -30,9 +30,17 @@ const AppLayout = ({ children }) => {
   )
 }
 
+const LandingOrRedirect = () => {
+  const { name, progress } = useApp()
+  const hasState = name || Object.keys(progress).length > 0
+
+  if (hasState) return <Navigate to="/dashboard" replace />
+  return <LandingPage />
+}
+
 const AppShell = () => (
   <Routes>
-    <Route path="/" element={<LandingPage />} />
+    <Route path="/" element={<LandingOrRedirect />} />
 
     <Route path="/dashboard" element={
       <AppLayout><Dashboard /></AppLayout>
