@@ -1,75 +1,159 @@
-import React, { createContext, useContext, useState, useCallback, useEffect } from 'react'
+import React, { createContext, useContext, useState, useCallback, useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { UI_STRINGS } from '../data/curriculum'
+
+const STORAGE_KEY = 'mwangaza_state'
+const STATE_VERSION = 1
+
+const DEFAULT_STATE = {
+  version: STATE_VERSION,
+  profile: {
+    name: '',
+    selectedGrade: 4,
+    language: 'en',
+    darkMode: false,
+  },
+  progress: {},
+}
+
+const loadState = () => {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY)
+    if (!raw) return DEFAULT_STATE
+    const parsed = JSON.parse(raw)
+    if (parsed.version !== STATE_VERSION) return DEFAULT_STATE
+    return parsed
+  } catch {
+    return DEFAULT_STATE
+  }
+}
 
 const AppContext = createContext(null)
 
 export const AppProvider = ({ children }) => {
   const navigate = useNavigate()
+  const [state, setState] = useState(loadState)
+  const [notification, setNotification] = useState(null)
 
-  const [language,      setLanguage]      = useState('en')
-  const [darkMode,      setDarkMode]      = useState(false)
-  const [progress,      setProgress]      = useState({})
-  const [notification,  setNotification]  = useState(null)
-  const [selectedGrade, setSelectedGrade] = useState(4)
-
-  const t = (key) => UI_STRINGS[language]?.[key] || UI_STRINGS.en[key] || key
-
-  useEffect(() => {
-    document.documentElement.classList.toggle('dark', darkMode)
-  }, [darkMode])
-
-  // ── Progress is stored in localStorage (no user, no Supabase) ──
+  // Persist to localStorage on every state change
   useEffect(() => {
     try {
-      const stored = localStorage.getItem('mwangaza_progress')
-      if (stored) setProgress(JSON.parse(stored))
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
     } catch {
-      setProgress({})
+      console.warn('localStorage write failed')
     }
+  }, [state])
+
+  // Apply dark mode class
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', state.profile.darkMode)
+  }, [state.profile.darkMode])
+
+  // ── Profile setters ────────────────────────────────────────
+  const setName = useCallback((name) => {
+    setState(prev => ({
+      ...prev,
+      profile: { ...prev.profile, name },
+    }))
   }, [])
 
+  const setSelectedGrade = useCallback((grade) => {
+    setState(prev => ({
+      ...prev,
+      profile: { ...prev.profile, selectedGrade: grade },
+    }))
+  }, [])
+
+  const setLanguage = useCallback((lang) => {
+    setState(prev => ({
+      ...prev,
+      profile: { ...prev.profile, language: lang },
+    }))
+  }, [])
+
+  const setDarkMode = useCallback((dark) => {
+    setState(prev => ({
+      ...prev,
+      profile: { ...prev.profile, darkMode: dark },
+    }))
+  }, [])
+
+  // ── Progress ───────────────────────────────────────────────
   const saveLessonProgress = useCallback((lessonId, score, passed) => {
-    const existing   = progress[lessonId]
-    const attempts   = (existing?.attempts || 0) + 1
-    const status     = passed ? 'completed' : 'attempted'
-    const best_score = Math.max(score, existing?.best_score || 0)
+    setState(prev => {
+      const existing = prev.progress[lessonId]
+      const attempts = (existing?.attempts || 0) + 1
+      const bestScore = Math.max(score, existing?.bestScore || 0)
+      const status = passed ? 'completed' : 'attempted'
 
-    const progressData = {
-      lesson_id:  lessonId,
-      status,
-      score,
-      best_score,
-      attempts,
-      updated_at: new Date().toISOString(),
-    }
-
-    const updated = { ...progress, [lessonId]: progressData }
-    setProgress(updated)
-
-    try {
-      localStorage.setItem('mwangaza_progress', JSON.stringify(updated))
-    } catch {
-      console.warn('Could not save progress to localStorage')
-    }
+      return {
+        ...prev,
+        progress: {
+          ...prev.progress,
+          [lessonId]: {
+            status,
+            score,
+            bestScore,
+            best_score: bestScore,
+            attempts,
+            updatedAt: new Date().toISOString(),
+          },
+        },
+      }
+    })
 
     if (passed) {
-      showNotification('Lesson complete! Great work. 🎉', 'success')
+      showNotification(
+        state.profile.language === 'en' ? 'Lesson complete!' : 'Somo limekamilika!',
+        'success'
+      )
     }
-  }, [progress])
+  }, [state.profile.language])
 
-  const showNotification = (message, type = 'info') => {
+  // ── Derived stats ──────────────────────────────────────────
+  const stats = useMemo(() => {
+    const entries = Object.values(state.progress)
+    const completed = entries.filter(p => p.status === 'completed').length
+    const attempted = entries.length
+    const scored = entries.filter(p => p.bestScore)
+    const mastery = scored.length
+      ? Math.round(scored.reduce((sum, p) => sum + p.bestScore, 0) / scored.length)
+      : 0
+
+    return { completed, attempted, mastery }
+  }, [state.progress])
+
+  // ── Notification ───────────────────────────────────────────
+  const showNotification = useCallback((message, type = 'info') => {
     setNotification({ message, type, id: Date.now() })
     setTimeout(() => setNotification(null), 3500)
-  }
+  }, [])
+
+  // ── Translation ────────────────────────────────────────────
+  const t = useCallback((key) => {
+    return UI_STRINGS[state.profile.language]?.[key] || UI_STRINGS.en[key] || key
+  }, [state.profile.language])
 
   return (
     <AppContext.Provider value={{
-      language,      setLanguage,
-      darkMode,      setDarkMode,
-      progress,
-      selectedGrade, setSelectedGrade,
+      // Profile
+      name:          state.profile.name,
+      selectedGrade: state.profile.selectedGrade,
+      language:      state.profile.language,
+      darkMode:      state.profile.darkMode,
+      setName,
+      setSelectedGrade,
+      setLanguage,
+      setDarkMode,
+
+      // Progress
+      progress: state.progress,
       saveLessonProgress,
+
+      // Derived
+      stats,
+
+      // Utils
       showNotification,
       notification,
       navigate,

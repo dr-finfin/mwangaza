@@ -5,38 +5,33 @@ import { useApp } from '../../context/AppContext'
 const Navbar = ({ onMenuToggle }) => {
   const navigate = useNavigate()
   const location = useLocation()
-  const { t, language, setLanguage, darkMode, setDarkMode, selectedGrade } = useApp()
+  const { name, selectedGrade, language, setLanguage, darkMode, setDarkMode, t } = useApp()
 
   const [showDropdown, setShowDropdown] = useState(false)
-  const [showSearch,   setShowSearch]   = useState(false)
-  const [searchQuery,  setSearchQuery]  = useState('')
 
-  const studentName = localStorage.getItem('mwangaza_name') || 'Student'
-  const initials    = studentName
-    .split(' ')
-    .map(n => n[0])
-    .join('')
-    .toUpperCase()
-    .slice(0, 2)
+  const initials = name
+    ? name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
+    : '?'
+
+  const displayName = name || (language === 'en' ? 'Student' : 'Mwanafunzi')
 
   const pathLabels = {
-    '/dashboard':  'Home',
-    '/curriculum': 'Learn',
-    '/profile':    'Profile',
+    '/dashboard': 'Home',
+    '/curriculum': language === 'en' ? 'Learn' : 'Jifunza',
+    '/profile': language === 'en' ? 'Profile' : 'Wasifu',
   }
 
-  const currentLabel = pathLabels[location.pathname] || ''
-
   return (
-    <header className="fixed top-0 right-0 left-0 lg:left-64 z-40 bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800">
+    <header className={`fixed top-0 right-0 left-0 lg:left-64 z-40 border-b ${
+      darkMode ? 'bg-gray-900 border-gray-800' : 'bg-white border-gray-100'
+    }`}>
       <div className="flex items-center justify-between px-4 sm:px-6 h-16">
 
         {/* Left */}
         <div className="flex items-center gap-3">
           <button
             onClick={onMenuToggle}
-            className="lg:hidden p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 transition-colors"
-            aria-label="Open menu"
+            className="lg:hidden p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
@@ -45,11 +40,11 @@ const Navbar = ({ onMenuToggle }) => {
 
           <div className="hidden sm:flex items-center gap-2 text-sm">
             <span className="text-gray-400 dark:text-gray-500">Mwangaza</span>
-            {currentLabel && (
+            {pathLabels[location.pathname] && (
               <>
                 <span className="text-gray-200 dark:text-gray-700">/</span>
                 <span className="text-gray-800 dark:text-gray-200 font-semibold">
-                  {currentLabel}
+                  {pathLabels[location.pathname]}
                 </span>
               </>
             )}
@@ -58,129 +53,69 @@ const Navbar = ({ onMenuToggle }) => {
 
         {/* Right */}
         <div className="flex items-center gap-2">
-
-          {/* Search */}
-          {showSearch ? (
-            <div className="relative flex items-center">
-              <input
-                autoFocus
-                value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
-                onBlur={() => {
-                  setShowSearch(false)
-                  setSearchQuery('')
-                }}
-                placeholder={t('search')}
-                className="w-44 sm:w-60 px-4 py-2 pr-8 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm text-gray-700 dark:text-gray-300 placeholder-gray-400 focus:outline-none focus:border-blue-500 transition-all"
-              />
-              <button
-                onMouseDown={() => {
-                  setShowSearch(false)
-                  setSearchQuery('')
-                }}
-                className="absolute right-2.5 text-gray-400 hover:text-gray-600 text-lg leading-none"
-                aria-label="Close search"
-              >
-                ×
-              </button>
-            </div>
-          ) : (
-            <button
-              onClick={() => setShowSearch(true)}
-              className="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-400 transition-colors"
-              aria-label="Search"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-            </button>
-          )}
-
-          {/* Language */}
           <button
             onClick={() => setLanguage(language === 'en' ? 'sw' : 'en')}
-            className="hidden sm:flex items-center px-3 py-1.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400 text-xs font-semibold transition-all border border-gray-100 dark:border-gray-800"
+            className={`hidden sm:flex px-3 py-1.5 rounded-lg text-xs font-semibold border ${
+              darkMode ? 'border-gray-700 text-gray-400' : 'border-gray-200 text-gray-500'
+            }`}
           >
-            {language === 'en' ? 'EN' : 'SW'}
+            {language === 'en' ? 'SW' : 'EN'}
           </button>
 
-          {/* Theme */}
           <button
             onClick={() => setDarkMode(!darkMode)}
-            className="hidden sm:flex items-center px-3 py-1.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400 text-xs font-semibold transition-all border border-gray-100 dark:border-gray-800"
+            className={`hidden sm:flex px-3 py-1.5 rounded-lg text-xs font-semibold border ${
+              darkMode ? 'border-gray-700 text-gray-400' : 'border-gray-200 text-gray-500'
+            }`}
           >
             {darkMode ? 'Light' : 'Dark'}
           </button>
 
-          {/* Profile dropdown */}
+          {/* Profile */}
           <div className="relative">
             <button
               onClick={() => setShowDropdown(!showDropdown)}
-              className="flex items-center gap-2 pl-1 pr-2.5 py-1 rounded-2xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-all"
+              className="flex items-center gap-2 pl-1 pr-2.5 py-1 rounded-2xl hover:bg-gray-100 dark:hover:bg-gray-800"
             >
-              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white text-xs font-bold">
                 {initials}
               </div>
-              <span className="hidden sm:block text-sm font-medium text-gray-700 dark:text-gray-300 max-w-[90px] truncate">
-                {studentName.split(' ')[0]}
+              <span className="hidden sm:block text-sm font-medium text-gray-700 dark:text-gray-300 max-w-[80px] truncate">
+                {displayName.split(' ')[0]}
               </span>
-              <svg
-                className={`w-3.5 h-3.5 text-gray-400 transition-transform duration-200 ${showDropdown ? 'rotate-180' : ''}`}
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
             </button>
 
             {showDropdown && (
               <>
-                <div
-                  className="fixed inset-0 z-40"
-                  onClick={() => setShowDropdown(false)}
-                />
-                <div className="absolute right-0 top-full mt-2 w-52 bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-800 overflow-hidden z-50">
-
-                  {/* Header */}
-                  <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50">
-                    <div className="font-semibold text-gray-800 dark:text-white text-sm truncate">
-                      {studentName}
+                <div className="fixed inset-0 z-40" onClick={() => setShowDropdown(false)} />
+                <div className={`absolute right-0 top-full mt-2 w-48 rounded-2xl shadow-xl border overflow-hidden z-50 ${
+                  darkMode ? 'bg-gray-900 border-gray-800' : 'bg-white border-gray-100'
+                }`}>
+                  <div className={`px-4 py-3 border-b ${darkMode ? 'border-gray-800 bg-gray-800/50' : 'border-gray-100 bg-gray-50'}`}>
+                    <div className={`font-semibold text-sm truncate ${darkMode ? 'text-white' : 'text-gray-800'}`}>
+                      {displayName}
                     </div>
                     <div className="text-gray-400 text-xs mt-0.5">
-                      Grade {selectedGrade}
+                      {language === 'en' ? 'Grade' : 'Darasa'} {selectedGrade}
                     </div>
                   </div>
 
-                  {/* Items */}
                   <div className="py-1">
-                    <button
-                      onClick={() => { navigate('/profile'); setShowDropdown(false) }}
-                      className="w-full px-4 py-2.5 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-left"
-                    >
-                      {t('profile')}
-                    </button>
-
-                    <button
-                      onClick={() => { navigate('/curriculum'); setShowDropdown(false) }}
-                      className="w-full px-4 py-2.5 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-left"
-                    >
-                      {language === 'en' ? 'Browse lessons' : 'Angalia masomo'}
-                    </button>
-
-                    <button
-                      onClick={() => { setLanguage(language === 'en' ? 'sw' : 'en'); setShowDropdown(false) }}
-                      className="w-full px-4 py-2.5 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-left"
-                    >
-                      {language === 'en' ? 'Switch to Kiswahili' : 'Switch to English'}
-                    </button>
-
-                    <button
-                      onClick={() => { setDarkMode(!darkMode); setShowDropdown(false) }}
-                      className="w-full px-4 py-2.5 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-left"
-                    >
-                      {darkMode ? 'Use light mode' : 'Use dark mode'}
-                    </button>
+                    {[
+                      { label: t('profile'), action: () => navigate('/profile') },
+                      { label: language === 'en' ? 'Learn' : 'Jifunza', action: () => navigate('/curriculum') },
+                      { label: language === 'en' ? (darkMode ? 'Light mode' : 'Dark mode') : (darkMode ? 'Mwanga' : 'Giza'), action: () => setDarkMode(!darkMode) },
+                    ].map((item, i) => (
+                      <button
+                        key={i}
+                        onClick={() => { item.action(); setShowDropdown(false) }}
+                        className={`w-full px-4 py-2.5 text-sm text-left ${
+                          darkMode ? 'text-gray-300 hover:bg-gray-800' : 'text-gray-600 hover:bg-gray-50'
+                        }`}
+                      >
+                        {item.label}
+                      </button>
+                    ))}
                   </div>
                 </div>
               </>

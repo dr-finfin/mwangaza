@@ -3,26 +3,20 @@ import { useApp } from '../../context/AppContext'
 import { GRADES } from '../../data/curriculum'
 
 const ProfileView = () => {
-  const { t, language, progress, selectedGrade, setSelectedGrade, showNotification } = useApp()
+  const { name, setName, selectedGrade, setSelectedGrade, language, stats, t, showNotification } = useApp()
 
-  const completed = Object.values(progress).filter(p => p.status === 'completed').length
-  const attempted = Object.values(progress).length
-  const scores    = Object.values(progress).filter(p => p.best_score)
-  const mastery   = scores.length
-    ? Math.round(scores.reduce((a, b) => a + b.best_score, 0) / scores.length)
-    : 0
-
-  const [editing,   setEditing]   = useState(false)
-  const [name,      setName]      = useState(() => localStorage.getItem('mwangaza_name') || '')
+  const [editing, setEditing] = useState(false)
   const [draftName, setDraftName] = useState(name)
   const [draftGrade, setDraftGrade] = useState(selectedGrade)
 
   const handleSave = () => {
     setName(draftName)
     setSelectedGrade(draftGrade)
-    localStorage.setItem('mwangaza_name', draftName)
     setEditing(false)
-    showNotification('✅ Profile updated!', 'success')
+    showNotification(
+      language === 'en' ? 'Profile updated' : 'Wasifu umesasishwa',
+      'success'
+    )
   }
 
   const handleCancel = () => {
@@ -36,42 +30,22 @@ const ProfileView = () => {
     : '?'
 
   return (
-    <div className="animate-fade-in max-w-2xl mx-auto">
+    <div className="max-w-2xl mx-auto">
 
-      {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-black text-gray-900 dark:text-white">
-          {t('profile')} 👤
+          {t('profile')}
         </h1>
-        <p className="text-gray-500 dark:text-gray-400 mt-1 text-sm">
-          {language === 'en'
-            ? 'Manage your name and learning preferences'
-            : 'Simamia jina lako na mapendeleo ya kujifunza'}
-        </p>
       </div>
 
-      {/* Profile Card */}
-      <div className="bg-white dark:bg-gray-800 rounded-3xl border border-gray-100
-                      dark:border-gray-700 shadow-sm overflow-hidden mb-6">
+      {/* Profile card */}
+      <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden mb-6">
 
-        {/* Cover banner */}
-        <div className="h-28 bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 relative">
-          <div
-            className="absolute inset-0 opacity-20"
-            style={{
-              backgroundImage: 'radial-gradient(circle at 20% 50%, white 1px, transparent 1px)',
-              backgroundSize: '30px 30px',
-            }}
-          />
-        </div>
+        <div className="h-24 bg-gradient-to-r from-blue-600 to-blue-500" />
 
         <div className="px-6 pb-6">
-          {/* Avatar row */}
-          <div className="-mt-12 mb-6 flex items-end justify-between">
-            <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-700
-                            rounded-2xl flex items-center justify-center text-white
-                            text-2xl font-black border-4 border-white
-                            dark:border-gray-800 shadow-xl">
+          <div className="-mt-10 mb-6 flex items-end justify-between">
+            <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center text-white text-xl font-black border-4 border-white dark:border-gray-800 shadow-lg">
               {initials}
             </div>
 
@@ -79,61 +53,53 @@ const ProfileView = () => {
               {editing && (
                 <button
                   onClick={handleCancel}
-                  className="px-4 py-2 rounded-xl text-sm font-semibold border
-                             border-gray-200 dark:border-gray-600 text-gray-600
-                             dark:text-gray-400 hover:bg-gray-50
-                             dark:hover:bg-gray-700 transition-all"
+                  className="px-4 py-2 rounded-xl text-sm font-semibold border border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700"
                 >
-                  Cancel
+                  {language === 'en' ? 'Cancel' : 'Ghairi'}
                 </button>
               )}
               <button
                 onClick={editing ? handleSave : () => setEditing(true)}
-                className={`px-5 py-2 rounded-xl text-sm font-semibold transition-all duration-200 ${
+                className={`px-4 py-2 rounded-xl text-sm font-semibold ${
                   editing
-                    ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-lg shadow-blue-500/30'
+                    ? 'bg-blue-600 text-white hover:bg-blue-700'
                     : 'border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
                 }`}
               >
-                {editing ? '✓ Save Changes' : '✏️ Edit Profile'}
+                {editing
+                  ? (language === 'en' ? 'Save' : 'Hifadhi')
+                  : (language === 'en' ? 'Edit' : 'Hariri')}
               </button>
             </div>
           </div>
 
-          {/* Form or Display */}
           {editing ? (
             <div className="space-y-5">
               <div>
-                <label className="block text-xs font-semibold text-gray-500
-                                  dark:text-gray-400 mb-1.5 uppercase tracking-wider">
-                  Your Name
+                <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5 uppercase tracking-wider">
+                  {language === 'en' ? 'Your Name' : 'Jina Lako'}
                 </label>
                 <input
                   value={draftName}
                   onChange={e => setDraftName(e.target.value)}
-                  className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border
-                             border-gray-200 dark:border-gray-600 rounded-xl
-                             text-gray-800 dark:text-gray-200 font-medium
-                             focus:outline-none focus:border-blue-500
-                             focus:ring-2 focus:ring-blue-500/20 transition-all"
-                  placeholder="Your name"
+                  className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-gray-800 dark:text-gray-200 font-medium focus:outline-none focus:border-blue-500"
+                  placeholder={language === 'en' ? 'Your name' : 'Jina lako'}
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-gray-500
-                                  dark:text-gray-400 mb-1.5 uppercase tracking-wider">
-                  Current Grade
+                <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5 uppercase tracking-wider">
+                  {language === 'en' ? 'Grade' : 'Darasa'}
                 </label>
                 <div className="grid grid-cols-5 gap-2">
                   {GRADES.map(g => (
                     <button
                       key={g.id}
                       onClick={() => setDraftGrade(g.id)}
-                      className={`py-2.5 rounded-xl text-sm font-bold transition-all duration-200 ${
+                      className={`py-2.5 rounded-xl text-sm font-bold transition-all ${
                         draftGrade === g.id
-                          ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30 scale-105'
-                          : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-blue-50 dark:hover:bg-blue-950/30 hover:text-blue-600'
+                          ? 'bg-blue-600 text-white scale-105'
+                          : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-blue-50'
                       }`}
                     >
                       {g.id}
@@ -145,21 +111,14 @@ const ProfileView = () => {
           ) : (
             <div>
               <h2 className="text-xl font-black text-gray-900 dark:text-white">
-                {name || 'Student'}
+                {name || (language === 'en' ? 'Student' : 'Mwanafunzi')}
               </h2>
-              <p className="text-gray-400 text-sm mt-0.5">
-                No account required
-              </p>
-              <div className="flex items-center gap-2 mt-3 flex-wrap">
-                <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30
-                                 text-blue-600 dark:text-blue-400 text-xs
-                                 font-semibold rounded-full">
-                  🎓 Grade {selectedGrade}
+              <div className="flex items-center gap-2 mt-2 flex-wrap">
+                <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-xs font-semibold rounded-full">
+                  {language === 'en' ? 'Grade' : 'Darasa'} {selectedGrade}
                 </span>
-                <span className="px-3 py-1 bg-emerald-100 dark:bg-emerald-900/30
-                                 text-emerald-600 dark:text-emerald-400 text-xs
-                                 font-semibold rounded-full">
-                  ✓ {completed} lessons done
+                <span className="px-3 py-1 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 text-xs font-semibold rounded-full">
+                  {stats.completed} {language === 'en' ? 'lessons' : 'masomo'}
                 </span>
               </div>
             </div>
@@ -167,37 +126,27 @@ const ProfileView = () => {
         </div>
       </div>
 
-      {/* Quick Stats */}
+      {/* Stats */}
       <div className="grid grid-cols-3 gap-4 mb-6">
         {[
-          { label: 'Lessons Done', value: completed,    icon: '📚', color: 'text-blue-600 dark:text-blue-400' },
-          { label: 'Mastery',      value: `${mastery}%`, icon: '🎯', color: 'text-amber-600 dark:text-amber-400' },
-          { label: 'Attempted',    value: attempted,    icon: '⚡', color: 'text-purple-500' },
+          { label: language === 'en' ? 'Lessons' : 'Masomo', value: stats.completed, color: 'text-blue-600 dark:text-blue-400' },
+          { label: language === 'en' ? 'Mastery' : 'Ujuzi', value: `${stats.mastery}%`, color: 'text-amber-600 dark:text-amber-400' },
+          { label: language === 'en' ? 'Attempted' : 'Majaribio', value: stats.attempted, color: 'text-purple-600 dark:text-purple-400' },
         ].map((s, i) => (
-          <div
-            key={i}
-            className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100
-                       dark:border-gray-700 p-4 text-center shadow-sm"
-          >
-            <div className="text-2xl mb-1">{s.icon}</div>
+          <div key={i} className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-4 text-center">
             <div className={`text-xl font-black ${s.color}`}>{s.value}</div>
-            <div className="text-gray-400 dark:text-gray-500 text-xs mt-0.5">{s.label}</div>
+            <div className="text-gray-400 text-xs mt-0.5">{s.label}</div>
           </div>
         ))}
       </div>
 
       {/* Info */}
-      <div className="bg-white dark:bg-gray-800 rounded-3xl border border-gray-100
-                      dark:border-gray-700 shadow-sm overflow-hidden">
-        <div className="px-6 py-4 border-b border-gray-100 dark:border-gray-700">
-          <h3 className="font-bold text-gray-900 dark:text-white">About Your Progress</h3>
-        </div>
-        <div className="px-6 py-4">
-          <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
-            Your progress is saved locally on this device. No account or sign-in
-            is needed. To keep your progress, use the same browser and device.
-          </p>
-        </div>
+      <div className="bg-gray-50 dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-5">
+        <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
+          {language === 'en'
+            ? 'Your progress is saved on this device. Use the same browser to keep your data.'
+            : 'Maendeleo yako yamehifadhiwa kwenye kifaa hiki. Tumia kivinjari kimoja kuhifadhi data yako.'}
+        </p>
       </div>
     </div>
   )
