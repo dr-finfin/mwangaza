@@ -34,7 +34,7 @@ const Navbar = ({ onMenuToggle }) => {
 
   return (
     <>
-      <header className="fixed top-0 right-0 left-0 lg:left-64 z-40 bg-white dark:bg-gray-900 border-b-2 border-gray-200 dark:border-gray-800 shadow-sm">
+      <header className="fixed top-0 right-0 left-0 lg:left-64 z-40 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md border-b border-gray-100 dark:border-gray-800">
         <div className="flex items-center justify-between px-4 sm:px-6 h-16 gap-2">
 
           <div className="flex items-center gap-3 min-w-0">
