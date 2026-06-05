@@ -34,13 +34,13 @@ const Navbar = ({ onMenuToggle }) => {
 
   return (
     <>
-        <header className="fixed top-0 right-0 left-0 lg:left-64 z-40 bg-gray-100 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
+      <header className="fixed top-0 right-0 left-0 lg:left-64 z-40 bg-gray-100 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
         <div className="flex items-center justify-between px-4 sm:px-6 h-16 gap-2">
 
           <div className="flex items-center gap-3 min-w-0">
             <button
               onClick={onMenuToggle}
-              className="lg:hidden p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400 flex-shrink-0"
+              className="lg:hidden p-2 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400 flex-shrink-0"
               aria-label="Menu"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -65,7 +65,7 @@ const Navbar = ({ onMenuToggle }) => {
 
             <button
               onClick={() => setSearchOpen(true)}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:border-gray-300 dark:hover:border-gray-600"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:border-gray-300 dark:hover:border-gray-600 bg-white dark:bg-gray-800"
               aria-label="Search"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
@@ -77,29 +77,12 @@ const Navbar = ({ onMenuToggle }) => {
               <kbd className="hidden md:inline ml-1 text-[10px] font-mono text-gray-400 border border-gray-200 dark:border-gray-700 rounded px-1">/</kbd>
             </button>
 
-            <button
-              onClick={() => setLanguage(language === 'en' ? 'sw' : 'en')}
-              className="hidden sm:flex px-3 py-1.5 rounded-lg text-xs font-semibold border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
-            >
-              {language === 'en' ? 'SW' : 'EN'}
-            </button>
-
-            <button
-              onClick={() => setDarkMode(!darkMode)}
-              className="hidden sm:flex px-3 py-1.5 rounded-lg text-xs font-semibold border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
-            >
-              {darkMode ? 'Light' : 'Dark'}
-            </button>
-
             <div className="relative">
               <button
                 onClick={() => setShowDropdown(!showDropdown)}
-                className="flex items-center gap-2 pl-1 pr-2.5 py-1 rounded-2xl hover:bg-gray-100 dark:hover:bg-gray-800"
+                className="flex items-center gap-2 pl-1 pr-2.5 py-1 rounded-2xl hover:bg-gray-200 dark:hover:bg-gray-800"
               >
-                <div
-                  className="w-8 h-8 rounded-lg flex items-center justify-center text-lg"
-                  style={{ backgroundColor: 'var(--accent)' }}
-                >
+                <div className="w-9 h-9 rounded-xl flex items-center justify-center text-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
                   {ch.emoji}
                 </div>
                 <span className="hidden sm:block text-sm font-medium text-gray-700 dark:text-gray-300 max-w-[80px] truncate">
@@ -132,14 +115,6 @@ const Navbar = ({ onMenuToggle }) => {
                         className="w-full px-4 py-2.5 text-sm text-left text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
                       >
                         {language === 'en' ? 'Settings' : 'Mipangilio'}
-                      </button>
-                      <button
-                        onClick={() => { setDarkMode(!darkMode); setShowDropdown(false) }}
-                        className="w-full px-4 py-2.5 text-sm text-left text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 sm:hidden"
-                      >
-                        {darkMode
-                          ? (language === 'en' ? 'Light mode' : 'Mwanga')
-                          : (language === 'en' ? 'Dark mode' : 'Giza')}
                       </button>
                     </div>
                   </div>

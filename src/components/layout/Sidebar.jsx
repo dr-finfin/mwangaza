@@ -44,7 +44,7 @@ const NAV_ITEMS = [
 const Sidebar = ({ mobileOpen, onClose }) => {
   const navigate = useNavigate()
   const location = useLocation()
-  const { language, selectedGrade, stats, sidebarCollapsed, setSidebarCollapsed } = useApp()
+  const { language, sidebarCollapsed, setSidebarCollapsed } = useApp()
 
   const handleNav = (path) => {
     navigate(path)
@@ -55,14 +55,14 @@ const Sidebar = ({ mobileOpen, onClose }) => {
     <div className="flex flex-col h-full">
 
       {/* Logo */}
-      <div className={`py-6 border-b border-gray-100 dark:border-gray-800 flex ${collapsed ? 'justify-center px-2' : 'justify-center px-5'}`}>
+      <div className={`pt-6 pb-4 flex ${collapsed ? 'justify-center px-2' : 'justify-center px-5'}`}>
         <button onClick={() => handleNav('/dashboard')} aria-label="Mwangaza">
-          <img src="/mwangaza_icon.png" alt="Mwangaza" className="w-14 h-14" />
+          <img src="/mwangaza_icon.png" alt="Mwangaza" className="w-12 h-12" />
         </button>
       </div>
 
       {/* Nav */}
-      <nav className={`flex-1 py-5 space-y-1 ${collapsed ? 'px-2' : 'px-3'}`}>
+      <nav className={`flex-1 py-2 space-y-1 ${collapsed ? 'px-2' : 'px-3'}`}>
         {NAV_ITEMS.map(({ path, label, labelSw, Icon }) => {
           const isActive = location.pathname === path
           return (
@@ -70,7 +70,7 @@ const Sidebar = ({ mobileOpen, onClose }) => {
               key={path}
               onClick={() => handleNav(path)}
               title={collapsed ? (language === 'en' ? label : labelSw) : undefined}
-              className={`w-full flex items-center gap-3 ${collapsed ? 'justify-center px-2 py-3' : 'px-4 py-3'} rounded-xl text-sm font-medium transition-all ${
+              className={`w-full flex items-center gap-3 ${collapsed ? 'justify-center px-2 py-2.5' : 'px-3 py-2.5'} rounded-lg text-sm font-medium transition-colors ${
                 isActive
                   ? 'text-white'
                   : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white'
@@ -84,33 +84,14 @@ const Sidebar = ({ mobileOpen, onClose }) => {
         })}
       </nav>
 
-      {/* Bottom */}
-      <div className="border-t border-gray-100 dark:border-gray-800">
-        {!collapsed && (
-          <div className="px-5 py-4">
-            <div className="text-xs text-gray-400 dark:text-gray-500 mb-2">
-              {language === 'en' ? 'Grade' : 'Darasa'} {selectedGrade}
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="flex-1 h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                <div className="h-full rounded-full" style={{ width: `${Math.min(stats.mastery, 100)}%`, backgroundColor: 'var(--accent)' }} />
-              </div>
-              <span className="text-xs font-semibold text-gray-600 dark:text-gray-400">{stats.mastery}%</span>
-            </div>
-            <div className="text-xs text-gray-400 dark:text-gray-500 mt-2">
-              {stats.completed} {language === 'en' ? 'lessons done' : 'masomo'}
-            </div>
-          </div>
-        )}
-
-        <button
-          onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-          className="hidden lg:flex w-full items-center justify-center py-3 text-gray-400 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 border-t border-gray-100 dark:border-gray-800"
-          aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-        >
-          {collapsed ? <ChevronRightIcon className="w-4 h-4" /> : <ChevronLeftIcon className="w-4 h-4" />}
-        </button>
-      </div>
+      {/* Collapse toggle */}
+      <button
+        onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+        className="hidden lg:flex w-full items-center justify-center py-3 text-gray-400 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
+        aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+      >
+        {collapsed ? <ChevronRightIcon className="w-4 h-4" /> : <ChevronLeftIcon className="w-4 h-4" />}
+      </button>
     </div>
   )
 

@@ -105,11 +105,9 @@ const SubjectSelector = ({ grade, onSelect, onBack, progress, language }) => {
             <button
               key={subject.id}
               onClick={() => onSelect(subject)}
-              className="text-left bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl p-5 hover:shadow-lg hover:scale-[1.02] transition-all"
+              className="text-left bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl p-5 hover:border-gray-300 dark:hover:border-gray-600 transition-colors"
             >
-              <div className={`w-12 h-12 bg-gradient-to-br ${subject.color} rounded-xl flex items-center justify-center text-2xl shadow-sm mb-4`}>
-                {subject.emoji}
-              </div>
+              <div className="text-2xl mb-3">{subject.emoji}</div>
               <h3 className="font-bold text-gray-900 dark:text-white text-base mb-1">
                 {language === 'en' ? subject.name : subject.kiswahili}
               </h3>
@@ -133,13 +131,9 @@ const SubjectSelector = ({ grade, onSelect, onBack, progress, language }) => {
   )
 }
 
-const StrandList = ({ subject, grade, onSelectLesson, onBack, onBackGrade, progress, language, autoExpandStrand }) => {
+// Flat lesson list — strand as section headers
+const LessonList = ({ subject, grade, onSelectLesson, onBack, onBackGrade, progress, language }) => {
   const data = CURRICULUM[subject.id]
-  const [expanded, setExpanded] = useState(autoExpandStrand || null)
-
-  useEffect(() => {
-    if (autoExpandStrand) setExpanded(autoExpandStrand)
-  }, [autoExpandStrand])
 
   if (!data) {
     return (
@@ -163,96 +157,78 @@ const StrandList = ({ subject, grade, onSelectLesson, onBack, onBackGrade, progr
         { label: language === 'en' ? subject.name : subject.kiswahili },
       ]} />
 
-      <div className="flex items-center gap-4 mb-8">
-        <div className={`w-14 h-14 bg-gradient-to-br ${subject.color} rounded-xl flex items-center justify-center text-3xl shadow-sm`}>
-          {subject.emoji}
-        </div>
+      <div className="flex items-center gap-3 mb-8">
+        <div className="text-3xl">{subject.emoji}</div>
         <div>
           <h1 className="text-2xl font-black text-gray-900 dark:text-white">
             {language === 'en' ? subject.name : subject.kiswahili}
           </h1>
           <p className="text-gray-400 text-sm">
-            {data.strands.length} {language === 'en' ? 'strands' : 'nyuzi'}
+            {data.strands.length} {language === 'en' ? 'strands' : 'nyuzi'} · KICD
           </p>
         </div>
       </div>
 
-      <div className="space-y-3">
-        {data.strands.map((strand, si) => {
-          const isOpen = expanded === strand.id
-          const done = strand.subStrands.filter(ss => progress[ss.id]?.status === 'completed').length
-
-          return (
-            <div key={strand.id} className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden">
-              <button
-                onClick={() => setExpanded(isOpen ? null : strand.id)}
-                className="w-full flex items-center justify-between p-5 hover:bg-gray-50 dark:hover:bg-gray-800 text-left"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold text-white" style={{ backgroundColor: 'var(--accent)' }}>
-                    {si + 1}
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-gray-900 dark:text-white text-sm">
-                      {language === 'en' ? strand.name : strand.kiswahili}
-                    </h3>
-                    <p className="text-gray-400 text-xs">{done}/{strand.subStrands.length}</p>
-                  </div>
-                </div>
-                <svg className={`w-5 h-5 text-gray-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-
-              {isOpen && (
-                <div className="border-t border-gray-100 dark:border-gray-700 divide-y divide-gray-50 dark:divide-gray-750">
-                  {strand.subStrands.map((sub, ssi) => {
-                    const sp = progress[sub.id]
-                    const completed = sp?.status === 'completed'
-                    const attempted = sp?.status === 'attempted'
-
-                    return (
-                      <button
-                        key={sub.id}
-                        onClick={() => onSelectLesson(sub, subject)}
-                        className="w-full flex items-center gap-4 px-5 py-4 hover:bg-gray-50 dark:hover:bg-gray-800 text-left"
-                      >
-                        <div className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 text-sm font-bold ${
-                          completed
-                            ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600'
-                            : attempted
-                            ? 'bg-orange-100 dark:bg-orange-900/30 text-orange-500'
-                            : 'bg-gray-100 dark:bg-gray-700 text-gray-400'
-                        }`}>
-                          {completed ? '✓' : attempted ? '▷' : ssi + 1}
-                        </div>
-
-                        <div className="flex-1 min-w-0">
-                          <p className="font-semibold text-gray-800 dark:text-gray-200 text-sm truncate">
-                            {language === 'en' ? sub.name : sub.kiswahili}
-                          </p>
-                          <div className="flex items-center gap-2 mt-0.5 flex-wrap">
-                            <span className="text-gray-400 text-xs">{sub.duration}</span>
-                            <span className="text-xs text-gray-400">·</span>
-                            <span className="text-gray-400 text-xs">{sub.difficulty}</span>
-                            {sp?.bestScore != null && (
-                              <>
-                                <span className="text-xs text-gray-400">·</span>
-                                <span className="text-xs font-medium" style={{ color: 'var(--accent)' }}>
-                                  {sp.bestScore}%
-                                </span>
-                              </>
-                            )}
-                          </div>
-                        </div>
-                      </button>
-                    )
-                  })}
-                </div>
-              )}
+      {/* Flat list grouped by strand */}
+      <div className="space-y-8">
+        {data.strands.map((strand, si) => (
+          <div key={strand.id}>
+            <div className="flex items-center gap-3 mb-3 px-1">
+              <span className="text-xs font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500">
+                {si + 1}. {language === 'en' ? strand.name : strand.kiswahili}
+              </span>
             </div>
-          )
-        })}
+
+            <div className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl overflow-hidden divide-y divide-gray-100 dark:divide-gray-700">
+              {strand.subStrands.map((sub, ssi) => {
+                const sp = progress[sub.id]
+                const completed = sp?.status === 'completed'
+                const attempted = sp?.status === 'attempted'
+
+                return (
+                  <button
+                    key={sub.id}
+                    onClick={() => onSelectLesson(sub, subject)}
+                    className="w-full flex items-center gap-4 px-5 py-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 text-left transition-colors"
+                  >
+                    <div className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 text-sm font-bold ${
+                      completed
+                        ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600'
+                        : attempted
+                        ? 'bg-orange-100 dark:bg-orange-900/30 text-orange-500'
+                        : 'bg-gray-100 dark:bg-gray-700 text-gray-400'
+                    }`}>
+                      {completed ? '✓' : attempted ? '▷' : ssi + 1}
+                    </div>
+
+                    <div className="flex-1 min-w-0">
+                      <p className="font-semibold text-gray-800 dark:text-gray-200 text-sm truncate">
+                        {language === 'en' ? sub.name : sub.kiswahili}
+                      </p>
+                      <div className="flex items-center gap-2 mt-0.5 flex-wrap">
+                        <span className="text-gray-400 text-xs">{sub.duration}</span>
+                        <span className="text-xs text-gray-400">·</span>
+                        <span className="text-gray-400 text-xs">{sub.difficulty}</span>
+                        {sp?.bestScore != null && (
+                          <>
+                            <span className="text-xs text-gray-400">·</span>
+                            <span className="text-xs font-medium" style={{ color: 'var(--accent)' }}>
+                              {sp.bestScore}%
+                            </span>
+                          </>
+                        )}
+                      </div>
+                    </div>
+
+                    <svg className="w-4 h-4 text-gray-300 dark:text-gray-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                    </svg>
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   )
@@ -266,13 +242,10 @@ const CurriculumNavigator = () => {
   const [step, setStep] = useState(selectedGrade ? 'subject' : 'grade')
   const [selectedSubject, setSelectedSubject] = useState(null)
   const [selectedLesson, setSelectedLesson] = useState(null)
-  const [autoExpandStrand, setAutoExpandStrand] = useState(null)
 
-  // Read URL params on mount and navigate accordingly
   useEffect(() => {
     const gradeParam   = searchParams.get('grade')
     const subjectParam = searchParams.get('subject')
-    const strandParam  = searchParams.get('strand')
     const lessonParam  = searchParams.get('lesson')
 
     if (gradeParam) {
@@ -293,15 +266,13 @@ const CurriculumNavigator = () => {
                 if (lesson) {
                   setSelectedLesson({ lesson, subject })
                   setStep('lesson')
-                  setAutoExpandStrand(strand.id)
                   return
                 }
               }
             }
           }
 
-          if (strandParam) setAutoExpandStrand(strandParam)
-          setStep('strands')
+          setStep('lessons')
           return
         }
       }
@@ -315,8 +286,6 @@ const CurriculumNavigator = () => {
   }, [selectedGrade])
 
   const goDashboard = () => navigate('/dashboard')
-
-  // Clear URL params when navigating manually backward
   const clearParams = () => setSearchParams({})
 
   return (
@@ -333,15 +302,15 @@ const CurriculumNavigator = () => {
       {step === 'subject' && (
         <SubjectSelector
           grade={selectedGrade}
-          onSelect={(s) => { setSelectedSubject(s); setStep('strands') }}
+          onSelect={(s) => { setSelectedSubject(s); setStep('lessons') }}
           onBack={() => { setStep('grade'); clearParams() }}
           progress={progress}
           language={language}
         />
       )}
 
-      {step === 'strands' && selectedSubject && (
-        <StrandList
+      {step === 'lessons' && selectedSubject && (
+        <LessonList
           subject={selectedSubject}
           grade={selectedGrade}
           onSelectLesson={(lesson, subject) => { setSelectedLesson({ lesson, subject }); setStep('lesson') }}
@@ -349,7 +318,6 @@ const CurriculumNavigator = () => {
           onBackGrade={() => { setStep('grade'); clearParams() }}
           progress={progress}
           language={language}
-          autoExpandStrand={autoExpandStrand}
         />
       )}
 
@@ -357,7 +325,7 @@ const CurriculumNavigator = () => {
         <LessonView
           lesson={selectedLesson.lesson}
           subject={selectedLesson.subject}
-          onBack={() => { setStep('strands'); clearParams() }}
+          onBack={() => { setStep('lessons'); clearParams() }}
           onComplete={() => {}}
         />
       )}

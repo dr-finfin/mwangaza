@@ -32,203 +32,210 @@ const SettingsView = () => {
   }
 
   const themeOptions = [
-    { key: 'light', en: 'Light',  sw: 'Mwanga' },
-    { key: 'dark',  en: 'Dark',   sw: 'Giza' },
-    { key: 'auto',  en: 'Auto',   sw: 'Otomatiki' },
+    { key: 'light', en: 'Light', sw: 'Mwanga' },
+    { key: 'dark',  en: 'Dark',  sw: 'Giza' },
+    { key: 'auto',  en: 'Auto',  sw: 'Otomatiki' },
   ]
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
+    <div className="max-w-2xl mx-auto space-y-10">
+
       <div>
         <h1 className="text-3xl font-black text-gray-900 dark:text-white">
           {language === 'en' ? 'Settings' : 'Mipangilio'}
         </h1>
-        <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">
-          {language === 'en' ? 'Customize your experience' : 'Badilisha matumizi yako'}
-        </p>
       </div>
 
-      {/* Identity */}
-      <section className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl p-6">
-        <h2 className="text-sm font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-4">
-          {language === 'en' ? 'Identity' : 'Utambulisho'}
+      {/* ── YOU (frequently changed) ─────────────────────── */}
+      <div>
+        <h2 className="text-xs font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4 px-1">
+          {language === 'en' ? 'You' : 'Wewe'}
         </h2>
-        <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2">
-          {language === 'en' ? 'Your name' : 'Jina lako'}
-        </label>
-        <div className="flex gap-2">
-          <input
-            value={draftName}
-            onChange={e => setDraftName(e.target.value)}
-            className="flex-1 px-4 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-gray-800 dark:text-gray-200 font-medium focus:outline-none"
-            placeholder={language === 'en' ? 'Enter your name' : 'Andika jina lako'}
-          />
-          <button
-            onClick={saveName}
-            disabled={draftName === name}
-            className="px-5 py-2.5 text-white text-sm font-semibold rounded-xl disabled:opacity-40"
-            style={{ backgroundColor: 'var(--accent)' }}
-          >
-            {language === 'en' ? 'Save' : 'Hifadhi'}
-          </button>
-        </div>
-      </section>
 
-      {/* Character */}
-      <section className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl p-6">
-        <h2 className="text-sm font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-4">
-          {language === 'en' ? 'Character' : 'Mhusika'}
-        </h2>
-        <div className="grid grid-cols-5 gap-2 sm:gap-3">
-          {Object.entries(CHARACTERS).map(([key, ch]) => (
-            <button
-              key={key}
-              onClick={() => setCharacter(key)}
-              className={`flex flex-col items-center justify-center gap-1 py-4 rounded-xl border-2 transition-all ${
-                character === key
-                  ? 'text-white scale-105'
-                  : 'bg-gray-50 dark:bg-gray-700 border-transparent hover:border-gray-300 dark:hover:border-gray-600'
-              }`}
-              style={character === key ? { backgroundColor: 'var(--accent)', borderColor: 'var(--accent)' } : {}}
-            >
-              <span className="text-3xl">{ch.emoji}</span>
-              <span className={`text-[10px] font-bold uppercase tracking-wider ${
-                character === key ? 'text-white' : 'text-gray-500 dark:text-gray-400'
-              }`}>
-                {language === 'en' ? ch.name : ch.nameSw}
-              </span>
-            </button>
-          ))}
-        </div>
-      </section>
+        <div className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl divide-y divide-gray-100 dark:divide-gray-700">
 
-      {/* Grade */}
-      <section className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl p-6">
-        <h2 className="text-sm font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-4">
-          {language === 'en' ? 'Grade' : 'Darasa'}
-        </h2>
-        <div className="grid grid-cols-5 gap-2">
-          {GRADES.map(g => (
-            <button
-              key={g.id}
-              onClick={() => setSelectedGrade(g.id)}
-              className={`py-3 rounded-xl text-sm font-bold transition-all ${
-                selectedGrade === g.id
-                  ? 'text-white scale-105'
-                  : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600'
-              }`}
-              style={selectedGrade === g.id ? { backgroundColor: 'var(--accent)' } : {}}
-            >
-              {g.id}
-            </button>
-          ))}
-        </div>
-      </section>
+          {/* Name */}
+          <div className="p-5">
+            <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-wider">
+              {language === 'en' ? 'Name' : 'Jina'}
+            </label>
+            <div className="flex gap-2">
+              <input
+                value={draftName}
+                onChange={e => setDraftName(e.target.value)}
+                className="flex-1 px-4 py-2.5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-gray-800 dark:text-gray-200 font-medium focus:outline-none"
+                placeholder={language === 'en' ? 'Your name' : 'Jina lako'}
+              />
+              <button
+                onClick={saveName}
+                disabled={draftName === name}
+                className="px-5 py-2.5 text-white text-sm font-semibold rounded-xl disabled:opacity-40"
+                style={{ backgroundColor: 'var(--accent)' }}
+              >
+                {language === 'en' ? 'Save' : 'Hifadhi'}
+              </button>
+            </div>
+          </div>
 
-      {/* Appearance */}
-      <section className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl p-6">
-        <h2 className="text-sm font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-4">
+          {/* Character */}
+          <div className="p-5">
+            <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-3 uppercase tracking-wider">
+              {language === 'en' ? 'Character' : 'Mhusika'}
+            </label>
+            <div className="grid grid-cols-5 gap-2">
+              {Object.entries(CHARACTERS).map(([key, ch]) => (
+                <button
+                  key={key}
+                  onClick={() => setCharacter(key)}
+                  className={`flex flex-col items-center justify-center gap-1 py-3 rounded-xl border-2 transition-all ${
+                    character === key
+                      ? 'text-white'
+                      : 'bg-gray-50 dark:bg-gray-700 border-transparent hover:border-gray-300 dark:hover:border-gray-600'
+                  }`}
+                  style={character === key ? { backgroundColor: 'var(--accent)', borderColor: 'var(--accent)' } : {}}
+                >
+                  <span className="text-2xl">{ch.emoji}</span>
+                  <span className={`text-[10px] font-bold uppercase tracking-wider ${
+                    character === key ? 'text-white' : 'text-gray-500 dark:text-gray-400'
+                  }`}>
+                    {language === 'en' ? ch.name : ch.nameSw}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Grade */}
+          <div className="p-5">
+            <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-3 uppercase tracking-wider">
+              {language === 'en' ? 'Grade' : 'Darasa'}
+            </label>
+            <div className="grid grid-cols-9 gap-1.5">
+              {GRADES.map(g => (
+                <button
+                  key={g.id}
+                  onClick={() => setSelectedGrade(g.id)}
+                  className={`aspect-square rounded-lg text-sm font-bold transition-all ${
+                    selectedGrade === g.id
+                      ? 'text-white'
+                      : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600'
+                  }`}
+                  style={selectedGrade === g.id ? { backgroundColor: 'var(--accent)' } : {}}
+                >
+                  {g.id}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ── APPEARANCE ──────────────────────────────────── */}
+      <div>
+        <h2 className="text-xs font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4 px-1">
           {language === 'en' ? 'Appearance' : 'Mwonekano'}
         </h2>
 
-        <div className="mb-5">
-          <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-3">
-            {language === 'en' ? 'Accent color' : 'Rangi'}
-          </label>
-          <div className="grid grid-cols-5 gap-3">
-            {Object.entries(ACCENT_COLORS).map(([key, color]) => (
-              <button
-                key={key}
-                onClick={() => setAccent(key)}
-                className={`aspect-square rounded-2xl transition-all hover:scale-110 ${
-                  accent === key ? 'ring-2 ring-offset-2 ring-offset-white dark:ring-offset-gray-800' : ''
-                }`}
-                style={{ backgroundColor: color.hex }}
-                title={color.name}
-              />
-            ))}
-          </div>
-        </div>
+        <div className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl divide-y divide-gray-100 dark:divide-gray-700">
 
-        <div>
-          <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-3">
-            {language === 'en' ? 'Theme' : 'Mandhari'}
-          </label>
-          <div className="grid grid-cols-3 gap-2">
-            {themeOptions.map(opt => (
+          {/* Color */}
+          <div className="p-5">
+            <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-3 uppercase tracking-wider">
+              {language === 'en' ? 'Color' : 'Rangi'}
+            </label>
+            <div className="grid grid-cols-5 gap-3">
+              {Object.entries(ACCENT_COLORS).map(([key, color]) => (
+                <button
+                  key={key}
+                  onClick={() => setAccent(key)}
+                  className={`aspect-square rounded-2xl transition-all hover:scale-110 ${
+                    accent === key ? 'ring-2 ring-offset-2 ring-offset-white dark:ring-offset-gray-800' : ''
+                  }`}
+                  style={{ backgroundColor: color.hex }}
+                  title={color.name}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* Theme */}
+          <div className="p-5">
+            <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-3 uppercase tracking-wider">
+              {language === 'en' ? 'Theme' : 'Mandhari'}
+            </label>
+            <div className="grid grid-cols-3 gap-2">
+              {themeOptions.map(opt => (
+                <button
+                  key={opt.key}
+                  onClick={() => setThemeMode(opt.key)}
+                  className={`py-3 rounded-xl text-sm font-semibold border-2 transition-all ${
+                    themeMode === opt.key ? 'text-white' : 'border-gray-200 dark:border-gray-700 text-gray-500'
+                  }`}
+                  style={themeMode === opt.key ? { backgroundColor: 'var(--accent)', borderColor: 'var(--accent)' } : {}}
+                >
+                  {language === 'en' ? opt.en : opt.sw}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Language */}
+          <div className="p-5">
+            <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-3 uppercase tracking-wider">
+              {language === 'en' ? 'Language' : 'Lugha'}
+            </label>
+            <div className="grid grid-cols-2 gap-2">
               <button
-                key={opt.key}
-                onClick={() => setThemeMode(opt.key)}
+                onClick={() => setLanguage('en')}
                 className={`py-3 rounded-xl text-sm font-semibold border-2 transition-all ${
-                  themeMode === opt.key ? 'text-white' : 'border-gray-200 dark:border-gray-700 text-gray-500'
+                  language === 'en' ? 'text-white' : 'border-gray-200 dark:border-gray-700 text-gray-500'
                 }`}
-                style={themeMode === opt.key ? { backgroundColor: 'var(--accent)', borderColor: 'var(--accent)' } : {}}
+                style={language === 'en' ? { backgroundColor: 'var(--accent)', borderColor: 'var(--accent)' } : {}}
               >
-                {language === 'en' ? opt.en : opt.sw}
+                English
               </button>
-            ))}
+              <button
+                onClick={() => setLanguage('sw')}
+                className={`py-3 rounded-xl text-sm font-semibold border-2 transition-all ${
+                  language === 'sw' ? 'text-white' : 'border-gray-200 dark:border-gray-700 text-gray-500'
+                }`}
+                style={language === 'sw' ? { backgroundColor: 'var(--accent)', borderColor: 'var(--accent)' } : {}}
+              >
+                Kiswahili
+              </button>
+            </div>
           </div>
-          <p className="text-xs text-gray-400 dark:text-gray-500 mt-2">
-            {language === 'en'
-              ? 'Auto follows your device theme.'
-              : 'Otomatiki itafuata mandhari ya kifaa chako.'}
-          </p>
         </div>
-      </section>
+      </div>
 
-      {/* Language */}
-      <section className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl p-6">
-        <h2 className="text-sm font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-4">
-          {language === 'en' ? 'Language' : 'Lugha'}
-        </h2>
-        <div className="flex gap-2">
-          <button
-            onClick={() => setLanguage('en')}
-            className={`flex-1 py-3 rounded-xl text-sm font-semibold border-2 transition-all ${
-              language === 'en' ? 'text-white' : 'border-gray-200 dark:border-gray-700 text-gray-500'
-            }`}
-            style={language === 'en' ? { backgroundColor: 'var(--accent)', borderColor: 'var(--accent)' } : {}}
-          >
-            English
-          </button>
-          <button
-            onClick={() => setLanguage('sw')}
-            className={`flex-1 py-3 rounded-xl text-sm font-semibold border-2 transition-all ${
-              language === 'sw' ? 'text-white' : 'border-gray-200 dark:border-gray-700 text-gray-500'
-            }`}
-            style={language === 'sw' ? { backgroundColor: 'var(--accent)', borderColor: 'var(--accent)' } : {}}
-          >
-            Kiswahili
-          </button>
-        </div>
-      </section>
-
-      {/* Data */}
-      <section className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl p-6">
-        <h2 className="text-sm font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-4">
+      {/* ── DATA (rare, dangerous) ─────────────────────── */}
+      <div>
+        <h2 className="text-xs font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4 px-1">
           {language === 'en' ? 'Data' : 'Data'}
         </h2>
 
-        <button
-          onClick={exportData}
-          className="w-full py-3 mb-3 rounded-xl text-sm font-semibold border-2 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
-        >
-          {language === 'en' ? 'Export my progress' : 'Hamisha maendeleo yangu'}
-        </button>
+        <div className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl divide-y divide-gray-100 dark:divide-gray-700">
+          <button
+            onClick={exportData}
+            className="w-full p-5 text-left text-sm font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+          >
+            {language === 'en' ? 'Export my progress' : 'Hamisha maendeleo yangu'}
+          </button>
 
-        <button
-          onClick={handleReset}
-          className="w-full py-3 rounded-xl text-sm font-semibold border-2 border-red-200 dark:border-red-900/50 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30"
-        >
-          {language === 'en' ? 'Clear all data' : 'Futa data yote'}
-        </button>
+          <button
+            onClick={handleReset}
+            className="w-full p-5 text-left text-sm font-semibold text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors"
+          >
+            {language === 'en' ? 'Clear all data' : 'Futa data yote'}
+          </button>
+        </div>
 
-        <p className="text-xs text-gray-400 dark:text-gray-500 mt-4 leading-relaxed">
+        <p className="text-xs text-gray-400 dark:text-gray-500 mt-3 px-1 leading-relaxed">
           {language === 'en'
-            ? 'Your data is stored on this device only. Export to back it up.'
-            : 'Data yako imehifadhiwa kwenye kifaa hiki tu. Hamisha ili kuihifadhi.'}
+            ? 'Your data is stored on this device only.'
+            : 'Data yako imehifadhiwa kwenye kifaa hiki tu.'}
         </p>
-      </section>
+      </div>
     </div>
   )
 }
