@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { useApp } from '../../context/AppContext'
+import { useApp, CHARACTERS } from '../../context/AppContext'
 import SearchOverlay from './SearchOverlay'
 
 const Navbar = ({ onMenuToggle }) => {
   const navigate = useNavigate()
   const location = useLocation()
-  const { name, selectedGrade, language, setLanguage, darkMode, setDarkMode, t } = useApp()
+  const { name, selectedGrade, language, setLanguage, darkMode, setDarkMode, t, character } = useApp()
 
   const [showDropdown, setShowDropdown] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
 
-  // Keyboard shortcut: / opens search
   useEffect(() => {
     const handleKey = (e) => {
       if (e.key === '/' && !['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName)) {
@@ -23,11 +22,8 @@ const Navbar = ({ onMenuToggle }) => {
     return () => document.removeEventListener('keydown', handleKey)
   }, [])
 
-  const initials = name
-    ? name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
-    : '?'
-
   const displayName = name || (language === 'en' ? 'Student' : 'Mwanafunzi')
+  const ch = CHARACTERS[character] || CHARACTERS.lion
 
   const pathLabels = {
     '/dashboard':  language === 'en' ? 'Home'     : 'Nyumbani',
@@ -41,7 +37,6 @@ const Navbar = ({ onMenuToggle }) => {
       <header className="fixed top-0 right-0 left-0 lg:left-64 z-40 bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800">
         <div className="flex items-center justify-between px-4 sm:px-6 h-16 gap-2">
 
-          {/* Left */}
           <div className="flex items-center gap-3 min-w-0">
             <button
               onClick={onMenuToggle}
@@ -66,10 +61,8 @@ const Navbar = ({ onMenuToggle }) => {
             </div>
           </div>
 
-          {/* Right */}
           <div className="flex items-center gap-2 flex-shrink-0">
 
-            {/* Search button */}
             <button
               onClick={() => setSearchOpen(true)}
               className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:border-gray-300 dark:hover:border-gray-600"
@@ -98,14 +91,16 @@ const Navbar = ({ onMenuToggle }) => {
               {darkMode ? 'Light' : 'Dark'}
             </button>
 
-            {/* Profile */}
             <div className="relative">
               <button
                 onClick={() => setShowDropdown(!showDropdown)}
                 className="flex items-center gap-2 pl-1 pr-2.5 py-1 rounded-2xl hover:bg-gray-100 dark:hover:bg-gray-800"
               >
-                <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-xs font-bold" style={{ backgroundColor: 'var(--accent)' }}>
-                  {initials}
+                <div
+                  className="w-8 h-8 rounded-lg flex items-center justify-center text-lg"
+                  style={{ backgroundColor: 'var(--accent)' }}
+                >
+                  {ch.emoji}
                 </div>
                 <span className="hidden sm:block text-sm font-medium text-gray-700 dark:text-gray-300 max-w-[80px] truncate">
                   {displayName.split(' ')[0]}

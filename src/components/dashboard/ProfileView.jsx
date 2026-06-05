@@ -1,6 +1,6 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useApp } from '../../context/AppContext'
+import { useApp, CHARACTERS } from '../../context/AppContext'
 import { CURRICULUM } from '../../data/curriculum'
 
 const getLessonName = (lessonId) => {
@@ -16,13 +16,10 @@ const getLessonName = (lessonId) => {
 
 const ProfileView = () => {
   const navigate = useNavigate()
-  const { name, selectedGrade, language, stats, progress } = useApp()
-
-  const initials = name
-    ? name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
-    : '?'
+  const { name, selectedGrade, language, stats, progress, character } = useApp()
 
   const displayName = name || (language === 'en' ? 'Student' : 'Mwanafunzi')
+  const ch = CHARACTERS[character] || CHARACTERS.lion
 
   const recentLessons = Object.entries(progress)
     .sort(([, a], [, b]) => (b.updatedAt || '').localeCompare(a.updatedAt || ''))
@@ -48,17 +45,17 @@ const ProfileView = () => {
         <div className="h-24" style={{ backgroundColor: 'var(--accent)' }} />
         <div className="px-6 pb-6">
           <div
-            className="-mt-10 mb-4 w-20 h-20 rounded-2xl flex items-center justify-center text-white text-2xl font-black border-4 border-white dark:border-gray-800 shadow-lg"
+            className="-mt-10 mb-4 w-20 h-20 rounded-2xl flex items-center justify-center text-4xl border-4 border-white dark:border-gray-800 shadow-lg"
             style={{ backgroundColor: 'var(--accent)' }}
           >
-            {initials}
+            {ch.emoji}
           </div>
 
           <h2 className="text-2xl font-black text-gray-900 dark:text-white">
             {displayName}
           </h2>
           <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">
-            {language === 'en' ? 'Grade' : 'Darasa'} {selectedGrade}
+            {language === 'en' ? 'Grade' : 'Darasa'} {selectedGrade} · {language === 'en' ? ch.name : ch.nameSw}
           </p>
         </div>
       </div>

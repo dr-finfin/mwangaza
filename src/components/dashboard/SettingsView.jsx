@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useApp, ACCENT_COLORS } from '../../context/AppContext'
+import { useApp, ACCENT_COLORS, CHARACTERS } from '../../context/AppContext'
 import { GRADES } from '../../data/curriculum'
 
 const SettingsView = () => {
@@ -9,6 +9,7 @@ const SettingsView = () => {
     language, setLanguage,
     darkMode, setDarkMode,
     accent, setAccent,
+    character, setCharacter,
     exportData, resetAll,
     showNotification,
   } = useApp()
@@ -41,6 +42,7 @@ const SettingsView = () => {
         </p>
       </div>
 
+      {/* Identity */}
       <section className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl p-6">
         <h2 className="text-sm font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-4">
           {language === 'en' ? 'Identity' : 'Utambulisho'}
@@ -66,6 +68,35 @@ const SettingsView = () => {
         </div>
       </section>
 
+      {/* Character */}
+      <section className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl p-6">
+        <h2 className="text-sm font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-4">
+          {language === 'en' ? 'Character' : 'Mhusika'}
+        </h2>
+        <div className="grid grid-cols-5 gap-2 sm:gap-3">
+          {Object.entries(CHARACTERS).map(([key, ch]) => (
+            <button
+              key={key}
+              onClick={() => setCharacter(key)}
+              className={`flex flex-col items-center justify-center gap-1 py-4 rounded-xl border-2 transition-all ${
+                character === key
+                  ? 'text-white scale-105'
+                  : 'bg-gray-50 dark:bg-gray-700 border-transparent hover:border-gray-300 dark:hover:border-gray-600'
+              }`}
+              style={character === key ? { backgroundColor: 'var(--accent)', borderColor: 'var(--accent)' } : {}}
+            >
+              <span className="text-3xl">{ch.emoji}</span>
+              <span className={`text-[10px] font-bold uppercase tracking-wider ${
+                character === key ? 'text-white' : 'text-gray-500 dark:text-gray-400'
+              }`}>
+                {language === 'en' ? ch.name : ch.nameSw}
+              </span>
+            </button>
+          ))}
+        </div>
+      </section>
+
+      {/* Grade */}
       <section className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl p-6">
         <h2 className="text-sm font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-4">
           {language === 'en' ? 'Grade' : 'Darasa'}
@@ -88,6 +119,7 @@ const SettingsView = () => {
         </div>
       </section>
 
+      {/* Appearance */}
       <section className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl p-6">
         <h2 className="text-sm font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-4">
           {language === 'en' ? 'Appearance' : 'Mwonekano'}
@@ -97,12 +129,12 @@ const SettingsView = () => {
           <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-3">
             {language === 'en' ? 'Accent color' : 'Rangi'}
           </label>
-          <div className="flex gap-3">
+          <div className="grid grid-cols-5 gap-3">
             {Object.entries(ACCENT_COLORS).map(([key, color]) => (
               <button
                 key={key}
                 onClick={() => setAccent(key)}
-                className={`w-10 h-10 rounded-full transition-all hover:scale-110 ${
+                className={`aspect-square rounded-2xl transition-all hover:scale-110 ${
                   accent === key ? 'ring-2 ring-offset-2 ring-offset-white dark:ring-offset-gray-800' : ''
                 }`}
                 style={{ backgroundColor: color.hex }}
@@ -139,6 +171,7 @@ const SettingsView = () => {
         </div>
       </section>
 
+      {/* Language */}
       <section className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl p-6">
         <h2 className="text-sm font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-4">
           {language === 'en' ? 'Language' : 'Lugha'}
@@ -165,6 +198,7 @@ const SettingsView = () => {
         </div>
       </section>
 
+      {/* Data */}
       <section className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl p-6">
         <h2 className="text-sm font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-4">
           {language === 'en' ? 'Data' : 'Data'}

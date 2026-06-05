@@ -6,11 +6,24 @@ const STORAGE_KEY = 'mwangaza_state'
 const STATE_VERSION = 1
 
 export const ACCENT_COLORS = {
-  blue:    { name: 'Blue',    hex: '#2563eb', hover: '#1d4ed8' },
-  gold:    { name: 'Gold',    hex: '#C9A84C', hover: '#B8860B' },
+  red:     { name: 'Red',     hex: '#dc2626', hover: '#b91c1c' },
+  orange:  { name: 'Orange',  hex: '#ea580c', hover: '#c2410c' },
+  yellow:  { name: 'Yellow',  hex: '#eab308', hover: '#ca8a04' },
+  green:   { name: 'Green',   hex: '#16a34a', hover: '#15803d' },
   emerald: { name: 'Emerald', hex: '#059669', hover: '#047857' },
-  rose:    { name: 'Rose',    hex: '#e11d48', hover: '#be123c' },
-  slate:   { name: 'Slate',   hex: '#475569', hover: '#334155' },
+  cyan:    { name: 'Cyan',    hex: '#0891b2', hover: '#0e7490' },
+  blue:    { name: 'Blue',    hex: '#2563eb', hover: '#1d4ed8' },
+  violet:  { name: 'Violet',  hex: '#7c3aed', hover: '#6d28d9' },
+  pink:    { name: 'Pink',    hex: '#db2777', hover: '#be185d' },
+  gold:    { name: 'Gold',    hex: '#C9A84C', hover: '#B8860B' },
+}
+
+export const CHARACTERS = {
+  lion:     { name: 'Lion',     nameSw: 'Simba',  emoji: '🦁' },
+  elephant: { name: 'Elephant', nameSw: 'Tembo',  emoji: '🐘' },
+  rhino:    { name: 'Rhino',    nameSw: 'Kifaru', emoji: '🦏' },
+  leopard:  { name: 'Leopard',  nameSw: 'Chui',   emoji: '🐆' },
+  buffalo:  { name: 'Buffalo',  nameSw: 'Nyati',  emoji: '🐃' },
 }
 
 const DEFAULT_STATE = {
@@ -21,6 +34,7 @@ const DEFAULT_STATE = {
     language: 'en',
     darkMode: false,
     accent: 'blue',
+    character: 'lion',
     sidebarCollapsed: false,
   },
   progress: {},
@@ -72,6 +86,7 @@ export const AppProvider = ({ children }) => {
   const setLanguage         = useCallback(v => setState(p => ({ ...p, profile: { ...p.profile, language: v } })), [])
   const setDarkMode         = useCallback(v => setState(p => ({ ...p, profile: { ...p.profile, darkMode: v } })), [])
   const setAccent           = useCallback(v => setState(p => ({ ...p, profile: { ...p.profile, accent: v } })), [])
+  const setCharacter        = useCallback(v => setState(p => ({ ...p, profile: { ...p.profile, character: v } })), [])
   const setSidebarCollapsed = useCallback(v => setState(p => ({ ...p, profile: { ...p.profile, sidebarCollapsed: v } })), [])
 
   const resetAll = useCallback(() => {
@@ -141,8 +156,9 @@ export const AppProvider = ({ children }) => {
       language:         state.profile.language,
       darkMode:         state.profile.darkMode,
       accent:           state.profile.accent,
+      character:        state.profile.character,
       sidebarCollapsed: state.profile.sidebarCollapsed,
-      setName, setSelectedGrade, setLanguage, setDarkMode, setAccent, setSidebarCollapsed,
+      setName, setSelectedGrade, setLanguage, setDarkMode, setAccent, setCharacter, setSidebarCollapsed,
       resetAll, exportData,
       progress: state.progress,
       saveLessonProgress,
