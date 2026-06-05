@@ -281,4 +281,8 @@
   input, textarea, select {
     font-size: 16px; /* prevents iOS zoom on focus */
   }
+
+/* Hide scrollbar on horizontal strip */
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 }
