@@ -3,10 +3,10 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { useApp, CHARACTERS } from '../../context/AppContext'
 import SearchOverlay from './SearchOverlay'
 
-const Navbar = ({ onMenuToggle }) => {
+const Navbar = () => {
   const navigate = useNavigate()
   const location = useLocation()
-  const { name, selectedGrade, language, setLanguage, darkMode, setDarkMode, t, character } = useApp()
+  const { name, selectedGrade, language, t, character } = useApp()
 
   const [showDropdown, setShowDropdown] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
@@ -37,18 +37,11 @@ const Navbar = ({ onMenuToggle }) => {
       <header className="fixed top-0 right-0 left-0 lg:left-64 z-40 bg-gray-100 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
         <div className="flex items-center justify-between px-4 sm:px-6 h-16 gap-2">
 
+          {/* Mobile: show logo. Desktop: breadcrumb */}
           <div className="flex items-center gap-3 min-w-0">
-            <button
-              onClick={onMenuToggle}
-              className="lg:hidden p-2 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400 flex-shrink-0"
-              aria-label="Menu"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            </button>
+            <img src="/mwangaza_icon.png" alt="Mwangaza" className="w-9 h-9 lg:hidden" />
 
-            <div className="hidden sm:flex items-center gap-2 text-sm min-w-0">
+            <div className="hidden lg:flex items-center gap-2 text-sm min-w-0">
               <span className="text-gray-400 dark:text-gray-500">Mwangaza</span>
               {pathLabels[location.pathname] && (
                 <>
@@ -65,8 +58,8 @@ const Navbar = ({ onMenuToggle }) => {
 
             <button
               onClick={() => setSearchOpen(true)}
+              aria-label={language === 'en' ? 'Search lessons' : 'Tafuta masomo'}
               className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:border-gray-300 dark:hover:border-gray-600 bg-white dark:bg-gray-800"
-              aria-label="Search"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -80,6 +73,9 @@ const Navbar = ({ onMenuToggle }) => {
             <div className="relative">
               <button
                 onClick={() => setShowDropdown(!showDropdown)}
+                aria-label={language === 'en' ? 'Your account' : 'Akaunti yako'}
+                aria-haspopup="menu"
+                aria-expanded={showDropdown}
                 className="flex items-center gap-2 pl-1 pr-2.5 py-1 rounded-2xl hover:bg-gray-200 dark:hover:bg-gray-800"
               >
                 <div className="w-9 h-9 rounded-xl flex items-center justify-center text-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
@@ -92,8 +88,8 @@ const Navbar = ({ onMenuToggle }) => {
 
               {showDropdown && (
                 <>
-                  <div className="fixed inset-0 z-40" onClick={() => setShowDropdown(false)} />
-                  <div className="absolute right-0 top-full mt-2 w-48 rounded-2xl shadow-xl border overflow-hidden z-50 bg-white dark:bg-gray-900 border-gray-100 dark:border-gray-800">
+                  <div className="fixed inset-0 z-40" onClick={() => setShowDropdown(false)} aria-hidden="true" />
+                  <div role="menu" className="absolute right-0 top-full mt-2 w-48 rounded-2xl shadow-xl border overflow-hidden z-50 bg-white dark:bg-gray-900 border-gray-100 dark:border-gray-800">
                     <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50">
                       <div className="font-semibold text-sm truncate text-gray-800 dark:text-white">
                         {displayName}
@@ -105,12 +101,14 @@ const Navbar = ({ onMenuToggle }) => {
 
                     <div className="py-1">
                       <button
+                        role="menuitem"
                         onClick={() => { navigate('/profile'); setShowDropdown(false) }}
                         className="w-full px-4 py-2.5 text-sm text-left text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
                       >
                         {t('profile')}
                       </button>
                       <button
+                        role="menuitem"
                         onClick={() => { navigate('/settings'); setShowDropdown(false) }}
                         className="w-full px-4 py-2.5 text-sm text-left text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
                       >

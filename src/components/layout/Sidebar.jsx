@@ -41,75 +41,59 @@ const NAV_ITEMS = [
   { path: '/settings',   label: 'Settings', labelSw: 'Mipangilio', Icon: SettingsIcon },
 ]
 
-const Sidebar = ({ mobileOpen, onClose }) => {
+const Sidebar = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const { language, sidebarCollapsed, setSidebarCollapsed } = useApp()
 
-  const handleNav = (path) => {
-    navigate(path)
-    onClose?.()
-  }
+  return (
+    <aside
+      className={`hidden lg:block fixed left-0 top-0 bottom-0 bg-white dark:bg-gray-900 border-r border-gray-100 dark:border-gray-800 z-30 overflow-y-auto transition-all duration-200 ${
+        sidebarCollapsed ? 'w-20' : 'w-64'
+      }`}
+      aria-label="Sidebar navigation"
+    >
+      <div className="flex flex-col h-full">
 
-  const renderContent = (collapsed) => (
-    <div className="flex flex-col h-full">
+        <div className={`pt-6 pb-4 flex ${sidebarCollapsed ? 'justify-center px-2' : 'justify-center px-5'}`}>
+          <button onClick={() => navigate('/dashboard')} aria-label="Mwangaza home">
+            <img src="/mwangaza_icon.png" alt="Mwangaza" className="w-12 h-12" />
+          </button>
+        </div>
 
-      {/* Logo */}
-      <div className={`pt-6 pb-4 flex ${collapsed ? 'justify-center px-2' : 'justify-center px-5'}`}>
-        <button onClick={() => handleNav('/dashboard')} aria-label="Mwangaza">
-          <img src="/mwangaza_icon.png" alt="Mwangaza" className="w-12 h-12" />
+        <nav className={`flex-1 py-2 space-y-1 ${sidebarCollapsed ? 'px-2' : 'px-3'}`} aria-label="Primary">
+          {NAV_ITEMS.map(({ path, label, labelSw, Icon }) => {
+            const isActive = location.pathname === path
+            return (
+              <button
+                key={path}
+                onClick={() => navigate(path)}
+                aria-label={language === 'en' ? label : labelSw}
+                aria-current={isActive ? 'page' : undefined}
+                title={sidebarCollapsed ? (language === 'en' ? label : labelSw) : undefined}
+                className={`w-full flex items-center gap-3 ${sidebarCollapsed ? 'justify-center px-2 py-2.5' : 'px-3 py-2.5'} rounded-lg text-sm font-medium transition-colors ${
+                  isActive
+                    ? 'text-white'
+                    : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white'
+                }`}
+                style={isActive ? { backgroundColor: 'var(--accent)' } : {}}
+              >
+                <Icon className="w-5 h-5 flex-shrink-0" />
+                {!sidebarCollapsed && <span>{language === 'en' ? label : labelSw}</span>}
+              </button>
+            )
+          })}
+        </nav>
+
+        <button
+          onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+          aria-label={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          className="flex w-full items-center justify-center py-3 text-gray-400 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
+        >
+          {sidebarCollapsed ? <ChevronRightIcon className="w-4 h-4" /> : <ChevronLeftIcon className="w-4 h-4" />}
         </button>
       </div>
-
-      {/* Nav */}
-      <nav className={`flex-1 py-2 space-y-1 ${collapsed ? 'px-2' : 'px-3'}`}>
-        {NAV_ITEMS.map(({ path, label, labelSw, Icon }) => {
-          const isActive = location.pathname === path
-          return (
-            <button
-              key={path}
-              onClick={() => handleNav(path)}
-              title={collapsed ? (language === 'en' ? label : labelSw) : undefined}
-              className={`w-full flex items-center gap-3 ${collapsed ? 'justify-center px-2 py-2.5' : 'px-3 py-2.5'} rounded-lg text-sm font-medium transition-colors ${
-                isActive
-                  ? 'text-white'
-                  : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white'
-              }`}
-              style={isActive ? { backgroundColor: 'var(--accent)' } : {}}
-            >
-              <Icon className="w-5 h-5 flex-shrink-0" />
-              {!collapsed && <span>{language === 'en' ? label : labelSw}</span>}
-            </button>
-          )
-        })}
-      </nav>
-
-      {/* Collapse toggle */}
-      <button
-        onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-        className="hidden lg:flex w-full items-center justify-center py-3 text-gray-400 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
-        aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-      >
-        {collapsed ? <ChevronRightIcon className="w-4 h-4" /> : <ChevronLeftIcon className="w-4 h-4" />}
-      </button>
-    </div>
-  )
-
-  return (
-    <>
-      <aside className={`hidden lg:block fixed left-0 top-0 bottom-0 bg-white dark:bg-gray-900 border-r border-gray-100 dark:border-gray-800 z-30 overflow-y-auto transition-all duration-200 ${sidebarCollapsed ? 'w-20' : 'w-64'}`}>
-        {renderContent(sidebarCollapsed)}
-      </aside>
-
-      {mobileOpen && (
-        <div className="lg:hidden fixed inset-0 z-50 flex">
-          <div className="fixed inset-0 bg-black/40" onClick={onClose} />
-          <aside className="relative w-72 bg-white dark:bg-gray-900 h-full overflow-y-auto shadow-2xl">
-            {renderContent(false)}
-          </aside>
-        </div>
-      )}
-    </>
+    </aside>
   )
 }
 

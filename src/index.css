@@ -285,4 +285,30 @@
 /* Hide scrollbar on horizontal strip */
 .scrollbar-hide::-webkit-scrollbar { display: none; }
 .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Page fade-in animation */
+@keyframes pageFade {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-page-fade {
+  animation: pageFade 0.25s ease-out;
+}
+
+/* Focus ring uses accent color */
+*:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Sun watermark utility */
+.sun-watermark {
+  background-image: url('/mwangaza_icon.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0.05;
+  pointer-events: none;
+}
 }
