@@ -43,14 +43,14 @@ const LandingPage = () => {
           ? 'bg-white/90 dark:bg-gray-950/90 backdrop-blur-md border-b border-gray-100 dark:border-gray-800'
           : 'bg-transparent'
       }`}>
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-5 sm:px-8 h-20 flex items-center justify-between">
           <button onClick={() => navigate('/')} aria-label="Mwangaza">
-            <img src="/mwangaza_icon.png" alt="Mwangaza" className="w-11 h-11 rounded-xl" />
+            <img src="/mwangaza_icon.png" alt="Mwangaza" className="w-14 h-14" />
           </button>
 
           <button
             onClick={() => navigate('/onboarding')}
-            className="px-5 py-2 text-white text-sm font-semibold rounded-xl hover:opacity-90 transition-opacity"
+            className="px-5 py-2.5 text-white text-sm font-semibold rounded-xl hover:opacity-90 transition-opacity"
             style={{ backgroundColor: 'var(--accent)' }}
           >
             {language === 'en' ? 'Start Learning' : 'Anza Kujifunza'}
@@ -58,10 +58,21 @@ const LandingPage = () => {
         </div>
       </nav>
 
-      <main className="flex-1">
+      <main className="flex-1 relative">
+
+        {/* Giant sun watermark behind hero */}
+        <div
+          className="absolute -right-32 sm:-right-20 top-10 w-[500px] sm:w-[700px] h-[500px] sm:h-[700px] opacity-[0.06] pointer-events-none select-none"
+          style={{
+            backgroundImage: 'url(/mwangaza_icon.png)',
+            backgroundSize: 'contain',
+            backgroundRepeat: 'no-repeat',
+            backgroundPosition: 'center',
+          }}
+        />
 
         {/* HERO */}
-        <section className="pt-32 sm:pt-40 pb-20 sm:pb-28">
+        <section className="relative pt-40 sm:pt-48 pb-20 sm:pb-28">
           <div className="max-w-7xl mx-auto px-5 sm:px-8">
 
             <h1 className="text-[3.5rem] sm:text-[6rem] lg:text-[8rem] font-black leading-[0.9] tracking-[-0.04em] mb-8 max-w-6xl">
@@ -88,7 +99,7 @@ const LandingPage = () => {
 
             <button
               onClick={() => navigate('/onboarding')}
-              className="px-7 py-4 text-white font-bold text-base rounded-xl hover:opacity-90 transition-opacity"
+              className="px-8 py-4 text-white font-bold text-base rounded-xl hover:opacity-90 transition-opacity"
               style={{ backgroundColor: 'var(--accent)' }}
             >
               {language === 'en' ? 'Get Started →' : 'Anza →'}
@@ -97,13 +108,24 @@ const LandingPage = () => {
         </section>
 
         {/* CHARACTER BLOCK */}
-        <section className="px-5 sm:px-8 pb-20 sm:pb-28">
+        <section className="relative px-5 sm:px-8 pb-20 sm:pb-28">
           <div className="max-w-7xl mx-auto">
             <div
-              className="rounded-[2rem] sm:rounded-[3rem] overflow-hidden"
+              className="relative rounded-[2rem] sm:rounded-[3rem] overflow-hidden"
               style={{ backgroundColor: 'var(--accent)' }}
             >
-              <div className="grid sm:grid-cols-2 gap-8 items-center px-8 sm:px-16 py-16 sm:py-24">
+              {/* Sun watermark inside character block */}
+              <div
+                className="absolute -left-20 -bottom-20 w-[400px] h-[400px] opacity-[0.12] pointer-events-none select-none"
+                style={{
+                  backgroundImage: 'url(/mwangaza_icon.png)',
+                  backgroundSize: 'contain',
+                  backgroundRepeat: 'no-repeat',
+                  filter: 'brightness(0) invert(1)',
+                }}
+              />
+
+              <div className="relative grid sm:grid-cols-2 gap-8 items-center px-8 sm:px-16 py-16 sm:py-24">
 
                 <div className="text-white text-center sm:text-left">
                   <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1] mb-4">
@@ -156,7 +178,7 @@ const LandingPage = () => {
                 onClick={() => navigate('/onboarding')}
                 className="flex-shrink-0 w-56 sm:w-64 text-left p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700 transition-colors"
               >
-                <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-2xl mb-4 bg-gray-50 dark:bg-gray-800`}>
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl mb-4 bg-gray-50 dark:bg-gray-800">
                   {subject.emoji}
                 </div>
                 <h3 className="font-bold text-base text-gray-900 dark:text-white">
@@ -176,7 +198,7 @@ const LandingPage = () => {
       {/* Footer */}
       <footer className="border-t border-gray-100 dark:border-gray-800 py-6">
         <div className="max-w-7xl mx-auto px-5 sm:px-8 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <img src="/mwangaza_icon.png" alt="Mwangaza" className="w-6 h-6 rounded" />
+          <img src="/mwangaza_icon.png" alt="Mwangaza" className="w-8 h-8" />
           <p className="text-xs text-gray-400 dark:text-gray-600">
             {language === 'en' ? 'Free forever · KICD aligned' : 'Bure milele · KICD'}
           </p>

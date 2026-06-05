@@ -50,15 +50,12 @@ const OnboardingView = () => {
 
       {/* Top bar */}
       <header className="border-b border-gray-100 dark:border-gray-800">
-        <div className="max-w-2xl mx-auto px-5 sm:px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <img src="/mwangaza_icon.png" alt="Mwangaza" className="w-8 h-8 rounded-lg" />
-            <span className="font-black text-base sm:text-lg tracking-tight">MWANGAZA</span>
-          </div>
+        <div className="max-w-2xl mx-auto px-5 sm:px-6 h-20 flex items-center justify-between">
+          <img src="/mwangaza_icon.png" alt="Mwangaza" className="w-12 h-12" />
 
           <button
             onClick={() => setLanguage(language === 'en' ? 'sw' : 'en')}
-            className="px-3 py-1.5 rounded-lg text-xs font-semibold border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400"
+            className="px-3 py-1.5 rounded-lg text-xs font-semibold border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
           >
             {language === 'en' ? 'SW' : 'EN'}
           </button>
@@ -231,7 +228,7 @@ const OnboardingView = () => {
             {step > 1 && (
               <button
                 onClick={() => setStep(step - 1)}
-                className="px-6 py-3.5 rounded-2xl text-sm font-semibold border-2 border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400"
+                className="px-6 py-3.5 rounded-2xl text-sm font-semibold border-2 border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800"
               >
                 {language === 'en' ? 'Back' : 'Rudi'}
               </button>

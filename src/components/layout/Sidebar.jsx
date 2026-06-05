@@ -55,13 +55,9 @@ const Sidebar = ({ mobileOpen, onClose }) => {
     <div className="flex flex-col h-full">
 
       {/* Logo */}
-      <div className={`py-5 border-b border-gray-100 dark:border-gray-800 flex ${collapsed ? 'justify-center px-2' : 'justify-center px-5'}`}>
+      <div className={`py-6 border-b border-gray-100 dark:border-gray-800 flex ${collapsed ? 'justify-center px-2' : 'justify-center px-5'}`}>
         <button onClick={() => handleNav('/dashboard')} aria-label="Mwangaza">
-          <img
-            src="/mwangaza_icon.png"
-            alt="Mwangaza"
-            className="w-12 h-12 rounded-xl shadow-sm"
-          />
+          <img src="/mwangaza_icon.png" alt="Mwangaza" className="w-14 h-14" />
         </button>
       </div>
 
@@ -76,7 +72,7 @@ const Sidebar = ({ mobileOpen, onClose }) => {
               title={collapsed ? (language === 'en' ? label : labelSw) : undefined}
               className={`w-full flex items-center gap-3 ${collapsed ? 'justify-center px-2 py-3' : 'px-4 py-3'} rounded-xl text-sm font-medium transition-all ${
                 isActive
-                  ? 'text-white shadow-sm'
+                  ? 'text-white'
                   : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white'
               }`}
               style={isActive ? { backgroundColor: 'var(--accent)' } : {}}
