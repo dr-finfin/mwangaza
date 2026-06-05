@@ -7,7 +7,7 @@ const SettingsView = () => {
     name, setName,
     selectedGrade, setSelectedGrade,
     language, setLanguage,
-    darkMode, setDarkMode,
+    themeMode, setThemeMode,
     accent, setAccent,
     character, setCharacter,
     exportData, resetAll,
@@ -30,6 +30,12 @@ const SettingsView = () => {
       showNotification(language === 'en' ? 'All data cleared' : 'Data yote imefutwa', 'success')
     }
   }
+
+  const themeOptions = [
+    { key: 'light', en: 'Light',  sw: 'Mwanga' },
+    { key: 'dark',  en: 'Dark',   sw: 'Giza' },
+    { key: 'auto',  en: 'Auto',   sw: 'Otomatiki' },
+  ]
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">
@@ -148,26 +154,25 @@ const SettingsView = () => {
           <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-3">
             {language === 'en' ? 'Theme' : 'Mandhari'}
           </label>
-          <div className="flex gap-2">
-            <button
-              onClick={() => setDarkMode(false)}
-              className={`flex-1 py-3 rounded-xl text-sm font-semibold border-2 transition-all ${
-                !darkMode ? 'text-white' : 'border-gray-200 dark:border-gray-700 text-gray-500'
-              }`}
-              style={!darkMode ? { backgroundColor: 'var(--accent)', borderColor: 'var(--accent)' } : {}}
-            >
-              {language === 'en' ? 'Light' : 'Mwanga'}
-            </button>
-            <button
-              onClick={() => setDarkMode(true)}
-              className={`flex-1 py-3 rounded-xl text-sm font-semibold border-2 transition-all ${
-                darkMode ? 'text-white' : 'border-gray-200 dark:border-gray-700 text-gray-500'
-              }`}
-              style={darkMode ? { backgroundColor: 'var(--accent)', borderColor: 'var(--accent)' } : {}}
-            >
-              {language === 'en' ? 'Dark' : 'Giza'}
-            </button>
+          <div className="grid grid-cols-3 gap-2">
+            {themeOptions.map(opt => (
+              <button
+                key={opt.key}
+                onClick={() => setThemeMode(opt.key)}
+                className={`py-3 rounded-xl text-sm font-semibold border-2 transition-all ${
+                  themeMode === opt.key ? 'text-white' : 'border-gray-200 dark:border-gray-700 text-gray-500'
+                }`}
+                style={themeMode === opt.key ? { backgroundColor: 'var(--accent)', borderColor: 'var(--accent)' } : {}}
+              >
+                {language === 'en' ? opt.en : opt.sw}
+              </button>
+            ))}
           </div>
+          <p className="text-xs text-gray-400 dark:text-gray-500 mt-2">
+            {language === 'en'
+              ? 'Auto follows your device theme.'
+              : 'Otomatiki itafuata mandhari ya kifaa chako.'}
+          </p>
         </div>
       </section>
 

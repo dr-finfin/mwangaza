@@ -32,12 +32,14 @@ const DEFAULT_STATE = {
     name: '',
     selectedGrade: 4,
     language: 'en',
-    darkMode: false,
+    themeMode: 'auto',     // 'auto' | 'light' | 'dark'
     accent: 'blue',
     character: 'lion',
     sidebarCollapsed: false,
   },
   progress: {},
+  bookmarks: [],           // array of lessonIds
+  lastLesson: null,        // { lessonId, subjectId, grade, openedAt }
 }
 
 const loadState = () => {
@@ -50,10 +52,20 @@ const loadState = () => {
       ...DEFAULT_STATE,
       ...parsed,
       profile: { ...DEFAULT_STATE.profile, ...parsed.profile },
+      bookmarks: parsed.bookmarks || [],
+      lastLesson: parsed.lastLesson || null,
     }
   } catch {
     return DEFAULT_STATE
   }
+}
+
+// Get effective dark mode based on themeMode + system preference
+const resolveDarkMode = (themeMode) => {
+  if (themeMode === 'dark') return true
+  if (themeMode === 'light') return false
+  // auto: follow system
+  return window.matchMedia?.('(prefers-color-scheme: dark)').matches || false
 }
 
 const AppContext = createContext(null)
@@ -62,6 +74,23 @@ export const AppProvider = ({ children }) => {
   const navigate = useNavigate()
   const [state, setState] = useState(loadState)
   const [notification, setNotification] = useState(null)
+  const [systemDark, setSystemDark] = useState(
+    window.matchMedia?.('(prefers-color-scheme: dark)').matches || false
+  )
+
+  // Listen to system theme changes
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-color-scheme: dark)')
+    const handler = (e) => setSystemDark(e.matches)
+    mq.addEventListener?.('change', handler)
+    return () => mq.removeEventListener?.('change', handler)
+  }, [])
+
+  const darkMode = useMemo(() => {
+    if (state.profile.themeMode === 'dark') return true
+    if (state.profile.themeMode === 'light') return false
+    return systemDark
+  }, [state.profile.themeMode, systemDark])
 
   useEffect(() => {
     try {
@@ -72,8 +101,8 @@ export const AppProvider = ({ children }) => {
   }, [state])
 
   useEffect(() => {
-    document.documentElement.classList.toggle('dark', state.profile.darkMode)
-  }, [state.profile.darkMode])
+    document.documentElement.classList.toggle('dark', darkMode)
+  }, [darkMode])
 
   useEffect(() => {
     const accent = ACCENT_COLORS[state.profile.accent] || ACCENT_COLORS.blue
@@ -84,10 +113,15 @@ export const AppProvider = ({ children }) => {
   const setName             = useCallback(v => setState(p => ({ ...p, profile: { ...p.profile, name: v } })), [])
   const setSelectedGrade    = useCallback(v => setState(p => ({ ...p, profile: { ...p.profile, selectedGrade: v } })), [])
   const setLanguage         = useCallback(v => setState(p => ({ ...p, profile: { ...p.profile, language: v } })), [])
-  const setDarkMode         = useCallback(v => setState(p => ({ ...p, profile: { ...p.profile, darkMode: v } })), [])
+  const setThemeMode        = useCallback(v => setState(p => ({ ...p, profile: { ...p.profile, themeMode: v } })), [])
   const setAccent           = useCallback(v => setState(p => ({ ...p, profile: { ...p.profile, accent: v } })), [])
   const setCharacter        = useCallback(v => setState(p => ({ ...p, profile: { ...p.profile, character: v } })), [])
   const setSidebarCollapsed = useCallback(v => setState(p => ({ ...p, profile: { ...p.profile, sidebarCollapsed: v } })), [])
+
+  // Backwards compat: setDarkMode now sets themeMode
+  const setDarkMode = useCallback(v => {
+    setState(p => ({ ...p, profile: { ...p.profile, themeMode: v ? 'dark' : 'light' } }))
+  }, [])
 
   const resetAll = useCallback(() => {
     setState(DEFAULT_STATE)
@@ -134,6 +168,35 @@ export const AppProvider = ({ children }) => {
     }
   }, [state.profile.language, showNotification])
 
+  // ── Bookmarks ────────────────────────────────────────────
+  const toggleBookmark = useCallback((lessonId) => {
+    setState(p => {
+      const exists = p.bookmarks.includes(lessonId)
+      return {
+        ...p,
+        bookmarks: exists
+          ? p.bookmarks.filter(id => id !== lessonId)
+          : [...p.bookmarks, lessonId],
+      }
+    })
+  }, [])
+
+  const isBookmarked = useCallback(
+    (lessonId) => state.bookmarks.includes(lessonId),
+    [state.bookmarks]
+  )
+
+  // ── Last lesson tracking ─────────────────────────────────
+  const setLastLesson = useCallback((lesson) => {
+    setState(p => ({
+      ...p,
+      lastLesson: {
+        ...lesson,
+        openedAt: new Date().toISOString(),
+      },
+    }))
+  }, [])
+
   const stats = useMemo(() => {
     const entries = Object.values(state.progress)
     const completed = entries.filter(p => p.status === 'completed').length
@@ -154,14 +217,21 @@ export const AppProvider = ({ children }) => {
       name:             state.profile.name,
       selectedGrade:    state.profile.selectedGrade,
       language:         state.profile.language,
-      darkMode:         state.profile.darkMode,
+      themeMode:        state.profile.themeMode,
+      darkMode,
       accent:           state.profile.accent,
       character:        state.profile.character,
       sidebarCollapsed: state.profile.sidebarCollapsed,
-      setName, setSelectedGrade, setLanguage, setDarkMode, setAccent, setCharacter, setSidebarCollapsed,
+      setName, setSelectedGrade, setLanguage, setThemeMode, setDarkMode,
+      setAccent, setCharacter, setSidebarCollapsed,
       resetAll, exportData,
       progress: state.progress,
       saveLessonProgress,
+      bookmarks: state.bookmarks,
+      toggleBookmark,
+      isBookmarked,
+      lastLesson: state.lastLesson,
+      setLastLesson,
       stats,
       showNotification,
       notification,
