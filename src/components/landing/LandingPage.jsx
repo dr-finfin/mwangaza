@@ -1,7 +1,26 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useApp, CHARACTERS } from '../../context/AppContext'
+import { useApp, CHARACTERS, ACCENT_COLORS } from '../../context/AppContext'
 import { getSubjectsForGrade } from '../../data/curriculum'
+
+// Pair each character with a vibe-matching accent color
+const CHARACTER_COLORS = {
+  lion:     'gold',     // golden mane
+  elephant: 'slate',    // grey... wait, let me pick from our 10
+  rhino:    'cyan',
+  leopard:  'orange',
+  buffalo:  'emerald',
+}
+
+// Actually we removed slate. Let me use the 10 we have:
+// red, orange, yellow, green, emerald, cyan, blue, violet, pink, gold
+const CHAR_TO_COLOR = {
+  lion:     'gold',
+  elephant: 'violet',
+  rhino:    'cyan',
+  leopard:  'orange',
+  buffalo:  'emerald',
+}
 
 const LandingPage = () => {
   const navigate = useNavigate()
@@ -33,6 +52,8 @@ const LandingPage = () => {
   ].slice(0, 14)
 
   const ch = CHARACTERS[activeChar]
+  const charColorKey = CHAR_TO_COLOR[activeChar] || 'blue'
+  const charColor = ACCENT_COLORS[charColorKey]
 
   return (
     <div className="min-h-screen flex flex-col bg-white dark:bg-gray-950 text-gray-900 dark:text-white overflow-x-hidden">
@@ -107,12 +128,12 @@ const LandingPage = () => {
           </div>
         </section>
 
-        {/* CHARACTER BLOCK */}
+        {/* CHARACTER BLOCK — color changes with character */}
         <section className="relative px-5 sm:px-8 pb-20 sm:pb-28">
           <div className="max-w-7xl mx-auto">
             <div
-              className="relative rounded-[2rem] sm:rounded-[3rem] overflow-hidden"
-              style={{ backgroundColor: 'var(--accent)' }}
+              className="relative rounded-[2rem] sm:rounded-[3rem] overflow-hidden transition-colors duration-700"
+              style={{ backgroundColor: charColor.hex }}
             >
               {/* Sun watermark inside character block */}
               <div
@@ -131,10 +152,13 @@ const LandingPage = () => {
                   <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1] mb-4">
                     {language === 'en' ? 'Pick your character.' : 'Chagua mhusika.'}
                   </h2>
+                  <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1] mb-6 opacity-70">
+                    {language === 'en' ? 'Pick your color.' : 'Chagua rangi.'}
+                  </h2>
                   <p className="text-lg opacity-90 max-w-md mx-auto sm:mx-0">
                     {language === 'en'
-                      ? 'Choose one of the Big 5 to be your guide.'
-                      : 'Chagua mmoja wa Watano Wakuu awe mwongozo wako.'}
+                      ? 'Make Mwangaza yours.'
+                      : 'Fanya Mwangaza wako.'}
                   </p>
                 </div>
 
