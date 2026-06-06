@@ -12,6 +12,7 @@ const SettingsView = () => {
     character, setCharacter,
     exportData, resetAll,
     showNotification,
+    installAvailable, isInstalled, triggerInstall,
   } = useApp()
 
   const [draftName, setDraftName] = useState(name)
@@ -31,6 +32,18 @@ const SettingsView = () => {
     }
   }
 
+  const handleInstall = async () => {
+    const result = await triggerInstall()
+    if (!result.available) {
+      showNotification(
+        language === 'en'
+          ? 'Install option not available in this browser'
+          : 'Chaguo la kusakinisha halipatikani kwenye kivinjari hiki',
+        'info'
+      )
+    }
+  }
+
   const themeOptions = [
     { key: 'light', en: 'Light', sw: 'Mwanga' },
     { key: 'dark',  en: 'Dark',  sw: 'Giza' },
@@ -46,7 +59,7 @@ const SettingsView = () => {
         </h1>
       </div>
 
-      {/* ── YOU (frequently changed) ─────────────────────── */}
+      {/* ── YOU ─────────────────────────────────────────── */}
       <div>
         <h2 className="text-xs font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4 px-1">
           {language === 'en' ? 'You' : 'Wewe'}
@@ -54,7 +67,6 @@ const SettingsView = () => {
 
         <div className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl divide-y divide-gray-100 dark:divide-gray-700">
 
-          {/* Name */}
           <div className="p-5">
             <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-wider">
               {language === 'en' ? 'Name' : 'Jina'}
@@ -77,7 +89,6 @@ const SettingsView = () => {
             </div>
           </div>
 
-          {/* Character */}
           <div className="p-5">
             <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-3 uppercase tracking-wider">
               {language === 'en' ? 'Character' : 'Mhusika'}
@@ -105,7 +116,6 @@ const SettingsView = () => {
             </div>
           </div>
 
-          {/* Grade */}
           <div className="p-5">
             <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-3 uppercase tracking-wider">
               {language === 'en' ? 'Grade' : 'Darasa'}
@@ -130,7 +140,7 @@ const SettingsView = () => {
         </div>
       </div>
 
-      {/* ── APPEARANCE ──────────────────────────────────── */}
+      {/* ── APPEARANCE ─────────────────────────────────── */}
       <div>
         <h2 className="text-xs font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4 px-1">
           {language === 'en' ? 'Appearance' : 'Mwonekano'}
@@ -138,7 +148,6 @@ const SettingsView = () => {
 
         <div className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl divide-y divide-gray-100 dark:divide-gray-700">
 
-          {/* Color */}
           <div className="p-5">
             <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-3 uppercase tracking-wider">
               {language === 'en' ? 'Color' : 'Rangi'}
@@ -158,7 +167,6 @@ const SettingsView = () => {
             </div>
           </div>
 
-          {/* Theme */}
           <div className="p-5">
             <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-3 uppercase tracking-wider">
               {language === 'en' ? 'Theme' : 'Mandhari'}
@@ -179,7 +187,6 @@ const SettingsView = () => {
             </div>
           </div>
 
-          {/* Language */}
           <div className="p-5">
             <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-3 uppercase tracking-wider">
               {language === 'en' ? 'Language' : 'Lugha'}
@@ -208,7 +215,67 @@ const SettingsView = () => {
         </div>
       </div>
 
-      {/* ── DATA (rare, dangerous) ─────────────────────── */}
+      {/* ── APP (install) ─────────────────────────────── */}
+      <div>
+        <h2 className="text-xs font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4 px-1">
+          {language === 'en' ? 'App' : 'Programu'}
+        </h2>
+
+        <div className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl p-5">
+
+          {isInstalled ? (
+            <div className="flex items-center gap-3">
+              <div
+                className="w-10 h-10 rounded-xl flex items-center justify-center text-white"
+                style={{ backgroundColor: 'var(--accent)' }}
+              >
+                ✓
+              </div>
+              <div className="flex-1">
+                <p className="font-semibold text-gray-900 dark:text-white text-sm">
+                  {language === 'en' ? 'Mwangaza is installed' : 'Mwangaza imesakinishwa'}
+                </p>
+                <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">
+                  {language === 'en'
+                    ? 'You can use it offline from your home screen.'
+                    : 'Unaweza kuitumia bila mtandao kutoka skrini ya nyumbani.'}
+                </p>
+              </div>
+            </div>
+          ) : installAvailable ? (
+            <div>
+              <p className="font-semibold text-gray-900 dark:text-white text-sm mb-1">
+                {language === 'en' ? 'Install Mwangaza' : 'Sakinisha Mwangaza'}
+              </p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mb-4 leading-relaxed">
+                {language === 'en'
+                  ? 'Add Mwangaza to your home screen for quick access and offline study.'
+                  : 'Ongeza Mwangaza kwenye skrini ya nyumbani kwa ufikiaji wa haraka na masomo nje ya mtandao.'}
+              </p>
+              <button
+                onClick={handleInstall}
+                className="w-full py-3 rounded-xl text-sm font-bold text-white hover:opacity-90 transition-opacity"
+                style={{ backgroundColor: 'var(--accent)' }}
+              >
+                {language === 'en' ? 'Install App' : 'Sakinisha Programu'}
+              </button>
+            </div>
+          ) : (
+            <div>
+              <p className="font-semibold text-gray-900 dark:text-white text-sm mb-1">
+                {language === 'en' ? 'Install not available' : 'Usakinishaji haupatikani'}
+              </p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
+                {language === 'en'
+                  ? 'Your browser does not support one-click install. Use your browser menu to "Add to Home Screen".'
+                  : 'Kivinjari chako hakitumii usakinishaji wa mbofyo mmoja. Tumia menyu ya kivinjari kuongeza kwenye skrini ya nyumbani.'}
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* ── DATA ─────────────────────────────────────── */}
       <div>
         <h2 className="text-xs font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4 px-1">
           {language === 'en' ? 'Data' : 'Data'}
