@@ -10,20 +10,20 @@ const LessonView = ({ lesson, subject, onBack, onComplete }) => {
   const isCompleted    = lessonProgress?.status === 'completed'
   const hasQuiz        = lesson.quiz && lesson.quiz.length > 0
   const hasVideo       = !!lesson.videoUrl
+  const hasRichNotes   = !!lesson.notes
   const bookmarked     = isBookmarked(lesson.id)
 
-  // Track last lesson opened
   useEffect(() => {
-    // Try to find subject's grade
     let grade = 4
     if (subject?.id?.endsWith('-1')) grade = 1
     else if (subject?.id?.endsWith('-4')) grade = 4
+    else if (subject?.id?.endsWith('-5')) grade = 5
     else if (subject?.id?.endsWith('-7')) grade = 7
 
     setLastLesson({
       lessonId:  lesson.id,
       subjectId: subject?.id,
-      strandId:  null, // optional
+      strandId:  null,
       grade,
     })
   }, [lesson.id])
@@ -38,7 +38,6 @@ const LessonView = ({ lesson, subject, onBack, onComplete }) => {
         ← Back to {language === 'en' ? subject?.name : subject?.kiswahili}
       </button>
 
-      {/* Lesson header */}
       <div className="mb-6 flex items-start justify-between gap-4">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-3 flex-wrap">
@@ -70,7 +69,6 @@ const LessonView = ({ lesson, subject, onBack, onComplete }) => {
           </h1>
         </div>
 
-        {/* Bookmark */}
         <button
           onClick={() => toggleBookmark(lesson.id)}
           className={`flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center text-xl transition-all ${
@@ -80,9 +78,6 @@ const LessonView = ({ lesson, subject, onBack, onComplete }) => {
           }`}
           style={bookmarked ? { backgroundColor: 'var(--accent)' } : {}}
           aria-label={bookmarked ? 'Remove bookmark' : 'Bookmark this lesson'}
-          title={bookmarked
-            ? (language === 'en' ? 'Remove bookmark' : 'Ondoa alama')
-            : (language === 'en' ? 'Bookmark' : 'Hifadhi')}
         >
           {bookmarked ? '★' : '☆'}
         </button>
@@ -94,7 +89,7 @@ const LessonView = ({ lesson, subject, onBack, onComplete }) => {
           onClick={() => setActiveTab('video')}
           className={`px-5 py-3 text-sm font-semibold border-b-2 transition-all -mb-px ${
             activeTab === 'video'
-              ? 'border-blue-600 text-blue-600 dark:text-blue-400'
+              ? ''
               : 'border-transparent text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
           }`}
           style={activeTab === 'video' ? { borderColor: 'var(--accent)', color: 'var(--accent)' } : {}}
@@ -159,10 +154,7 @@ const LessonView = ({ lesson, subject, onBack, onComplete }) => {
             <ul className="space-y-3">
               {lesson.outcomes?.map((outcome, i) => (
                 <li key={i} className="flex items-start gap-3">
-                  <div
-                    className="w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5 text-white"
-                    style={{ backgroundColor: 'var(--accent)' }}
-                  >
+                  <div className="w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5 text-white" style={{ backgroundColor: 'var(--accent)' }}>
                     {i + 1}
                   </div>
                   <span className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">{outcome}</span>
@@ -192,28 +184,97 @@ const LessonView = ({ lesson, subject, onBack, onComplete }) => {
             onComplete={(result) => {
               onComplete?.(result)
               if (result.passed) {
-                setTimeout(() => setActiveTab('video'), 2000)
+                setTimeout(() => setActiveTab('notes'), 2000)
               }
             }}
           />
         </div>
       )}
 
-      {/* NOTES */}
+      {/* NOTES — rich version if available, fallback to outcomes */}
       {activeTab === 'notes' && (
-        <div className="space-y-3">
-          {lesson.outcomes?.map((outcome, i) => (
-            <div
-              key={i}
-              className="flex gap-4 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl border-l-4"
-              style={{ borderColor: 'var(--accent)' }}
-            >
-              <span className="text-xs font-black font-mono mt-0.5 flex-shrink-0" style={{ color: 'var(--accent)' }}>
-                {String(i + 1).padStart(2, '0')}
-              </span>
-              <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed">{outcome}</p>
+        <div>
+          {hasRichNotes ? (
+            <article className="space-y-8">
+
+              {/* Sections */}
+              {lesson.notes.sections?.map((section, i) => (
+                <section key={i}>
+                  <h2 className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: 'var(--accent)' }}>
+                    {section.heading}
+                  </h2>
+                  <p className="text-gray-700 dark:text-gray-300 text-base leading-[1.8] whitespace-pre-line">
+                    {section.body}
+                  </p>
+                </section>
+              ))}
+
+              {/* Vocabulary */}
+              {lesson.notes.vocabulary?.length > 0 && (
+                <section className="pt-4 border-t border-gray-100 dark:border-gray-800">
+                  <h2 className="text-xs font-bold uppercase tracking-widest mb-4 text-gray-400 dark:text-gray-500">
+                    {language === 'en' ? 'Key Vocabulary' : 'Msamiati'}
+                  </h2>
+                  <div className="space-y-3">
+                    {lesson.notes.vocabulary.map((v, i) => (
+                      <div key={i} className="flex flex-col sm:flex-row gap-1 sm:gap-4">
+                        <span className="font-bold text-gray-900 dark:text-white text-sm sm:w-32 flex-shrink-0">
+                          {v.term}
+                        </span>
+                        <span className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+                          {v.definition}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+              )}
+
+              {/* Recap */}
+              {lesson.notes.recap?.length > 0 && (
+                <section
+                  className="rounded-2xl p-6 border-l-4"
+                  style={{
+                    backgroundColor: 'color-mix(in srgb, var(--accent) 8%, transparent)',
+                    borderColor: 'var(--accent)',
+                  }}
+                >
+                  <h2 className="text-xs font-bold uppercase tracking-widest mb-4" style={{ color: 'var(--accent)' }}>
+                    {language === 'en' ? 'Quick Recap' : 'Muhtasari'}
+                  </h2>
+                  <ul className="space-y-2">
+                    {lesson.notes.recap.map((point, i) => (
+                      <li key={i} className="flex items-start gap-2 text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
+                        <span style={{ color: 'var(--accent)' }}>✓</span>
+                        <span>{point}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              )}
+            </article>
+          ) : (
+            // Fallback for lessons without rich notes yet
+            <div className="space-y-3">
+              {lesson.outcomes?.map((outcome, i) => (
+                <div
+                  key={i}
+                  className="flex gap-4 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl border-l-4"
+                  style={{ borderColor: 'var(--accent)' }}
+                >
+                  <span className="text-xs font-black font-mono mt-0.5 flex-shrink-0" style={{ color: 'var(--accent)' }}>
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed">{outcome}</p>
+                </div>
+              ))}
+              <p className="text-xs text-gray-400 dark:text-gray-500 text-center pt-4">
+                {language === 'en'
+                  ? 'Detailed notes coming soon for this lesson.'
+                  : 'Maelezo ya kina yanakuja hivi karibuni.'}
+              </p>
             </div>
-          ))}
+          )}
         </div>
       )}
     </div>

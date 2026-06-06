@@ -303,6 +303,45 @@ export const CURRICULUM = {
                 explanation: 'Soil recovery restores damaged soil so it can support healthy plant growth again, which is essential for food production.',
               },
             ],
+            notes: {
+              sections: [
+                {
+                  heading: 'What is Soil Conservation?',
+                  body: 'Soil conservation means protecting the soil from damage and making it healthier so it can keep producing good crops. Healthy soil = healthy food = healthy people.',
+                },
+                {
+                  heading: 'How Soil Gets Damaged',
+                  body: 'Soil can be damaged by:\n\n• Heavy rain washing it away (erosion)\n• Strong wind blowing it away\n• Over-farming without resting the land\n• Cutting down too many trees\n• Using too many chemicals',
+                },
+                {
+                  heading: 'Soil Recovery (Restoration)',
+                  body: 'Restoration means making damaged soil healthy again.\n\nMethods include:\n\n• Planting trees to hold the soil with roots\n• Resting the land for a season (fallowing)\n• Adding compost and manure to feed the soil\n• Building terraces on slopes to slow down water',
+                },
+                {
+                  heading: 'Improving Soil with Organic Manure',
+                  body: 'Organic manure comes from living sources — cow dung, chicken droppings, kitchen waste, and decomposed leaves. It adds nutrients naturally, holds water, and helps tiny organisms in the soil thrive.\n\nUnlike chemical fertilisers, it is cheap, safe, and improves the soil over time.',
+                },
+                {
+                  heading: 'Why It Matters for Kenya',
+                  body: 'Kenyan farmers depend on healthy soil for food and income. When soil is well cared for, families eat better, farms produce more, and the environment stays green for future generations.',
+                },
+              ],
+              vocabulary: [
+                { term: 'Conservation', definition: 'Protecting something so it lasts' },
+                { term: 'Erosion',      definition: 'Soil being carried away by water or wind' },
+                { term: 'Restoration',  definition: 'Making damaged soil healthy again' },
+                { term: 'Organic',      definition: 'Coming from a living source like plants or animals' },
+                { term: 'Manure',       definition: 'Animal waste used to fertilise soil' },
+                { term: 'Compost',      definition: 'Rotted plant and food waste used as fertiliser' },
+              ],
+              recap: [
+                'Soil conservation protects soil from damage',
+                'Rain, wind, and overuse can damage soil',
+                'Restoration uses trees, manure, and terraces to heal soil',
+                'Organic manure is natural, cheap, and improves soil long-term',
+                'Healthy soil = healthy farms = healthy families',
+              ],
+            },
           },
         ],
       },
@@ -363,6 +402,40 @@ export const CURRICULUM = {
                 explanation: 'Science helps us understand natural phenomena and solve real-world problems in health, agriculture, technology and more.',
               },
             ],
+            notes: {
+              sections: [
+                {
+                  heading: 'What Integrated Science Means',
+                  body: 'Integrated Science is a subject that brings together three branches of science: Biology, Chemistry and Physics. Instead of studying each one separately, you learn how they connect and work together in the real world.',
+                },
+                {
+                  heading: 'The Three Branches',
+                  body: 'Biology is the study of living things — plants, animals, and the human body.\n\nChemistry is the study of substances — what they are made of and how they react.\n\nPhysics is the study of energy, motion, electricity, and forces.',
+                },
+                {
+                  heading: 'Why Science Matters in Kenya',
+                  body: 'Science helps us understand and solve real problems. Farmers use it to grow better crops. Doctors use it to treat diseases. Engineers use it to design roads, buildings, and solar panels in places like Turkana.',
+                },
+                {
+                  heading: 'Careers in Science',
+                  body: 'Studying Integrated Science can lead to many careers: doctor, nurse, agricultural officer, lab technician, engineer, environmental scientist, or science teacher. Every modern industry needs people who understand science.',
+                },
+              ],
+              vocabulary: [
+                { term: 'Integrated', definition: 'Joined together as one' },
+                { term: 'Biology',    definition: 'The science of living things' },
+                { term: 'Chemistry',  definition: 'The science of substances and how they react' },
+                { term: 'Physics',    definition: 'The science of matter, energy, and forces' },
+                { term: 'Branch',     definition: 'A division or part of a larger subject' },
+              ],
+              recap: [
+                'Integrated Science combines Biology, Chemistry and Physics',
+                'Biology = living things; Chemistry = substances; Physics = energy and forces',
+                'Science solves real problems in health, farming, and technology',
+                'Many Kenyan careers are built on science',
+                'Understanding science helps you understand the world',
+              ],
+            },
           },
         ],
       },
@@ -422,6 +495,41 @@ export const CURRICULUM = {
                 explanation: 'Immediately rinse with large amounts of water to dilute the chemical and always inform your teacher of any accident.',
               },
             ],
+            notes: {
+              sections: [
+                {
+                  heading: 'Why Lab Safety Matters',
+                  body: 'A science laboratory contains chemicals, glass equipment, sharp tools, and open flames. Without safety rules, simple mistakes can cause burns, cuts, poisoning, or fires.',
+                },
+                {
+                  heading: 'Top Safety Rules',
+                  body: 'Always wear safety goggles and a lab coat.\n\nRead all instructions before starting.\n\nNever eat, drink, or play in the lab.\n\nTie back long hair and avoid loose clothing.\n\nNever taste or smell chemicals directly.',
+                },
+                {
+                  heading: 'Common Hazard Symbols',
+                  body: 'Skull and crossbones = toxic / poisonous.\n\nFlame = flammable, catches fire easily.\n\nExclamation mark = irritant, may harm skin or eyes.\n\nCorrosive symbol = can burn skin or destroy materials.',
+                },
+                {
+                  heading: 'What to Do in an Accident',
+                  body: 'If a chemical spills on your skin, rinse with plenty of water and tell the teacher immediately.\n\nIf there is a fire, alert the teacher and stay calm.\n\nNever try to fix or clean a major accident on your own.',
+                },
+              ],
+              vocabulary: [
+                { term: 'Laboratory', definition: 'A room where scientific experiments are done' },
+                { term: 'Hazard',     definition: 'Something that can cause harm' },
+                { term: 'Toxic',      definition: 'Poisonous, harmful if swallowed or touched' },
+                { term: 'Flammable',  definition: 'Catches fire easily' },
+                { term: 'Corrosive',  definition: 'Can eat away skin or other materials' },
+                { term: 'First Aid',  definition: 'Immediate help given after an accident' },
+              ],
+              recap: [
+                'Always wear protective gear in the lab',
+                'Read instructions before any experiment',
+                'Learn what each hazard symbol means',
+                'Never eat, drink, or play in the laboratory',
+                'Tell the teacher immediately if anything goes wrong',
+              ],
+            },
           },
         ],
       },
@@ -476,6 +584,45 @@ export const CURRICULUM = {
                 explanation: 'A Bunsen burner provides a controlled gas flame used for heating substances during experiments.',
               },
             ],
+            notes: {
+              sections: [
+                {
+                  heading: 'What is Apparatus?',
+                  body: 'Apparatus means the equipment and tools used in a science laboratory. Each tool has a specific job. Using the wrong tool can ruin your experiment or be dangerous.',
+                },
+                {
+                  heading: 'Tools for Holding and Heating Liquids',
+                  body: 'A beaker is a wide glass container used to hold and heat liquids. It is NOT used for accurate measurement.\n\nA test tube holds small amounts of liquid for heating or simple reactions.\n\nA conical flask has a narrow neck, useful for swirling without spilling.',
+                },
+                {
+                  heading: 'Tools for Measuring',
+                  body: 'A measuring cylinder gives accurate volumes of liquid in millilitres (ml).\n\nA thermometer measures temperature in degrees Celsius.\n\nA balance measures the mass of solids in grams.',
+                },
+                {
+                  heading: 'Tools for Heating',
+                  body: 'A Bunsen burner gives a controlled flame for heating substances.\n\nA tripod stand holds equipment above the flame.\n\nA wire gauze spreads the heat evenly under a beaker.',
+                },
+                {
+                  heading: 'Handling Apparatus Safely',
+                  body: 'Always hold glass equipment with two hands.\n\nNever put a hot beaker on a cold surface — it may crack.\n\nClean and return every tool after use.',
+                },
+              ],
+              vocabulary: [
+                { term: 'Apparatus',          definition: 'Equipment used in science experiments' },
+                { term: 'Beaker',             definition: 'Wide glass container for heating or holding liquids' },
+                { term: 'Measuring cylinder', definition: 'Tall narrow tube for measuring liquid volumes' },
+                { term: 'Bunsen burner',      definition: 'A controlled gas flame used for heating' },
+                { term: 'Tripod',             definition: 'Three-legged stand for holding equipment over a flame' },
+                { term: 'Volume',             definition: 'The amount of space a liquid takes up' },
+              ],
+              recap: [
+                'Every lab tool has a specific use',
+                'Beakers hold and heat liquids but do not measure accurately',
+                'Measuring cylinders give accurate volumes',
+                'Bunsen burners give a controlled flame for heating',
+                'Handle all glass apparatus with care to avoid breakage',
+              ],
+            },
           },
         ],
       },
@@ -525,6 +672,41 @@ export const CURRICULUM = {
                 explanation: 'Iron filings are magnetic. A magnet can be used to attract and separate them from non-magnetic sand.',
               },
             ],
+            notes: {
+              sections: [
+                {
+                  heading: 'What is a Mixture?',
+                  body: 'A mixture is formed when two or more substances are combined but do not react chemically. Each substance keeps its own properties. Examples from daily life: tea (water + tea leaves), soil, air.',
+                },
+                {
+                  heading: 'Two Types of Mixtures',
+                  body: 'Homogeneous mixture — looks the same throughout. Example: salt dissolved in water, sugar in tea.\n\nHeterogeneous mixture — you can see the different parts. Example: oil and water, soil and sand.',
+                },
+                {
+                  heading: 'Methods of Separating Mixtures',
+                  body: 'Filtration — separates a solid from a liquid using filter paper. Example: separating sand from water.\n\nEvaporation — heats a solution until the liquid disappears, leaving the solid behind. Example: getting salt from sea water.\n\nDistillation — boils a liquid then cools the vapour. Used to get pure water.\n\nMagnetic separation — uses a magnet to pick up magnetic materials. Example: iron filings from sand.',
+                },
+                {
+                  heading: 'Why This Matters',
+                  body: 'Separating mixtures is important everywhere: water purification, salt production at the coast, mining gold from rock, and even brewing chai at home.',
+                },
+              ],
+              vocabulary: [
+                { term: 'Mixture',       definition: 'Two or more substances combined without reacting' },
+                { term: 'Homogeneous',   definition: 'Looks uniform throughout' },
+                { term: 'Heterogeneous', definition: 'Parts can be seen as separate' },
+                { term: 'Filtration',    definition: 'Separating solid from liquid using filter paper' },
+                { term: 'Evaporation',   definition: 'Liquid turning into gas using heat' },
+                { term: 'Distillation',  definition: 'Boiling then cooling a liquid to purify it' },
+              ],
+              recap: [
+                'A mixture combines substances without a chemical change',
+                'Homogeneous = uniform; Heterogeneous = visible parts',
+                'Filtration separates solids from liquids',
+                'Evaporation leaves the solid behind when liquid escapes',
+                'Magnets can separate magnetic materials from non-magnetic ones',
+              ],
+            },
           },
         ],
       },
@@ -569,6 +751,45 @@ export const CURRICULUM = {
                 explanation: 'A pH of 7 is neutral. Below 7 is acidic and above 7 is basic. Pure water has a pH of 7.',
               },
             ],
+            notes: {
+              sections: [
+                {
+                  heading: 'What are Acids and Bases?',
+                  body: 'Acids and bases are two types of substances with opposite properties.\n\nAcids taste sour. Examples: lemon juice, vinegar, sour milk.\n\nBases (also called alkalis) feel slippery and taste bitter. Examples: soap, baking soda, toothpaste.',
+                },
+                {
+                  heading: 'What is an Indicator?',
+                  body: 'An indicator is a substance that changes colour to tell us whether something is acidic, basic, or neutral. Litmus paper is the most common indicator used in schools.',
+                },
+                {
+                  heading: 'How Litmus Paper Works',
+                  body: 'Red litmus paper turns BLUE in a base.\n\nBlue litmus paper turns RED in an acid.\n\nIf it stays the same colour, the substance is neutral.',
+                },
+                {
+                  heading: 'The pH Scale',
+                  body: 'The pH scale runs from 0 to 14.\n\n0 to 6 = acidic (the lower, the stronger)\n7 = neutral (pure water)\n8 to 14 = basic (the higher, the stronger)\n\nKnowing pH helps farmers test soil, doctors check the body, and factories make safe products.',
+                },
+                {
+                  heading: 'Plant Extracts as Indicators',
+                  body: 'Some plants can also be used as natural indicators. Red cabbage juice, hibiscus petals, and turmeric all change colour when added to acids or bases. This is a fun and cheap way to do science experiments at home.',
+                },
+              ],
+              vocabulary: [
+                { term: 'Acid',      definition: 'Sour substance with pH below 7' },
+                { term: 'Base',      definition: 'Bitter, slippery substance with pH above 7' },
+                { term: 'Indicator', definition: 'Substance that changes colour to show acid or base' },
+                { term: 'Litmus',    definition: 'Coloured paper used to test acids and bases' },
+                { term: 'Neutral',   definition: 'Neither acid nor base — pH of 7' },
+                { term: 'pH scale',  definition: 'A 0–14 scale that measures acidity' },
+              ],
+              recap: [
+                'Acids taste sour; bases feel slippery',
+                'Indicators change colour to identify acids and bases',
+                'Blue litmus turns red in acid; red litmus turns blue in base',
+                'pH 0–6 = acidic, 7 = neutral, 8–14 = basic',
+                'Plants like red cabbage can be used as natural indicators',
+              ],
+            },
           },
         ],
       },
@@ -618,6 +839,45 @@ export const CURRICULUM = {
                 explanation: 'After fertilisation the egg travels to the uterus where it implants and develops into a baby over nine months.',
               },
             ],
+            notes: {
+              sections: [
+                {
+                  heading: 'Why Reproduction Matters',
+                  body: 'Reproduction is how new humans are made. It is the reason every family, community, and nation continues to exist. Understanding it helps us take care of our bodies and make responsible choices.',
+                },
+                {
+                  heading: 'The Male Reproductive System',
+                  body: 'The testes (korodani) produce sperm cells and the hormone testosterone.\n\nThe penis delivers sperm into the female body.\n\nSperm travels through tubes from the testes to be released.',
+                },
+                {
+                  heading: 'The Female Reproductive System',
+                  body: 'The ovaries (ovari) produce egg cells, one every month.\n\nThe fallopian tubes carry the egg towards the uterus and are where fertilisation happens.\n\nThe uterus (mfuko wa uzazi) is where a fertilised egg grows into a baby.\n\nThe vagina is the passage to the uterus and the birth canal.',
+                },
+                {
+                  heading: 'Fertilisation and Pregnancy',
+                  body: 'Fertilisation happens when a sperm cell joins with an egg cell in the fallopian tube. The fertilised egg then moves down to the uterus and attaches itself to the wall. Over nine months, it grows into a baby.',
+                },
+                {
+                  heading: 'The Menstrual Cycle',
+                  body: 'Every month a girl\'s body releases an egg. If no fertilisation happens, the uterus sheds its lining as blood through the vagina. This is called menstruation, and it usually lasts 3–7 days.',
+                },
+              ],
+              vocabulary: [
+                { term: 'Testes',         definition: 'Male organs that produce sperm (korodani)' },
+                { term: 'Ovaries',        definition: 'Female organs that produce eggs (ovari)' },
+                { term: 'Uterus',         definition: 'Where a baby grows (mfuko wa uzazi)' },
+                { term: 'Fallopian tube', definition: 'Tube where fertilisation takes place' },
+                { term: 'Fertilisation',  definition: 'The joining of sperm and egg' },
+                { term: 'Menstruation',   definition: 'Monthly shedding of the uterus lining' },
+              ],
+              recap: [
+                'Males produce sperm in the testes',
+                'Females produce eggs in the ovaries',
+                'Fertilisation happens in the fallopian tube',
+                'A fertilised egg grows in the uterus for nine months',
+                'Menstruation is the body\'s monthly cycle when no fertilisation occurs',
+              ],
+            },
           },
         ],
       },
@@ -667,6 +927,45 @@ export const CURRICULUM = {
                 explanation: 'The lungs excrete carbon dioxide and water vapour as waste products of cellular respiration.',
               },
             ],
+            notes: {
+              sections: [
+                {
+                  heading: 'What is Excretion?',
+                  body: 'Excretion is the removal of waste substances that the body produces from its own chemical reactions. Without excretion, these wastes would build up and poison the body.',
+                },
+                {
+                  heading: 'The Main Excretory Organs',
+                  body: 'Kidneys (figo) — filter waste from blood and produce urine.\n\nSkin (ngozi) — releases sweat which removes salt and water.\n\nLungs (mapafu) — breathe out carbon dioxide and water vapour.\n\nLiver (ini) — breaks down old red blood cells and other waste.',
+                },
+                {
+                  heading: 'How the Kidneys Work',
+                  body: 'Each person has two kidneys near the lower back. Blood flows through them, and they filter out waste and extra water. The waste becomes urine, which is stored in the bladder until it is released through the urethra.',
+                },
+                {
+                  heading: 'The Skin as an Excretory Organ',
+                  body: 'The skin contains sweat glands. When you are hot or active, these glands release sweat — a mixture of water, salts, and urea. This cools the body and removes some waste at the same time.',
+                },
+                {
+                  heading: 'Staying Healthy',
+                  body: 'Drink plenty of clean water every day.\n\nEat balanced meals with fruits and vegetables.\n\nDo not hold in urine for long periods.\n\nAvoid too much salt and alcohol, which strain the kidneys.',
+                },
+              ],
+              vocabulary: [
+                { term: 'Excretion', definition: 'Removing waste from the body' },
+                { term: 'Kidneys',   definition: 'Organs that filter blood (figo)' },
+                { term: 'Urine',     definition: 'Liquid waste produced by the kidneys' },
+                { term: 'Sweat',     definition: 'Salty water released through the skin' },
+                { term: 'Bladder',   definition: 'Organ that stores urine' },
+                { term: 'Urea',      definition: 'Waste substance removed in urine and sweat' },
+              ],
+              recap: [
+                'Excretion removes waste produced by the body',
+                'The kidneys are the main filters of blood',
+                'The skin removes waste through sweat',
+                'The lungs remove carbon dioxide and water vapour',
+                'Drink plenty of water to keep the excretory system healthy',
+              ],
+            },
           },
         ],
       },
@@ -722,6 +1021,45 @@ export const CURRICULUM = {
                 explanation: 'Never insert objects into sockets — it can cause electric shock or fire. Always handle electricity with care.',
               },
             ],
+            notes: {
+              sections: [
+                {
+                  heading: 'What is Electrical Energy?',
+                  body: 'Electrical energy is the energy carried by moving electric charges. It is the energy that powers your lights, phone, radio, and almost every modern device in your home and school.',
+                },
+                {
+                  heading: 'Sources of Electricity in Kenya',
+                  body: 'Hydroelectric power — generated from flowing water at dams like Seven Forks.\n\nSolar power — captured from the sun using solar panels.\n\nWind power — produced by large wind turbines, e.g. at Lake Turkana.\n\nGeothermal — heat from underground at Olkaria.\n\nGenerators — burn diesel or petrol to produce electricity.\n\nBatteries — store small amounts of electricity for phones and torches.',
+                },
+                {
+                  heading: 'Series Circuits',
+                  body: 'In a series circuit, components are connected one after another in a single loop. If one bulb burns out, the whole circuit breaks and all the bulbs go off. Christmas lights often work this way.',
+                },
+                {
+                  heading: 'Parallel Circuits',
+                  body: 'In a parallel circuit, each component has its own path. If one bulb burns out, the others stay on. The lights in your house are wired this way — that\'s why you can turn one bulb off without affecting the others.',
+                },
+                {
+                  heading: 'Electrical Safety',
+                  body: 'Never touch wires with wet hands.\n\nNever overload one socket with many plugs.\n\nReport damaged cables and broken sockets to an adult.\n\nNever insert objects into a power socket.\n\nKeep electrical devices away from water.',
+                },
+              ],
+              vocabulary: [
+                { term: 'Electricity', definition: 'Energy carried by moving electric charges' },
+                { term: 'Circuit',     definition: 'A closed path through which electricity flows' },
+                { term: 'Series',      definition: 'Connected one after another in a single loop' },
+                { term: 'Parallel',    definition: 'Each component has its own separate path' },
+                { term: 'Renewable',   definition: 'Energy source that does not run out, like the sun' },
+                { term: 'Generator',   definition: 'Machine that produces electricity from fuel' },
+              ],
+              recap: [
+                'Electrical energy powers most modern devices',
+                'Kenya gets electricity from hydro, solar, wind, geothermal and generators',
+                'Series circuits = one path; one failure stops everything',
+                'Parallel circuits = separate paths; failures do not affect others',
+                'Always follow safety rules when handling electricity',
+              ],
+            },
           },
         ],
       },
@@ -767,6 +1105,45 @@ export const CURRICULUM = {
                 explanation: 'Fridge door seals contain magnets that keep the door tightly closed. Magnets are used in many everyday items like speakers, motors and compasses.',
               },
             ],
+            notes: {
+              sections: [
+                {
+                  heading: 'What is Magnetism?',
+                  body: 'Magnetism is a force that pulls or pushes certain materials without touching them. The objects that have this force are called magnets.',
+                },
+                {
+                  heading: 'Magnetic vs Non-Magnetic Materials',
+                  body: 'Magnetic materials are attracted to magnets. Examples: iron nails, steel spoons, some screws.\n\nNon-magnetic materials are NOT attracted to magnets. Examples: plastic, wood, glass, paper, aluminium foil.',
+                },
+                {
+                  heading: 'The Two Poles of a Magnet',
+                  body: 'Every magnet has two poles: a North pole (N) and a South pole (S). You cannot have a magnet with only one pole. Even if you break a magnet in half, each piece becomes a complete new magnet with both poles.',
+                },
+                {
+                  heading: 'How Magnets Interact',
+                  body: 'Like poles repel — push away from each other.\n  N + N → push apart\n  S + S → push apart\n\nUnlike poles attract — pull towards each other.\n  N + S → snap together\n\nA simple way to remember: opposites attract.',
+                },
+                {
+                  heading: 'Everyday Uses of Magnets',
+                  body: 'Fridge door seals keep doors tightly shut.\n\nLoudspeakers and earphones use magnets to produce sound.\n\nElectric motors in fans, blenders and EVs depend on magnets.\n\nCompasses use a small magnet to always point north.\n\nMRI machines in hospitals use very strong magnets to see inside the body.',
+                },
+              ],
+              vocabulary: [
+                { term: 'Magnet',   definition: 'Material that attracts iron and certain metals' },
+                { term: 'Pole',     definition: 'One of the two ends of a magnet (North or South)' },
+                { term: 'Attract',  definition: 'To pull towards' },
+                { term: 'Repel',    definition: 'To push away' },
+                { term: 'Magnetic', definition: 'Material that responds to a magnet' },
+                { term: 'Compass',  definition: 'Tool that uses a magnet to show direction' },
+              ],
+              recap: [
+                'Magnetism is a force that attracts or repels certain materials',
+                'Iron and steel are magnetic; wood and plastic are not',
+                'Every magnet has a North pole and a South pole',
+                'Like poles repel; unlike poles attract',
+                'Magnets are used in fridges, speakers, motors and compasses',
+              ],
+            },
           },
         ],
       },
