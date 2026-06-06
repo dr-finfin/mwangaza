@@ -609,15 +609,48 @@ export const CURRICULUM = {
             id: 'sci7-electrical',
             name: 'Electrical Energy',
             kiswahili: 'Nishati ya Umeme',
-            duration: 'Coming Soon',
+            duration: 'Watch',
             difficulty: 'Intermediate',
-            videoUrl: null,
+            videoUrl: 'https://www.youtube.com/embed/qhz8UUtR4rU',
             outcomes: [
-              'Understand the concept of electrical energy',
-              'Identify sources of electrical energy',
-              'Describe how electrical circuits work',
+              'Identify common sources of electricity in Kenya',
+              'Set up simple series and parallel circuits',
+              'Explain the difference between series and parallel circuits',
+              'Apply safety rules when handling electricity',
             ],
-            quiz: [],
+            quiz: [
+              {
+                id: 'q1',
+                question: 'Which of the following is a renewable source of electricity?',
+                options: ['Coal', 'Petrol generator', 'Solar power', 'Diesel'],
+                correct: 2,
+                explanation: 'Solar power is a renewable source because sunlight is naturally replenished every day.',
+              },
+              {
+                id: 'q2',
+                question: 'In a series circuit, what happens if one bulb burns out?',
+                options: [
+                  'All the other bulbs stay on',
+                  'All the other bulbs go off',
+                  'The bulbs become brighter',
+                  'Nothing changes',
+                ],
+                correct: 1,
+                explanation: 'In a series circuit, current flows through one path. If one bulb burns out, the circuit is broken and all bulbs go off.',
+              },
+              {
+                id: 'q3',
+                question: 'Which is a key safety rule when handling electricity?',
+                options: [
+                  'Touch wires with wet hands',
+                  'Never insert objects into sockets',
+                  'Overload one socket with many plugs',
+                  'Use damaged electrical cables',
+                ],
+                correct: 1,
+                explanation: 'Never insert objects into sockets — it can cause electric shock or fire. Always handle electricity with care.',
+              },
+            ],
           },
         ],
       },
@@ -745,7 +778,6 @@ export const searchLessons = (query, limit = 8) => {
   const results = []
 
   for (const [subjectId, subjectData] of Object.entries(CURRICULUM)) {
-    // Find the subject metadata across all grade groups
     let subjectMeta = null
     let gradeOfSubject = null
 
