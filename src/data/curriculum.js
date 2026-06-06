@@ -31,6 +31,15 @@ export const SUBJECTS = {
     { id: 'sst-4',  name: 'Social Studies',           kiswahili: 'Masomo ya Jamii',         emoji: '🌍', color: 'from-green-500 to-green-700',     strands: 4 },
     { id: 'cre-4',  name: 'Creative Arts & Sports',   kiswahili: 'Sanaa na Michezo',        emoji: '🎨', color: 'from-pink-500 to-pink-700',       strands: 3 },
   ],
+  5: [
+    { id: 'math-5', name: 'Mathematics',              kiswahili: 'Hisabati',               emoji: '🔢', color: 'from-blue-500 to-blue-700',      strands: 5 },
+    { id: 'sci-5',  name: 'Integrated Science',       kiswahili: 'Sayansi Jumuishi',        emoji: '🔬', color: 'from-cyan-500 to-cyan-700',      strands: 4 },
+    { id: 'eng-5',  name: 'English',                  kiswahili: 'Kiingereza',              emoji: '📖', color: 'from-emerald-500 to-emerald-700', strands: 5 },
+    { id: 'kis-5',  name: 'Kiswahili',                kiswahili: 'Kiswahili',               emoji: '🗣️', color: 'from-orange-500 to-orange-700',   strands: 4 },
+    { id: 'sst-5',  name: 'Social Studies',           kiswahili: 'Masomo ya Jamii',         emoji: '🌍', color: 'from-green-500 to-green-700',     strands: 4 },
+    { id: 'cre-5',  name: 'Creative Arts & Sports',   kiswahili: 'Sanaa na Michezo',        emoji: '🎨', color: 'from-pink-500 to-pink-700',       strands: 3 },
+    { id: 'agr-5',  name: 'Agriculture',              kiswahili: 'Kilimo',                  emoji: '🌾', color: 'from-lime-500 to-lime-700',      strands: 3 },
+  ],
   7: [
     { id: 'math-7', name: 'Mathematics',              kiswahili: 'Hisabati',                emoji: '🔢', color: 'from-blue-500 to-blue-700',      strands: 6 },
     { id: 'sci-7',  name: 'Integrated Science',       kiswahili: 'Sayansi Jumuishi',        emoji: '🔬', color: 'from-cyan-500 to-cyan-700',      strands: 9 },
@@ -42,8 +51,9 @@ export const SUBJECTS = {
   ],
 }
 
-// Helper: get subjects for any grade (fallback logic)
+// Helper: get subjects for any grade
 export const getSubjectsForGrade = (grade) => {
+  if (SUBJECTS[grade]) return SUBJECTS[grade]
   if (grade <= 3) return SUBJECTS[1]
   if (grade <= 6) return SUBJECTS[4]
   return SUBJECTS[7]
@@ -238,6 +248,67 @@ export const CURRICULUM = {
     ],
   },
 
+  // ── Grade 5 Agriculture ───────────────────────────────────────
+  'agr-5': {
+    subjectName: 'Agriculture',
+    strands: [
+      {
+        id: 'strand-agr5-environment',
+        name: 'Conserving our Environment',
+        kiswahili: 'Kuhifadhi Mazingira Yetu',
+        subStrands: [
+          {
+            id: 'agr5-soil-conservation',
+            name: 'Soil Conservation',
+            kiswahili: 'Uhifadhi wa Udongo',
+            duration: 'Watch',
+            difficulty: 'Beginner',
+            videoUrl: 'https://www.youtube.com/embed/MZwSpTzhVvw',
+            outcomes: [
+              'Define soil conservation and explain why it matters',
+              'Describe methods of soil recovery (restoration)',
+              'Explain how organic manure improves soil quality',
+              'Apply soil conservation practices on a Kenyan farm',
+            ],
+            quiz: [
+              {
+                id: 'q1',
+                question: 'What is soil conservation?',
+                options: [
+                  'Removing all the soil from a farm',
+                  'Protecting soil from damage and improving its quality',
+                  'Burning crops on the soil',
+                  'Selling soil to other farmers',
+                ],
+                correct: 1,
+                explanation: 'Soil conservation means protecting the soil from damage and improving its quality so it can continue producing healthy crops.',
+              },
+              {
+                id: 'q2',
+                question: 'Which of the following is an example of organic manure?',
+                options: ['Plastic bags', 'Cow dung', 'Petrol', 'Stones'],
+                correct: 1,
+                explanation: 'Cow dung is organic manure — it comes from a living source and adds nutrients to the soil naturally.',
+              },
+              {
+                id: 'q3',
+                question: 'Why is soil recovery (restoration) important?',
+                options: [
+                  'It makes soil dry and unproductive',
+                  'It helps damaged soil become healthy again so crops can grow',
+                  'It kills all plants in the soil',
+                  'It is only useful in cities',
+                ],
+                correct: 1,
+                explanation: 'Soil recovery restores damaged soil so it can support healthy plant growth again, which is essential for food production.',
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+
   // ── Grade 7 Integrated Science ────────────────────────────────
   'sci-7': {
     subjectName: 'Integrated Science',
@@ -253,7 +324,7 @@ export const CURRICULUM = {
             kiswahili: 'Utangulizi wa Sayansi Jumuishi',
             duration: 'Watch',
             difficulty: 'Beginner',
-            videoUrl: 'https://www.youtube.com/embed/CYbvkHr5g',
+            videoUrl: 'https://www.youtube.com/embed/w_CYbvkHr5g',
             outcomes: [
               'Understand what Integrated Science means',
               'Identify the branches of science covered in Grade 7',
@@ -307,7 +378,7 @@ export const CURRICULUM = {
             kiswahili: 'Usalama wa Maabara',
             duration: 'Watch',
             difficulty: 'Beginner',
-            videoUrl: 'https://www.youtube.com/embed/wQO-CfNKY',
+            videoUrl: 'https://www.youtube.com/embed/t_wQO-CfNKY',
             outcomes: [
               'Identify safety rules in a science laboratory',
               'Recognise hazard symbols and what they mean',
@@ -664,15 +735,38 @@ export const CURRICULUM = {
             id: 'sci7-magnetism',
             name: 'Magnetism',
             kiswahili: 'Sumaku',
-            duration: 'Coming Soon',
+            duration: 'Watch',
             difficulty: 'Intermediate',
-            videoUrl: null,
+            videoUrl: 'https://www.youtube.com/embed/JMzXoXmVepY',
             outcomes: [
               'Define magnetism and identify magnetic materials',
-              'Describe the properties of magnets',
-              'Explain the concept of magnetic fields',
+              'Distinguish between magnetic and non-magnetic materials',
+              'Describe the two poles of a magnet and how they interact',
+              'Identify everyday uses of magnets',
             ],
-            quiz: [],
+            quiz: [
+              {
+                id: 'q1',
+                question: 'Which of the following materials is magnetic?',
+                options: ['Plastic', 'Wood', 'Iron', 'Glass'],
+                correct: 2,
+                explanation: 'Iron is a magnetic material — it is attracted to magnets. Plastic, wood and glass are non-magnetic.',
+              },
+              {
+                id: 'q2',
+                question: 'What happens when two North poles of magnets are brought together?',
+                options: ['They attract each other', 'They repel each other', 'Nothing happens', 'They stick together'],
+                correct: 1,
+                explanation: 'Like poles repel each other. Two North poles (or two South poles) push away from each other.',
+              },
+              {
+                id: 'q3',
+                question: 'Which everyday object uses magnets?',
+                options: ['A fridge door seal', 'A glass window', 'A plastic chair', 'A paper notebook'],
+                correct: 0,
+                explanation: 'Fridge door seals contain magnets that keep the door tightly closed. Magnets are used in many everyday items like speakers, motors and compasses.',
+              },
+            ],
           },
         ],
       },
