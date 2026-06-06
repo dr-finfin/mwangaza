@@ -5,6 +5,7 @@ const PRECACHE_URLS = [
   '/index.html',
   '/mwangaza_icon.png',
   '/favicon.svg',
+  '/manifest.json',
 ]
 
 // Install — cache core assets

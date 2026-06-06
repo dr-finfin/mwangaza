@@ -11,6 +11,7 @@ import CurriculumNavigator from './components/curriculum/CurriculumNavigator'
 import ProfileView from './components/dashboard/ProfileView'
 import SettingsView from './components/dashboard/SettingsView'
 import Notification from './components/ui/Notification'
+import InstallPrompt from './components/ui/InstallPrompt'
 
 const AppLayout = ({ children }) => {
   const { notification, sidebarCollapsed } = useApp()
@@ -32,6 +33,7 @@ const AppLayout = ({ children }) => {
       </main>
       <TabBar />
       <Notification notification={notification} />
+      <InstallPrompt />
     </div>
   )
 }
