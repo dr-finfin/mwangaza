@@ -206,7 +206,7 @@ const LandingPage = () => {
           <p className="text-xs text-gray-400 dark:text-gray-600">
             {language === 'en' ? 'Free forever · KICD aligned' : 'Bure milele · KICD'}
           </p>
-          <span className="text-xs text-gray-400 dark:text-gray-600">© Finley Orenge Brian Chacha 2026</span>
+          <span className="text-xs text-gray-400 dark:text-gray-600">© Finley Orenge  Brian Chacha  2026</span>
         </div>
       </footer>
     </div>
