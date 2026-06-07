@@ -54,7 +54,7 @@ const LandingPage = () => {
           : 'bg-transparent'
       }`}>
         <div className="max-w-7xl mx-auto px-5 sm:px-8 h-20 flex items-center justify-between">
-          <AnimatedLogo height={56} />
+          <AnimatedLogo height={72} />
 
           <button
             onClick={() => navigate('/onboarding')}
