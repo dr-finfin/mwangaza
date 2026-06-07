@@ -57,7 +57,7 @@ const Sidebar = () => {
       <div className="flex flex-col h-full">
 
         <div className={`pt-6 pb-4 flex ${sidebarCollapsed ? 'justify-center px-2' : 'justify-center px-5'}`}>
-          <AnimatedLogo height={64} />
+          <AnimatedLogo height={84} />
         </div>
 
         <nav className={`flex-1 py-2 space-y-1 ${sidebarCollapsed ? 'px-2' : 'px-3'}`} aria-label="Primary">

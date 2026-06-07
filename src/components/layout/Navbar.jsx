@@ -40,7 +40,7 @@ const Navbar = () => {
 
           <div className="flex items-center gap-3 min-w-0">
             <div className="lg:hidden">
-              <AnimatedLogo height={44} />
+              <AnimatedLogo height={72} />
             </div>
 
             <div className="hidden lg:flex items-center gap-2 text-sm min-w-0">
