@@ -2,18 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useApp, CHARACTERS, ACCENT_COLORS } from '../../context/AppContext'
 import { getSubjectsForGrade } from '../../data/curriculum'
+import AnimatedLogo from '../ui/AnimatedLogo'
 
-// Pair each character with a vibe-matching accent color
-const CHARACTER_COLORS = {
-  lion:     'gold',     // golden mane
-  elephant: 'slate',    // grey... wait, let me pick from our 10
-  rhino:    'cyan',
-  leopard:  'orange',
-  buffalo:  'emerald',
-}
-
-// Actually we removed slate. Let me use the 10 we have:
-// red, orange, yellow, green, emerald, cyan, blue, violet, pink, gold
 const CHAR_TO_COLOR = {
   lion:     'gold',
   elephant: 'violet',
@@ -58,16 +48,13 @@ const LandingPage = () => {
   return (
     <div className="min-h-screen flex flex-col bg-white dark:bg-gray-950 text-gray-900 dark:text-white overflow-x-hidden">
 
-      {/* Navbar */}
       <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-200 ${
         scrolled
           ? 'bg-white/90 dark:bg-gray-950/90 backdrop-blur-md border-b border-gray-100 dark:border-gray-800'
           : 'bg-transparent'
       }`}>
         <div className="max-w-7xl mx-auto px-5 sm:px-8 h-20 flex items-center justify-between">
-          <button onClick={() => navigate('/')} aria-label="Mwangaza">
-            <img src="/mwangaza_icon.png" alt="Mwangaza" className="w-14 h-14" />
-          </button>
+          <AnimatedLogo height={56} />
 
           <button
             onClick={() => navigate('/onboarding')}
@@ -81,7 +68,6 @@ const LandingPage = () => {
 
       <main className="flex-1 relative">
 
-        {/* Giant sun watermark behind hero */}
         <div
           className="absolute -right-32 sm:-right-20 top-10 w-[500px] sm:w-[700px] h-[500px] sm:h-[700px] opacity-[0.06] pointer-events-none select-none"
           style={{
@@ -92,7 +78,6 @@ const LandingPage = () => {
           }}
         />
 
-        {/* HERO */}
         <section className="relative pt-40 sm:pt-48 pb-20 sm:pb-28">
           <div className="max-w-7xl mx-auto px-5 sm:px-8">
 
@@ -128,14 +113,12 @@ const LandingPage = () => {
           </div>
         </section>
 
-        {/* CHARACTER BLOCK — color changes with character */}
         <section className="relative px-5 sm:px-8 pb-20 sm:pb-28">
           <div className="max-w-7xl mx-auto">
             <div
               className="relative rounded-[2rem] sm:rounded-[3rem] overflow-hidden transition-colors duration-700"
               style={{ backgroundColor: charColor.hex }}
             >
-              {/* Sun watermark inside character block */}
               <div
                 className="absolute -left-20 -bottom-20 w-[400px] h-[400px] opacity-[0.12] pointer-events-none select-none"
                 style={{
@@ -187,7 +170,6 @@ const LandingPage = () => {
           </div>
         </section>
 
-        {/* SUBJECT STRIP */}
         <section className="pb-24 sm:pb-32">
           <div className="max-w-7xl mx-auto px-5 sm:px-8 mb-8">
             <h2 className="text-3xl sm:text-5xl font-black tracking-tight">
@@ -219,14 +201,13 @@ const LandingPage = () => {
         </section>
       </main>
 
-      {/* Footer */}
       <footer className="border-t border-gray-100 dark:border-gray-800 py-6">
         <div className="max-w-7xl mx-auto px-5 sm:px-8 flex flex-col sm:flex-row items-center justify-between gap-3">
           <img src="/mwangaza_icon.png" alt="Mwangaza" className="w-8 h-8" />
           <p className="text-xs text-gray-400 dark:text-gray-600">
             {language === 'en' ? 'Free forever · KICD aligned' : 'Bure milele · KICD'}
           </p>
-          <span className="text-xs text-gray-400 dark:text-gray-600">© 2025</span>
+          <span className="text-xs text-gray-400 dark:text-gray-600">© Finley Orenge Brian Chacha 2026</span>
         </div>
       </footer>
     </div>

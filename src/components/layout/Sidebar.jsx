@@ -1,6 +1,7 @@
 import React from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useApp } from '../../context/AppContext'
+import AnimatedLogo from '../ui/AnimatedLogo'
 
 const HomeIcon = (props) => (
   <svg {...props} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
@@ -56,9 +57,7 @@ const Sidebar = () => {
       <div className="flex flex-col h-full">
 
         <div className={`pt-6 pb-4 flex ${sidebarCollapsed ? 'justify-center px-2' : 'justify-center px-5'}`}>
-          <button onClick={() => navigate('/dashboard')} aria-label="Mwangaza home">
-            <img src="/mwangaza_icon.png" alt="Mwangaza" className="w-12 h-12" />
-          </button>
+          <AnimatedLogo height={48} />
         </div>
 
         <nav className={`flex-1 py-2 space-y-1 ${sidebarCollapsed ? 'px-2' : 'px-3'}`} aria-label="Primary">

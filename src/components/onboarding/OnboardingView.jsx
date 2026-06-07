@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useNavigate, Navigate } from 'react-router-dom'
 import { useApp, ACCENT_COLORS, CHARACTERS } from '../../context/AppContext'
 import { GRADES } from '../../data/curriculum'
+import AnimatedLogo from '../ui/AnimatedLogo'
 
 const OnboardingView = () => {
   const navigate = useNavigate()
@@ -48,10 +49,9 @@ const OnboardingView = () => {
   return (
     <div className="min-h-screen flex flex-col bg-white dark:bg-gray-950 text-gray-900 dark:text-white">
 
-      {/* Top bar */}
       <header className="border-b border-gray-100 dark:border-gray-800">
         <div className="max-w-2xl mx-auto px-5 sm:px-6 h-20 flex items-center justify-between">
-          <img src="/mwangaza_icon.png" alt="Mwangaza" className="w-12 h-12" />
+          <AnimatedLogo height={44} />
 
           <button
             onClick={() => setLanguage(language === 'en' ? 'sw' : 'en')}
@@ -62,7 +62,6 @@ const OnboardingView = () => {
         </div>
       </header>
 
-      {/* Progress */}
       <div className="max-w-2xl w-full mx-auto px-5 sm:px-6 pt-6">
         <div className="flex items-center gap-2">
           {Array.from({ length: totalSteps }).map((_, i) => (
@@ -80,11 +79,9 @@ const OnboardingView = () => {
         </p>
       </div>
 
-      {/* Content */}
       <main className="flex-1 flex flex-col">
         <div className="max-w-2xl w-full mx-auto px-5 sm:px-6 py-8 sm:py-12">
 
-          {/* STEP 1: Grade */}
           {step === 1 && (
             <div>
               <h1 className="text-3xl sm:text-5xl font-black leading-tight tracking-tight mb-3">
@@ -124,7 +121,6 @@ const OnboardingView = () => {
             </div>
           )}
 
-          {/* STEP 2: Character */}
           {step === 2 && (
             <div>
               <h1 className="text-3xl sm:text-5xl font-black leading-tight tracking-tight mb-3">
@@ -160,7 +156,6 @@ const OnboardingView = () => {
             </div>
           )}
 
-          {/* STEP 3: Color */}
           {step === 3 && (
             <div>
               <h1 className="text-3xl sm:text-5xl font-black leading-tight tracking-tight mb-3">
@@ -191,7 +186,6 @@ const OnboardingView = () => {
             </div>
           )}
 
-          {/* STEP 4: Name */}
           {step === 4 && (
             <div>
               <h1 className="text-3xl sm:text-5xl font-black leading-tight tracking-tight mb-3">
@@ -222,7 +216,6 @@ const OnboardingView = () => {
           )}
         </div>
 
-        {/* Bottom button */}
         <div className="mt-auto border-t border-gray-100 dark:border-gray-800">
           <div className="max-w-2xl mx-auto px-5 sm:px-6 py-5 flex gap-3">
             {step > 1 && (

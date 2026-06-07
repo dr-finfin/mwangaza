@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useApp, CHARACTERS } from '../../context/AppContext'
 import SearchOverlay from './SearchOverlay'
+import AnimatedLogo from '../ui/AnimatedLogo'
 
 const Navbar = () => {
   const navigate = useNavigate()
@@ -37,9 +38,10 @@ const Navbar = () => {
       <header className="fixed top-0 right-0 left-0 lg:left-64 z-40 bg-gray-100 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
         <div className="flex items-center justify-between px-4 sm:px-6 h-16 gap-2">
 
-          {/* Mobile: show logo. Desktop: breadcrumb */}
           <div className="flex items-center gap-3 min-w-0">
-            <img src="/mwangaza_icon.png" alt="Mwangaza" className="w-9 h-9 lg:hidden" />
+            <div className="lg:hidden">
+              <AnimatedLogo height={36} />
+            </div>
 
             <div className="hidden lg:flex items-center gap-2 text-sm min-w-0">
               <span className="text-gray-400 dark:text-gray-500">Mwangaza</span>

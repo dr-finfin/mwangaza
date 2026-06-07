@@ -32,14 +32,16 @@ const DEFAULT_STATE = {
     name: '',
     selectedGrade: 4,
     language: 'en',
-    themeMode: 'auto',     // 'auto' | 'light' | 'dark'
+    darkMode: false,
+    themeMode: 'auto',
     accent: 'blue',
     character: 'lion',
     sidebarCollapsed: false,
+    logoExpanded: false,
   },
   progress: {},
-  bookmarks: [],           // array of lessonIds
-  lastLesson: null,        // { lessonId, subjectId, grade, openedAt }
+  bookmarks: [],
+  lastLesson: null,
 }
 
 const loadState = () => {
@@ -60,14 +62,6 @@ const loadState = () => {
   }
 }
 
-// Get effective dark mode based on themeMode + system preference
-const resolveDarkMode = (themeMode) => {
-  if (themeMode === 'dark') return true
-  if (themeMode === 'light') return false
-  // auto: follow system
-  return window.matchMedia?.('(prefers-color-scheme: dark)').matches || false
-}
-
 const AppContext = createContext(null)
 
 export const AppProvider = ({ children }) => {
@@ -78,7 +72,41 @@ export const AppProvider = ({ children }) => {
     window.matchMedia?.('(prefers-color-scheme: dark)').matches || false
   )
 
-  // Listen to system theme changes
+  const [installPromptEvent, setInstallPromptEvent] = useState(null)
+  const [isInstalled, setIsInstalled] = useState(false)
+
+  useEffect(() => {
+    const standalone =
+      window.matchMedia('(display-mode: standalone)').matches ||
+      window.navigator.standalone === true
+    setIsInstalled(standalone)
+
+    const handler = (e) => {
+      e.preventDefault()
+      setInstallPromptEvent(e)
+    }
+    window.addEventListener('beforeinstallprompt', handler)
+
+    const installedHandler = () => {
+      setInstallPromptEvent(null)
+      setIsInstalled(true)
+    }
+    window.addEventListener('appinstalled', installedHandler)
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handler)
+      window.removeEventListener('appinstalled', installedHandler)
+    }
+  }, [])
+
+  const triggerInstall = useCallback(async () => {
+    if (!installPromptEvent) return { available: false }
+    installPromptEvent.prompt()
+    const { outcome } = await installPromptEvent.userChoice
+    setInstallPromptEvent(null)
+    return { available: true, outcome }
+  }, [installPromptEvent])
+
   useEffect(() => {
     const mq = window.matchMedia('(prefers-color-scheme: dark)')
     const handler = (e) => setSystemDark(e.matches)
@@ -117,8 +145,8 @@ export const AppProvider = ({ children }) => {
   const setAccent           = useCallback(v => setState(p => ({ ...p, profile: { ...p.profile, accent: v } })), [])
   const setCharacter        = useCallback(v => setState(p => ({ ...p, profile: { ...p.profile, character: v } })), [])
   const setSidebarCollapsed = useCallback(v => setState(p => ({ ...p, profile: { ...p.profile, sidebarCollapsed: v } })), [])
+  const setLogoExpanded     = useCallback(v => setState(p => ({ ...p, profile: { ...p.profile, logoExpanded: v } })), [])
 
-  // Backwards compat: setDarkMode now sets themeMode
   const setDarkMode = useCallback(v => {
     setState(p => ({ ...p, profile: { ...p.profile, themeMode: v ? 'dark' : 'light' } }))
   }, [])
@@ -168,7 +196,6 @@ export const AppProvider = ({ children }) => {
     }
   }, [state.profile.language, showNotification])
 
-  // ── Bookmarks ────────────────────────────────────────────
   const toggleBookmark = useCallback((lessonId) => {
     setState(p => {
       const exists = p.bookmarks.includes(lessonId)
@@ -186,7 +213,6 @@ export const AppProvider = ({ children }) => {
     [state.bookmarks]
   )
 
-  // ── Last lesson tracking ─────────────────────────────────
   const setLastLesson = useCallback((lesson) => {
     setState(p => ({
       ...p,
@@ -222,8 +248,9 @@ export const AppProvider = ({ children }) => {
       accent:           state.profile.accent,
       character:        state.profile.character,
       sidebarCollapsed: state.profile.sidebarCollapsed,
+      logoExpanded:     state.profile.logoExpanded,
       setName, setSelectedGrade, setLanguage, setThemeMode, setDarkMode,
-      setAccent, setCharacter, setSidebarCollapsed,
+      setAccent, setCharacter, setSidebarCollapsed, setLogoExpanded,
       resetAll, exportData,
       progress: state.progress,
       saveLessonProgress,
@@ -237,6 +264,9 @@ export const AppProvider = ({ children }) => {
       notification,
       navigate,
       t,
+      installAvailable: !!installPromptEvent,
+      isInstalled,
+      triggerInstall,
     }}>
       {children}
     </AppContext.Provider>
