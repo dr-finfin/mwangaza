@@ -51,7 +51,7 @@ const OnboardingView = () => {
 
       <header className="border-b border-gray-100 dark:border-gray-800">
         <div className="max-w-2xl mx-auto px-5 sm:px-6 h-20 flex items-center justify-between">
-          <AnimatedLogo height={84} />
+          <AnimatedLogo height={100} />
 
           <button
             onClick={() => setLanguage(language === 'en' ? 'sw' : 'en')}
