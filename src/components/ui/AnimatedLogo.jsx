@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useApp } from '../../context/AppContext'
 
-const AnimatedLogo = ({ height = 40, onClick }) => {
+const AnimatedLogo = ({ height = 64, onClick }) => {
   const { setLogoExpanded, logoExpanded } = useApp()
   const iconRef = useRef(null)
   const fullRef = useRef(null)
